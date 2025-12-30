@@ -1,0 +1,406 @@
+<!DOCTYPE html>
+<html lang="de">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Dashboard - FAB</title>
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            overflow-x: hidden;
+        }
+
+        .container {
+            max-width: 1600px;
+            margin: 0 auto;
+            padding: 20px;
+        }
+
+        .header {
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            color: white;
+            padding: 40px;
+            border-radius: 20px;
+            margin-bottom: 30px;
+            text-align: center;
+            box-shadow: 0 20px 60px rgba(0,0,0,0.3);
+        }
+
+        .header h1 {
+            font-size: 3em;
+            margin-bottom: 15px;
+        }
+
+        .header p {
+            font-size: 1.2em;
+            opacity: 0.9;
+        }
+
+        .nav-link {
+            display: inline-block;
+            margin-top: 20px;
+            margin-right: 10px;
+            padding: 12px 30px;
+            background: rgba(255,255,255,0.2);
+            color: white;
+            text-decoration: none;
+            border-radius: 25px;
+            transition: all 0.3s ease;
+        }
+
+        .nav-link:hover {
+            background: rgba(255,255,255,0.3);
+            transform: translateY(-2px);
+        }
+
+        .section {
+            background: white;
+            border-radius: 20px;
+            padding: 20px;
+            margin-bottom: 30px;
+            box-shadow: 0 20px 60px rgba(0,0,0,0.3);
+        }
+
+        .loading-container {
+            text-align: center;
+            padding: 60px;
+            color: #667eea;
+        }
+
+        .spinner {
+            border: 4px solid #f3f3f3;
+            border-top: 4px solid #667eea;
+            border-radius: 50%;
+            width: 50px;
+            height: 50px;
+            animation: spin 1s linear infinite;
+            margin: 0 auto 20px;
+        }
+
+        @keyframes spin {
+            0% { transform: rotate(0deg); }
+            100% { transform: rotate(360deg); }
+        }
+
+        .iframe-container {
+            position: relative;
+            width: 100%;
+            height: 90vh;
+            min-height: 800px;
+            border: none;
+            border-radius: 15px;
+            overflow: hidden;
+            box-shadow: 0 10px 30px rgba(0,0,0,0.2);
+        }
+
+        .iframe-container iframe {
+            width: 100%;
+            height: 100%;
+            border: none;
+            border-radius: 15px;
+        }
+
+        .error-message {
+            background: linear-gradient(135deg, #ff6b6b 0%, #ee5a6f 100%);
+            color: white;
+            padding: 30px;
+            border-radius: 15px;
+            margin: 20px 0;
+            text-align: center;
+        }
+
+        .error-message h3 {
+            margin-bottom: 15px;
+        }
+
+        .info-box {
+            background: linear-gradient(135deg, #4facfe 0%, #00f2fe 100%);
+            padding: 25px;
+            border-radius: 15px;
+            margin: 25px 0;
+            color: white;
+            font-size: 1.1em;
+            box-shadow: 0 10px 30px rgba(79,172,254,0.3);
+        }
+
+        .auth-form {
+            background: #f8f9fa;
+            padding: 30px;
+            border-radius: 15px;
+            margin: 20px 0;
+            max-width: 500px;
+            margin-left: auto;
+            margin-right: auto;
+        }
+
+        .auth-form input {
+            width: 100%;
+            padding: 12px;
+            margin: 10px 0;
+            border: 2px solid #e0e0e0;
+            border-radius: 8px;
+            font-size: 1em;
+        }
+
+        .auth-form button {
+            width: 100%;
+            padding: 15px;
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            color: white;
+            border: none;
+            border-radius: 8px;
+            font-size: 1.1em;
+            cursor: pointer;
+            margin-top: 10px;
+            transition: all 0.3s ease;
+        }
+
+        .auth-form button:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 5px 15px rgba(102,126,234,0.3);
+        }
+
+        .hidden {
+            display: none;
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <!-- HEADER -->
+        <div class="header">
+            <h1>📊 Dashboard</h1>
+            <p>Dulconnex Dashboard</p>
+            <a href="index.html" class="nav-link">← Zurück zur Übersicht</a>
+            <a href="ausbildungsrahmenplan.html" class="nav-link">📚 Ausbildungsrahmenplan</a>
+            <a href="ausbildungsplan.html" class="nav-link">📋 Ausbildungsplan</a>
+        </div>
+
+        <!-- LOADING STATE -->
+        <div class="section" id="loadingSection">
+            <div class="loading-container">
+                <div class="spinner"></div>
+                <h2>Dashboard wird geladen...</h2>
+                <p>Bitte warten Sie, während die Inhalte geladen werden.</p>
+            </div>
+        </div>
+
+        <!-- ERROR MESSAGE -->
+        <div class="section hidden" id="errorSection">
+            <div class="error-message">
+                <h3>⚠️ Fehler beim Laden</h3>
+                <p>Die Dashboard-Seite konnte nicht automatisch geladen werden.</p>
+                <p style="margin-top: 20px;">
+                    <strong>Bitte verwenden Sie den direkten Link:</strong><br>
+                    <a href="https://dulconnex.com/dashboard/8647DBAB24C14030D29F1E57437D90A2" 
+                       target="_blank" 
+                       style="color: white; text-decoration: underline; font-weight: bold;">
+                        Dashboard öffnen
+                    </a>
+                </p>
+            </div>
+        </div>
+
+        <!-- IFRAME CONTAINER -->
+        <div class="section hidden" id="iframeSection">
+            <div class="iframe-container">
+                <iframe id="dashboardFrame" 
+                        src="" 
+                        allow="fullscreen"
+                        sandbox="allow-same-origin allow-scripts allow-forms allow-popups allow-top-navigation">
+                </iframe>
+            </div>
+        </div>
+
+        <!-- INFO BOX -->
+        <div class="section hidden" id="infoSection">
+            <div class="info-box">
+                <strong>ℹ️ Hinweis:</strong> Falls die Inhalte nicht angezeigt werden, kann dies an CORS-Beschränkungen oder der Authentifizierung liegen. 
+                In diesem Fall öffnen Sie bitte die Seite direkt im neuen Tab.
+            </div>
+        </div>
+
+        <!-- BOOKMARKLET SECTION -->
+        <div class="section" id="bookmarkletSection" style="display: none;">
+            <h2 style="color: #667eea; margin-bottom: 20px;">🔖 Automatisches Login einrichten</h2>
+            <div class="info-box" style="background: linear-gradient(135deg, #a8edea 0%, #fed6e3 100%); color: #333;">
+                <strong>📌 So funktioniert's:</strong>
+                <ol style="margin-top: 15px; padding-left: 20px; text-align: left;">
+                    <li>Ziehen Sie den Button unten in Ihre Lesezeichenleiste</li>
+                    <li>Gehen Sie zur Dashboard-Seite: <a href="https://dulconnex.com/dashboard/8647DBAB24C14030D29F1E57437D90A2" target="_blank" style="color: #667eea; font-weight: bold;">Dashboard öffnen</a></li>
+                    <li>Klicken Sie auf das Lesezeichen - es loggt Sie automatisch ein!</li>
+                </ol>
+            </div>
+            <div style="text-align: center; margin: 30px 0;">
+                <a id="bookmarkletLink" 
+                   href="javascript:(function(){const u='La-Ola';const p='La-Ola+3';const un=document.querySelector('input[type=text],input[name*=user],input[name*=login],input[id*=user],input[id*=login]');const pw=document.querySelector('input[type=password]');const btn=document.querySelector('button[type=submit],input[type=submit]');if(un&&pw){un.value=u;pw.value=p;if(btn)btn.click();else{const f=un.closest('form');if(f)f.submit();}}else{alert('Login-Felder nicht gefunden. Bitte manuell einloggen.');}})();"
+                   style="display: inline-block; padding: 20px 40px; background: linear-gradient(135deg, #667eea 0%, #764ba2 100%); color: white; text-decoration: none; border-radius: 25px; font-size: 1.2em; font-weight: bold; box-shadow: 0 10px 30px rgba(102,126,234,0.3);">
+                    🔐 Auto-Login Lesezeichen
+                </a>
+                <p style="margin-top: 15px; color: #666; font-size: 0.9em;">
+                    Ziehen Sie diesen Button in Ihre Lesezeichenleiste
+                </p>
+            </div>
+        </div>
+    </div>
+
+    <script>
+        // Dashboard URL und Credentials
+        const dashboardUrl = 'https://dulconnex.com/dashboard/8647DBAB24C14030D29F1E57437D90A2';
+        const loginUrl = 'https://dulconnex.com/login'; // Mögliche Login-URL
+        const username = 'La-Ola';
+        const password = 'La-Ola+3';
+
+        // Automatisches Login in neuem Fenster mit Credentials
+        function autoLogin() {
+            const loadingSection = document.getElementById('loadingSection');
+            const iframeSection = document.getElementById('iframeSection');
+            const errorSection = document.getElementById('errorSection');
+            const infoSection = document.getElementById('infoSection');
+
+            // Öffne die Dashboard-URL direkt im Iframe
+            const iframe = document.getElementById('dashboardFrame');
+            
+            // Versuche verschiedene Ansätze
+            attemptLoad();
+        }
+
+        function attemptLoad() {
+            const iframe = document.getElementById('dashboardFrame');
+            const loadingSection = document.getElementById('loadingSection');
+            const iframeSection = document.getElementById('iframeSection');
+            const errorSection = document.getElementById('errorSection');
+            const infoSection = document.getElementById('infoSection');
+
+            // Ansatz 1: Direktes Laden (falls Session vorhanden)
+            iframe.src = dashboardUrl;
+            
+            let loadAttempted = false;
+            
+            iframe.onload = function() {
+                if (!loadAttempted) {
+                    loadAttempted = true;
+                    // Prüfe ob Login-Seite geladen wurde
+                    try {
+                        // Versuche auf Login-Felder zuzugreifen (wird durch CORS blockiert, aber wir versuchen es)
+                        setTimeout(() => {
+                            // Wenn nach 3 Sekunden noch geladen wird, nehmen wir an es funktioniert
+                            loadingSection.classList.add('hidden');
+                            iframeSection.classList.remove('hidden');
+                            infoSection.classList.remove('hidden');
+                        }, 3000);
+                    } catch (e) {
+                        // CORS-Fehler erwartet, aber Iframe könnte trotzdem funktionieren
+                        console.log('Iframe loaded (CORS may block access)');
+                    }
+                }
+            };
+
+            // Ansatz 2: Automatisches Login-Skript in neuem Fenster
+            setTimeout(() => {
+                if (!loadAttempted) {
+                    openWithAutoLogin();
+                }
+            }, 5000);
+        }
+
+        function openWithAutoLogin() {
+            // Erstelle ein neues Fenster mit Login-Skript
+            const loginWindow = window.open(dashboardUrl, 'dashboard', 'width=1200,height=800');
+            
+            if (loginWindow) {
+                // Versuche automatisch einzuloggen (funktioniert nur wenn wir Zugriff auf das Fenster haben)
+                setTimeout(() => {
+                    try {
+                        // Erstelle ein Login-Skript, das im neuen Fenster ausgeführt wird
+                        const loginScript = `
+                            (function() {
+                                // Suche nach Login-Feldern
+                                const usernameField = document.querySelector('input[type="text"], input[name*="user"], input[name*="login"], input[id*="user"], input[id*="login"]');
+                                const passwordField = document.querySelector('input[type="password"]');
+                                const submitButton = document.querySelector('button[type="submit"], input[type="submit"], button:contains("Login"), button:contains("Anmelden")');
+                                
+                                if (usernameField && passwordField) {
+                                    usernameField.value = '${username}';
+                                    passwordField.value = '${password}';
+                                    
+                                    // Versuche automatisch abzusenden
+                                    if (submitButton) {
+                                        submitButton.click();
+                                    } else {
+                                        // Versuche Formular zu finden und abzusenden
+                                        const form = usernameField.closest('form');
+                                        if (form) {
+                                            form.submit();
+                                        }
+                                    }
+                                }
+                            })();
+                        `;
+                        
+                        // Versuche Skript im neuen Fenster auszuführen
+                        loginWindow.eval(loginScript);
+                    } catch (e) {
+                        console.log('Auto-login nicht möglich (CORS/Security):', e);
+                        // Zeige manuellen Login-Link
+                        showManualLogin();
+                    }
+                }, 2000);
+            } else {
+                showManualLogin();
+            }
+        }
+
+        function showManualLogin() {
+            const loadingSection = document.getElementById('loadingSection');
+            const errorSection = document.getElementById('errorSection');
+            
+            loadingSection.classList.add('hidden');
+            errorSection.classList.remove('hidden');
+            
+            // Erstelle einen Link mit vorausgefüllten Credentials (wenn möglich)
+            const errorDiv = errorSection.querySelector('.error-message');
+            if (errorDiv) {
+                errorDiv.innerHTML = `
+                    <h3>🔐 Automatisches Login nicht möglich</h3>
+                    <p>Aus Sicherheitsgründen kann das automatische Login nicht direkt durchgeführt werden.</p>
+                    <p style="margin-top: 20px;">
+                        <strong>Bitte melden Sie sich manuell an:</strong><br>
+                        <strong>Benutzername:</strong> ${username}<br>
+                        <strong>Passwort:</strong> ${password}
+                    </p>
+                    <p style="margin-top: 20px;">
+                        <a href="${dashboardUrl}" 
+                           target="_blank" 
+                           style="display: inline-block; padding: 15px 30px; background: white; color: #667eea; text-decoration: none; border-radius: 8px; font-weight: bold; margin-top: 10px;">
+                            Dashboard öffnen →
+                        </a>
+                    </p>
+                `;
+            }
+        }
+
+        // Starte den Ladevorgang
+        window.addEventListener('DOMContentLoaded', function() {
+            // Versuche automatisches Laden
+            autoLogin();
+            
+            // Zeige Bookmarklet-Sektion nach kurzer Verzögerung
+            setTimeout(() => {
+                const bookmarkletSection = document.getElementById('bookmarkletSection');
+                if (bookmarkletSection) {
+                    bookmarkletSection.style.display = 'block';
+                }
+            }, 2000);
+        });
+    </script>
+</body>
+</html>
+
