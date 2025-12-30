@@ -1,0 +1,695 @@
+<!DOCTYPE html>
+<html lang="de">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Neuordnung FAB</title>
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            overflow-x: hidden;
+        }
+
+        .presentation {
+            max-width: 1200px;
+            margin: 0 auto;
+            padding: 20px;
+        }
+
+        .slide {
+            background: white;
+            border-radius: 20px;
+            padding: 60px;
+            margin-bottom: 30px;
+            box-shadow: 0 20px 60px rgba(0,0,0,0.3);
+            min-height: 600px;
+            display: flex;
+            flex-direction: column;
+            justify-content: center;
+            animation: slideIn 0.6s ease-out;
+        }
+
+        @keyframes slideIn {
+            from {
+                opacity: 0;
+                transform: translateY(30px);
+            }
+            to {
+                opacity: 1;
+                transform: translateY(0);
+            }
+        }
+
+        .slide-title {
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            text-align: center;
+            color: white;
+        }
+
+        h1 {
+            font-size: 3.5em;
+            margin-bottom: 20px;
+            color: white;
+        }
+
+        h2 {
+            font-size: 2.5em;
+            color: #667eea;
+            margin-bottom: 30px;
+            border-bottom: 4px solid #667eea;
+            padding-bottom: 15px;
+        }
+
+        h3 {
+            font-size: 1.8em;
+            color: #764ba2;
+            margin: 25px 0 15px 0;
+        }
+
+        .subtitle {
+            font-size: 1.5em;
+            color: rgba(255,255,255,0.9);
+            margin-top: 10px;
+        }
+
+        .problem-box {
+            background: linear-gradient(135deg, #ff6b6b 0%, #ee5a6f 100%);
+            color: white;
+            padding: 30px;
+            border-radius: 15px;
+            margin: 20px 0;
+            box-shadow: 0 10px 30px rgba(255,107,107,0.3);
+        }
+
+        .problem-box h3 {
+            color: white;
+            margin-top: 0;
+        }
+
+        .change-grid {
+            display: grid;
+            grid-template-columns: repeat(2, 1fr);
+            gap: 25px;
+            margin: 30px 0;
+        }
+
+        .change-card {
+            background: linear-gradient(135deg, #f093fb 0%, #f5576c 100%);
+            padding: 25px;
+            border-radius: 15px;
+            color: white;
+            box-shadow: 0 8px 25px rgba(0,0,0,0.15);
+            transition: transform 0.3s ease;
+        }
+
+        .change-card:hover {
+            transform: translateY(-5px);
+        }
+
+        .change-card h3 {
+            color: white;
+            font-size: 1.5em;
+            margin-bottom: 15px;
+        }
+
+        .icon {
+            font-size: 2.5em;
+            margin-bottom: 10px;
+        }
+
+        ul {
+            list-style: none;
+            padding-left: 0;
+        }
+
+        li {
+            padding: 12px 0;
+            padding-left: 35px;
+            position: relative;
+            font-size: 1.1em;
+            line-height: 1.6;
+        }
+
+        li:before {
+            content: "✓";
+            position: absolute;
+            left: 0;
+            color: #667eea;
+            font-weight: bold;
+            font-size: 1.3em;
+        }
+
+        .remove-list li:before {
+            content: "✗";
+            color: #ff6b6b;
+        }
+
+        .highlight-box {
+            background: linear-gradient(135deg, #4facfe 0%, #00f2fe 100%);
+            padding: 30px;
+            border-radius: 15px;
+            margin: 25px 0;
+            color: white;
+            font-size: 1.2em;
+            box-shadow: 0 10px 30px rgba(79,172,254,0.3);
+        }
+
+        .stats-container {
+            display: flex;
+            justify-content: space-around;
+            margin: 40px 0;
+        }
+
+        .stat-box {
+            text-align: center;
+            padding: 30px;
+            background: linear-gradient(135deg, #a8edea 0%, #fed6e3 100%);
+            border-radius: 15px;
+            min-width: 200px;
+            box-shadow: 0 8px 25px rgba(0,0,0,0.1);
+        }
+
+        .stat-number {
+            font-size: 3.5em;
+            font-weight: bold;
+            color: #667eea;
+            display: block;
+        }
+
+        .stat-label {
+            font-size: 1.1em;
+            color: #555;
+            margin-top: 10px;
+        }
+
+        .timeline {
+            background: #f8f9fa;
+            padding: 30px;
+            border-radius: 15px;
+            border-left: 5px solid #667eea;
+        }
+
+        .timeline-item {
+            margin: 20px 0;
+            padding-left: 25px;
+            border-left: 3px dashed #764ba2;
+            position: relative;
+        }
+
+        .timeline-item:before {
+            content: "●";
+            position: absolute;
+            left: -9px;
+            color: #764ba2;
+            font-size: 1.5em;
+        }
+
+        .conclusion-box {
+            background: linear-gradient(135deg, #f093fb 0%, #f5576c 100%);
+            color: white;
+            padding: 40px;
+            border-radius: 20px;
+            text-align: center;
+            font-size: 1.3em;
+            line-height: 1.8;
+            margin-top: 30px;
+            box-shadow: 0 15px 40px rgba(240,147,251,0.4);
+        }
+
+        .two-column {
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 30px;
+        }
+
+        .column-box {
+            background: #f8f9fa;
+            padding: 25px;
+            border-radius: 15px;
+            border-top: 4px solid #667eea;
+        }
+
+        .emphasis {
+            background: linear-gradient(135deg, #ffecd2 0%, #fcb69f 100%);
+            padding: 25px;
+            border-radius: 15px;
+            margin: 20px 0;
+            border-left: 5px solid #ff6b6b;
+        }
+
+        .nav-link {
+            display: inline-block;
+            margin-top: 20px;
+            padding: 12px 30px;
+            background: rgba(255,255,255,0.2);
+            color: white;
+            text-decoration: none;
+            border-radius: 25px;
+            transition: all 0.3s ease;
+            font-size: 1.1em;
+        }
+
+        .nav-link:hover {
+            background: rgba(255,255,255,0.3);
+            transform: translateY(-2px);
+        }
+
+        @media (max-width: 768px) {
+            .slide {
+                padding: 30px 20px;
+            }
+            
+            h1 {
+                font-size: 2em;
+            }
+            
+            h2 {
+                font-size: 1.8em;
+            }
+            
+            .change-grid, .two-column {
+                grid-template-columns: 1fr;
+            }
+        }
+    </style>
+</head>
+<body>
+    <div class="presentation">
+        
+        <!-- TITELFOLIE -->
+        <div class="slide slide-title">
+            <div>
+                <h1>🏊 Neuordnung des Berufsbildes</h1>
+                <h1>Fachangestellte für Bäderbetriebe</h1>
+                <p class="subtitle">Modernisierung der Ausbildung von 1997</p>
+                <p class="subtitle" style="margin-top: 40px; font-size: 1.2em;">Voruntersuchung 2022-2024</p>
+                <a href="ausbildungsrahmenplan.html" class="nav-link" style="margin-top: 40px;">📚 Zum Ausbildungsrahmenplan</a>
+                <a href="ausbildungsplan.html" class="nav-link" style="margin-top: 10px;">📋 Zum Ausbildungsplan</a>
+            </div>
+        </div>
+
+        <!-- AKTUELLE SITUATION -->
+        <div class="slide">
+            <h2>📊 Aktuelle Situation</h2>
+            
+            <div class="stats-container">
+                <div class="stat-box">
+                    <span class="stat-number">1997</span>
+                    <span class="stat-label">Letzte Novellierung<br>der Ausbildung</span>
+                </div>
+                <div class="stat-box">
+                    <span class="stat-number">594</span>
+                    <span class="stat-label">Neuabschlüsse<br>pro Jahr (2022)</span>
+                </div>
+                <div class="stat-box">
+                    <span class="stat-number">73-78%</span>
+                    <span class="stat-label">Bestehensquote<br>(unter Durchschnitt)</span>
+                </div>
+            </div>
+
+            <div class="problem-box">
+                <h3>🚨 Kernprobleme</h3>
+                <ul style="color: white; font-size: 1.1em;">
+                    <li style="color: white;">Digitalisierung nicht ausreichend abgebildet</li>
+                    <li style="color: white;">Zu wenig Fokus auf Kommunikation & Konfliktmanagement</li>
+                    <li style="color: white;">Prüfungsanforderungen teilweise nicht mehr zeitgemäß</li>
+                    <li style="color: white;">Unzureichende Abgrenzung zur Meisterfortbildung</li>
+                </ul>
+            </div>
+        </div>
+
+        <!-- HAUPTÄNDERUNGEN ÜBERSICHT -->
+        <div class="slide">
+            <h2>🎯 Hauptänderungen auf einen Blick</h2>
+            
+            <div class="change-grid">
+                <div class="change-card">
+                    <div class="icon">💻</div>
+                    <h3>Digitalisierung</h3>
+                    <p>Moderne IT-Systeme, Social Media, Datenschutz</p>
+                </div>
+                
+                <div class="change-card">
+                    <div class="icon">🗣️</div>
+                    <h3>Kommunikation</h3>
+                    <p>Deeskalation, Konfliktmanagement, Interkulturelle Kompetenz</p>
+                </div>
+                
+                <div class="change-card">
+                    <div class="icon">🔧</div>
+                    <h3>Bädertechnik</h3>
+                    <p>Gebäudeleittechnik, Digitale Steuerung, Energiemanagement</p>
+                </div>
+                
+                <div class="change-card">
+                    <div class="icon">🧖</div>
+                    <h3>Sauna & Wellness</h3>
+                    <p>Saunaaufsicht, Aufgüsse, Freizeitangebote</p>
+                </div>
+            </div>
+
+            <div class="highlight-box">
+                <strong>📌 Ziel:</strong> Die Ausbildung muss digitaler, kommunikativer und serviceorientierter werden!
+            </div>
+        </div>
+
+        <!-- DIGITALISIERUNG & BÜROWIRTSCHAFT -->
+        <div class="slide">
+            <h2>💻 Digitalisierung & Bürowirtschaft</h2>
+            
+            <h3>Neu bzw. verstärkt zu vermitteln:</h3>
+            <ul>
+                <li>Computergestützte Bürokommunikation</li>
+                <li>Digitale Kassen- und Abrechnungssysteme</li>
+                <li>Social Media und neue Medien (z.B. Facebook, Instagram)</li>
+                <li>Datenschutz und Datensicherheit (DSGVO)</li>
+                <li>Qualitätsmanagement und Dokumentation</li>
+            </ul>
+
+            <div class="emphasis">
+                <strong>⚡ Hintergrund:</strong> Moderne Bäder nutzen digitale Kassensysteme, Online-Buchungen und Social Media für Marketing. Die Auszubildenden müssen diese Systeme sicher beherrschen.
+            </div>
+        </div>
+
+        <!-- BÄDERTECHNIK -->
+        <div class="slide">
+            <h2>🔧 Bädertechnik im digitalen Zeitalter</h2>
+            
+            <h3>Schwerpunkte der Modernisierung:</h3>
+            <ul>
+                <li>Digital gestützte Überwachung und Steuerung von Bädertechnik (92% Zustimmung)</li>
+                <li>Gebäudeleittechnik und MSR-Technik (87% Zustimmung)</li>
+                <li>Rationelle Energieverwendung (85% Zustimmung)</li>
+                <li>Mess-, Steuer- und Regelanlagen (83% Zustimmung)</li>
+                <li>Umweltschutz und Nachhaltigkeit (80% Zustimmung)</li>
+            </ul>
+
+            <div class="two-column">
+                <div class="column-box">
+                    <h3 style="color: #667eea;">✓ Beibehalten</h3>
+                    <ul style="font-size: 0.95em;">
+                        <li>Grundlegende technische Kompetenzen</li>
+                        <li>Notfallreparaturen und Instandhaltung</li>
+                        <li>Verständnis für Verfahrensabläufe</li>
+                    </ul>
+                </div>
+                <div class="column-box">
+                    <h3 style="color: #ff6b6b;">↻ Aktualisieren</h3>
+                    <ul style="font-size: 0.95em;">
+                        <li>Veraltete Filtersysteme entfernen</li>
+                        <li>Digitale Steuerungssysteme aufnehmen</li>
+                        <li>Energieeffizienz verstärken</li>
+                    </ul>
+                </div>
+            </div>
+        </div>
+
+        <!-- KOMMUNIKATION -->
+        <div class="slide">
+            <h2>🗣️ Kundenkommunikation & Deeskalation</h2>
+            
+            <div class="highlight-box">
+                <strong>🔥 Top-Priorität:</strong> Gewaltprävention und Deeskalation (93% Zustimmung!)
+            </div>
+
+            <h3>Neue Schwerpunkte:</h3>
+            <ul>
+                <li><strong>Maßnahmen zur Gewaltprävention und Deeskalation</strong> (93% Zustimmung)</li>
+                <li>Umgang mit Extremsituationen - Unfälle, Havarien (91% Zustimmung)</li>
+                <li>Interkulturelle Kompetenzen (74% Zustimmung)</li>
+                <li>Serviceorientierter Umgang mit Badegästen</li>
+                <li>Konfliktmanagement und Beschwerdebearbeitung</li>
+            </ul>
+
+            <div class="emphasis">
+                <strong>📈 Begründung:</strong> Verändertes Besucherverhalten, steigende Ansprüche und zunehmende Konfliktsituationen erfordern deutlich bessere Kommunikationskompetenzen.
+            </div>
+        </div>
+
+        <!-- SAUNA & FREIZEITANGEBOTE -->
+        <div class="slide">
+            <h2>🧖 Sauna & Freizeitangebote</h2>
+            
+            <h3>Neu in die Ausbildung aufnehmen:</h3>
+            <div class="change-grid">
+                <div class="change-card" style="background: linear-gradient(135deg, #fa709a 0%, #fee140 100%);">
+                    <div class="icon">🧖‍♂️</div>
+                    <h3>Saunabereich</h3>
+                    <ul style="color: white;">
+                        <li style="color: white;">Kontrollieren von Saunaanlagen</li>
+                        <li style="color: white;">Betreuen von Saunagästen</li>
+                        <li style="color: white;">Durchführen von Aufgüssen</li>
+                    </ul>
+                </div>
+                
+                <div class="change-card" style="background: linear-gradient(135deg, #30cfd0 0%, #330867 100%);">
+                    <div class="icon">🎯</div>
+                    <h3>Freizeitangebote</h3>
+                    <ul style="color: white;">
+                        <li style="color: white;">Methodik & Didaktik von Angeboten</li>
+                        <li style="color: white;">Schwimmunterricht verstärken</li>
+                        <li style="color: white;">Sport- und Spaßangebote</li>
+                    </ul>
+                </div>
+            </div>
+
+            <div class="emphasis">
+                <strong>🎯 Ziel:</strong> Saunaanlagen gehören heute zum Standardangebot fast aller Bäder. FABs müssen sowohl technische als auch kundenorientierte Kompetenzen in diesem Bereich haben.
+            </div>
+        </div>
+
+        <!-- PRÜFUNGSÄNDERUNGEN -->
+        <div class="slide">
+            <h2>📝 Änderungen bei der Prüfung</h2>
+            
+            <div class="two-column">
+                <div class="column-box" style="border-top-color: #ff6b6b;">
+                    <h3 style="color: #ff6b6b;">✗ Streichen / Ändern</h3>
+                    <ul class="remove-list">
+                        <li>3-Meter-Kopfsprung → Fußsprung ODER streichen</li>
+                        <li>Kleiderschwimmen 300m → Distanz ggf. reduzieren</li>
+                        <li>7 Prüfungsbereiche → <strong>auf 5 reduzieren</strong></li>
+                        <li>Einzelne Kompetenzen → handlungsorientierte Prüfungen</li>
+                    </ul>
+                </div>
+                
+                <div class="column-box" style="border-top-color: #4facfe;">
+                    <h3 style="color: #4facfe;">✓ Aufnehmen / Verstärken</h3>
+                    <ul>
+                        <li>Kommunikation und Konfliktmanagement</li>
+                        <li>Umgang mit Badegästen integrieren</li>
+                        <li>Berufstypische vollständige Handlungen</li>
+                        <li>Wasserrettung verstärken</li>
+                    </ul>
+                </div>
+            </div>
+
+            <div class="highlight-box">
+                <strong>🔄 Gestreckte Abschlussprüfung (GAP):</strong><br>
+                Tendenz positiv, aber keine eindeutige Empfehlung → Im Neuordnungsverfahren zu prüfen
+            </div>
+        </div>
+
+        <!-- SICHERHEIT & AUFSICHT -->
+        <div class="slide">
+            <h2>🛡️ Sicherheit & Aufsicht</h2>
+            
+            <h3>Zu verstärken:</h3>
+            <ul>
+                <li>Mitwirken bei der Organisation von Betriebsabläufen</li>
+                <li>Kontrolle der Verkehrssicherungspflicht</li>
+                <li>Wasserrettungsmaßnahmen (höherer Umfang)</li>
+                <li>Erste Hilfe und Betreuen von Unfallbeteiligten</li>
+            </ul>
+
+            <div class="stats-container">
+                <div class="stat-box">
+                    <span class="stat-number">88%</span>
+                    <span class="stat-label">Aufsichts- und Verkehrssicherungspflichten<br>gehören zu den Hauptaufgaben</span>
+                </div>
+                <div class="stat-box">
+                    <span class="stat-number">91%</span>
+                    <span class="stat-label">wünschen verstärkte Vermittlung von Extremsituationen</span>
+                </div>
+            </div>
+
+            <div class="emphasis">
+                <strong>⚖️ Wichtig:</strong> Die Verkehrssicherungspflicht ist eine zentrale rechtliche Verantwortung. FABs müssen hier umfassend qualifiziert werden.
+            </div>
+        </div>
+
+        <!-- MEISTER-FORTBILDUNG -->
+        <div class="slide">
+            <h2>👔 Meister-Fortbildung: Klare Abgrenzung!</h2>
+            
+            <div class="problem-box">
+                <h3>❌ Aktuelles Problem</h3>
+                <p style="color: white; font-size: 1.1em;">Zu viele Überschneidungen mit der Ausbildung → Meister machen oft dieselben Aufgaben wie Fachangestellte!</p>
+            </div>
+
+            <div class="two-column">
+                <div class="column-box" style="border-top-color: #ff6b6b;">
+                    <h3 style="color: #ff6b6b;">✗ Aus Meister-Fortbildung streichen:</h3>
+                    <ul class="remove-list" style="font-size: 0.95em;">
+                        <li>Rettungsschwimmen (Kleiderschwimmen)</li>
+                        <li>Wettkampftechniken</li>
+                        <li>Math. und naturwiss. Grundlagen</li>
+                        <li>Grundlagen Bädertechnik</li>
+                        <li>Gesundheitslehre (Basics)</li>
+                    </ul>
+                </div>
+                
+                <div class="column-box" style="border-top-color: #667eea;">
+                    <h3 style="color: #667eea;">✓ In Meister-Fortbildung verstärken:</h3>
+                    <ul style="font-size: 0.95em;">
+                        <li><strong>Personalführung</strong> & Mitarbeitermotivation</li>
+                        <li><strong>Betriebswirtschaft</strong> & Strategieentwicklung</li>
+                        <li>Qualitätsmanagement</li>
+                        <li>Marketing & Kundenorientierung</li>
+                        <li>Energiemanagement</li>
+                    </ul>
+                </div>
+            </div>
+        </div>
+
+        <!-- AUSBILDUNGSSTRUKTUR -->
+        <div class="slide">
+            <h2>🎓 Ausbildungsstruktur</h2>
+            
+            <div class="highlight-box" style="font-size: 1.4em; padding: 40px;">
+                <strong>✓ MONOBERUF BEIBEHALTEN</strong><br><br>
+                Keine Spezialisierung während der Ausbildung
+            </div>
+
+            <h3>Begründung:</h3>
+            <ul>
+                <li>Generalistische Ausbildung wird bevorzugt (65% Zustimmung)</li>
+                <li>Umfassende Einsatzfähigkeit wichtiger als Spezialisierung</li>
+                <li>Kleine Bäder benötigen Allrounder</li>
+                <li>Flexibilität beim Berufseinstieg wird erhöht</li>
+            </ul>
+
+            <div class="emphasis">
+                <strong>💡 Hinweis:</strong> Spezialisierungen können nach der Ausbildung durch Zusatzqualifikationen erfolgen (z.B. Geprüfte Berufsspezialisten).
+            </div>
+        </div>
+
+        <!-- ZEITPLAN -->
+        <div class="slide">
+            <h2>📅 Zeitplan & Umsetzung</h2>
+            
+            <div class="timeline">
+                <div class="timeline-item">
+                    <strong>2022-2024</strong><br>
+                    Voruntersuchung durch BIBB durchgeführt
+                </div>
+                
+                <div class="timeline-item">
+                    <strong>2024/2025</strong><br>
+                    Übergabe des Abschlussberichts an Ministerien
+                </div>
+                
+                <div class="timeline-item">
+                    <strong>Nächste Schritte</strong><br>
+                    Entscheidung über Neuordnungsverfahren
+                </div>
+                
+                <div class="timeline-item">
+                    <strong>Empfehlung</strong><br>
+                    <strong>Parallele Neuordnung</strong> von Ausbildung und Meisterfortbildung
+                </div>
+            </div>
+
+            <div class="highlight-box" style="margin-top: 30px;">
+                <strong>🔗 Wichtig:</strong> Klare Trennung der Profile zwischen Fachangestellten und Meistern etablieren!
+            </div>
+        </div>
+
+        <!-- FAZIT -->
+        <div class="slide">
+            <h2>🎯 Fazit</h2>
+            
+            <div class="conclusion-box">
+                <strong style="font-size: 1.3em;">Die Ausbildung muss in drei Bereichen modernisiert werden:</strong>
+                <br><br>
+                <div style="text-align: left; max-width: 800px; margin: 20px auto;">
+                    <p><strong>1️⃣ DIGITALER</strong> → IT-Systeme, Gebäudeleittechnik, Social Media</p>
+                    <p><strong>2️⃣ KOMMUNIKATIVER</strong> → Deeskalation, Konfliktmanagement, Service</p>
+                    <p><strong>3️⃣ SERVICEORIENTIERTER</strong> → Sauna, Wellness, Freizeitangebote</p>
+                </div>
+                <br>
+                <strong>Die Meisterfortbildung muss sich auf Führung und Management konzentrieren!</strong>
+            </div>
+
+            <div class="stats-container" style="margin-top: 40px;">
+                <div class="stat-box">
+                    <span class="stat-number">1.515</span>
+                    <span class="stat-label">Befragte in der<br>Online-Befragung</span>
+                </div>
+                <div class="stat-box">
+                    <span class="stat-number">27</span>
+                    <span class="stat-label">Experten-<br>Interviews</span>
+                </div>
+                <div class="stat-box">
+                    <span class="stat-number">2022-24</span>
+                    <span class="stat-label">Untersuchungs-<br>zeitraum</span>
+                </div>
+            </div>
+        </div>
+
+        <!-- DANKE -->
+        <div class="slide slide-title">
+            <div>
+                <h1>Vielen Dank!</h1>
+                <p class="subtitle">Fragen und Diskussion</p>
+                <div style="margin-top: 60px; font-size: 1.2em; opacity: 0.9;">
+                    <p>📄 Quelle: BIBB Abschlussbericht</p>
+                    <p>Voruntersuchung Bäderbetriebe 2022-2024</p>
+                </div>
+                <a href="ausbildungsrahmenplan.html" class="nav-link" style="margin-top: 40px;">📚 Zum Ausbildungsrahmenplan</a>
+                <a href="ausbildungsplan.html" class="nav-link" style="margin-top: 10px;">📋 Zum Ausbildungsplan</a>
+            </div>
+        </div>
+
+    </div>
+
+    <script>
+        // Smooth scroll behavior
+        document.querySelectorAll('a[href^="#"]').forEach(anchor => {
+            anchor.addEventListener('click', function (e) {
+                e.preventDefault();
+                document.querySelector(this.getAttribute('href')).scrollIntoView({
+                    behavior: 'smooth'
+                });
+            });
+        });
+
+        // Add fade-in animation on scroll
+        const observerOptions = {
+            threshold: 0.1,
+            rootMargin: '0px 0px -100px 0px'
+        };
+
+        const observer = new IntersectionObserver(function(entries) {
+            entries.forEach(entry => {
+                if (entry.isIntersecting) {
+                    entry.target.style.opacity = '1';
+                    entry.target.style.transform = 'translateY(0)';
+                }
+            });
+        }, observerOptions);
+
+        document.querySelectorAll('.slide').forEach(slide => {
+            observer.observe(slide);
+        });
+    </script>
+</body>
+</html>
+

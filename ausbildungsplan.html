@@ -1,0 +1,1209 @@
+<!DOCTYPE html>
+<html lang="de">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Ausbildungsplan - FAB</title>
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            overflow-x: hidden;
+            padding: 20px;
+        }
+
+        .container {
+            max-width: 1400px;
+            margin: 0 auto;
+        }
+
+        .header {
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            color: white;
+            padding: 40px;
+            border-radius: 20px;
+            margin-bottom: 30px;
+            text-align: center;
+            box-shadow: 0 20px 60px rgba(0,0,0,0.3);
+        }
+
+        .header h1 {
+            font-size: 3em;
+            margin-bottom: 15px;
+        }
+
+        .header p {
+            font-size: 1.2em;
+            opacity: 0.9;
+        }
+
+        .nav-link {
+            display: inline-block;
+            margin-top: 20px;
+            padding: 12px 30px;
+            background: rgba(255,255,255,0.2);
+            color: white;
+            text-decoration: none;
+            border-radius: 25px;
+            transition: all 0.3s ease;
+        }
+
+        .nav-link:hover {
+            background: rgba(255,255,255,0.3);
+            transform: translateY(-2px);
+        }
+
+        .section {
+            background: white;
+            border-radius: 20px;
+            padding: 40px;
+            margin-bottom: 30px;
+            box-shadow: 0 20px 60px rgba(0,0,0,0.3);
+        }
+
+        h2 {
+            font-size: 2.5em;
+            color: #667eea;
+            margin-bottom: 25px;
+            border-bottom: 4px solid #667eea;
+            padding-bottom: 15px;
+        }
+
+        h3 {
+            font-size: 1.8em;
+            color: #764ba2;
+            margin: 30px 0 20px 0;
+        }
+
+        .form-group {
+            margin-bottom: 25px;
+        }
+
+        .form-group label {
+            display: block;
+            font-weight: bold;
+            color: #555;
+            margin-bottom: 8px;
+            font-size: 1.1em;
+        }
+
+        .form-group input[type="text"],
+        .form-group input[type="date"],
+        .form-group textarea {
+            width: 100%;
+            padding: 12px;
+            border: 2px solid #e0e0e0;
+            border-radius: 8px;
+            font-size: 1em;
+            font-family: inherit;
+            transition: border-color 0.3s ease;
+        }
+
+        .form-group input[type="text"]:focus,
+        .form-group input[type="date"]:focus,
+        .form-group textarea:focus {
+            outline: none;
+            border-color: #667eea;
+        }
+
+        .form-group textarea {
+            min-height: 100px;
+            resize: vertical;
+        }
+
+        .form-row {
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 20px;
+        }
+
+        @media (max-width: 768px) {
+            .form-row {
+                grid-template-columns: 1fr;
+            }
+        }
+
+        .info-box {
+            background: linear-gradient(135deg, #4facfe 0%, #00f2fe 100%);
+            padding: 25px;
+            border-radius: 15px;
+            margin: 25px 0;
+            color: white;
+            font-size: 1.1em;
+            box-shadow: 0 10px 30px rgba(79,172,254,0.3);
+        }
+
+        table {
+            width: 100%;
+            border-collapse: collapse;
+            margin: 20px 0;
+            background: white;
+            border-radius: 10px;
+            overflow: hidden;
+            box-shadow: 0 5px 15px rgba(0,0,0,0.1);
+            font-size: 0.9em;
+        }
+
+        th {
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            color: white;
+            padding: 12px 8px;
+            text-align: left;
+            font-size: 0.95em;
+            font-weight: bold;
+            border: 1px solid rgba(255,255,255,0.2);
+        }
+
+        td {
+            padding: 10px 8px;
+            border: 1px solid #e0e0e0;
+            vertical-align: top;
+        }
+
+        tr:nth-child(even) {
+            background: #f8f9fa;
+        }
+
+        tr:hover {
+            background: #e9ecef;
+        }
+
+        .skill-number {
+            font-weight: bold;
+            color: #667eea;
+            text-align: center;
+            width: 40px;
+        }
+
+        .skill-content {
+            min-width: 300px;
+        }
+
+        .time-input {
+            width: 60px;
+            padding: 5px;
+            border: 1px solid #ddd;
+            border-radius: 4px;
+            text-align: center;
+        }
+
+        .time-input:focus {
+            outline: none;
+            border-color: #667eea;
+        }
+
+        .checkbox-cell {
+            text-align: center;
+            width: 50px;
+        }
+
+        .checkbox-input {
+            width: 20px;
+            height: 20px;
+            cursor: pointer;
+        }
+
+        .notes-input {
+            width: 100%;
+            min-width: 200px;
+            padding: 5px;
+            border: 1px solid #ddd;
+            border-radius: 4px;
+            font-size: 0.85em;
+            font-family: inherit;
+        }
+
+        .notes-input:focus {
+            outline: none;
+            border-color: #667eea;
+        }
+
+        .section-header {
+            background: #f8f9fa;
+            font-weight: bold;
+            color: #667eea;
+            padding: 12px;
+        }
+
+        .section-header td {
+            background: #f8f9fa !important;
+            border-bottom: 2px solid #667eea;
+        }
+
+        .emphasis-box {
+            background: linear-gradient(135deg, #ffecd2 0%, #fcb69f 100%);
+            padding: 25px;
+            border-radius: 15px;
+            margin: 25px 0;
+            border-left: 5px solid #ff6b6b;
+        }
+
+        .print-btn, .save-btn {
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            color: white;
+            border: none;
+            padding: 15px 30px;
+            border-radius: 25px;
+            font-size: 1.1em;
+            cursor: pointer;
+            margin: 10px;
+            transition: all 0.3s ease;
+            box-shadow: 0 5px 15px rgba(102,126,234,0.3);
+        }
+
+        .print-btn:hover, .save-btn:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 8px 20px rgba(102,126,234,0.4);
+        }
+
+        .button-group {
+            text-align: center;
+            margin: 30px 0;
+        }
+
+        @media print {
+            body {
+                background: white;
+                padding: 0;
+            }
+            
+            .header, .button-group, .nav-link {
+                display: none;
+            }
+            
+            .section {
+                box-shadow: none;
+                page-break-inside: avoid;
+            }
+        }
+
+        .sub-item {
+            padding-left: 20px;
+            font-size: 0.95em;
+        }
+
+        .time-col {
+            text-align: center;
+            width: 80px;
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <!-- HEADER -->
+        <div class="header">
+            <h1>📋 Ausbildungsplan</h1>
+            <p>Anlage zum Berufsausbildungsvertrag</p>
+            <p style="font-size: 0.9em; margin-top: 10px; opacity: 0.8;">Fachangestellte für Bäderbetriebe / Fachangestellter für Bäderbetriebe</p>
+            <a href="index.html" class="nav-link">← Zurück zur Übersicht</a>
+            <a href="ausbildungsrahmenplan.html" class="nav-link">📚 Zum Ausbildungsrahmenplan</a>
+        </div>
+
+        <!-- AUSBILDUNGSPLAN FORMULAR -->
+        <div class="section">
+            <h2>Ausbildungsplan</h2>
+            <p style="margin-bottom: 25px; color: #666;">Anlage zum Berufsausbildungsvertrag vom</p>
+            <p style="margin-bottom: 30px; color: #666;">für die / den Auszubildende/n</p>
+
+            <div class="form-group">
+                <label>Ausbildungsberuf:</label>
+                <input type="text" value="Fachangestellte für Bäderbetriebe / Fachangestellter für Bäderbetriebe" readonly style="background: #f8f9fa; font-weight: bold; font-size: 1.1em;">
+            </div>
+
+            <div class="form-row">
+                <div class="form-group">
+                    <label>Ausbildungsstätte:</label>
+                    <input type="text" placeholder="Name der Ausbildungsstätte">
+                </div>
+                <div class="form-group">
+                    <label>Ausbildungsbeginn:</label>
+                    <input type="date">
+                </div>
+            </div>
+
+            <div class="form-row">
+                <div class="form-group">
+                    <label>Ausbildungsende:</label>
+                    <input type="date">
+                </div>
+                <div class="form-group">
+                    <label>Ausbilder/in:</label>
+                    <input type="text" placeholder="Name des Ausbilders / der Ausbilderin">
+                </div>
+            </div>
+
+            <div class="form-group">
+                <label>Berufsschule:</label>
+                <input type="text" placeholder="Name der Berufsschule">
+            </div>
+        </div>
+
+        <!-- ALLGEMEINE HINWEISE -->
+        <div class="section">
+            <h2>Allgemeine Hinweise zum Ausbildungsplan</h2>
+            
+            <div class="info-box">
+                <strong>Verantwortung:</strong> Der Ausbildende ist verantwortlich für die Erstellung des Ausbildungsplanes für die/den Auszubildende/n auf der Grundlage von § 5 der Verordnung über die Berufsausbildung zum/zur Fachangestellten für Bäderbetriebe und des Ausbildungsrahmenplanes. Er ist auch verantwortlich für die Vermittlung aller Ausbildungsinhalte.
+            </div>
+
+            <div class="emphasis-box">
+                <strong>Wichtige Hinweise:</strong>
+                <ul style="margin-top: 15px; padding-left: 20px;">
+                    <li>Der Ausbildungsplan ist in dreifacher Ausfertigung zu erstellen (für Auszubildende/n, Ausbildende/n, zuständige Stelle)</li>
+                    <li>Die zeitliche Struktur kann betriebsspezifisch angepasst werden</li>
+                    <li>Ein zentrales Prinzip der Ausbildung sollte die selbstständige Planung, Durchführung und Kontrolle beruflicher Tätigkeiten sein</li>
+                    <li>Bei der Vermittlung aller Fertigkeiten und Kenntnisse sollen stets die Zusammenhänge mit dem betrieblichen Gesamtzusammenhang berücksichtigt werden</li>
+                </ul>
+            </div>
+        </div>
+
+        <!-- FERTIGKEITEN UND KENNTNISSE -->
+        <div class="section">
+            <h2>Fertigkeiten und Kenntnisse</h2>
+            <p style="margin-bottom: 20px; color: #666;">Die folgenden Inhalte sind während der gesamten Ausbildungszeit zu vermitteln:</p>
+
+            <table>
+                <thead>
+                    <tr>
+                        <th style="width: 50px;">Nr.</th>
+                        <th>Fertigkeiten und Kenntnisse</th>
+                        <th class="time-col">1. Jahr</th>
+                        <th class="time-col">2. Jahr</th>
+                        <th class="time-col">3. Jahr</th>
+                        <th class="checkbox-cell">✓</th>
+                        <th>Anmerkungen</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    <tr class="section-header">
+                        <td colspan="7">1. Berufsbildung (§ 3 Nr. 1)</td>
+                    </tr>
+                    <tr>
+                        <td class="skill-number">1</td>
+                        <td class="skill-content">
+                            <strong>a)</strong> Bedeutung des Ausbildungsvertrages, insbesondere Abschluss, Dauer und Beendigung, erklären
+                        </td>
+                        <td class="time-col"><input type="number" class="time-input" min="0" placeholder="W"></td>
+                        <td class="time-col"><input type="number" class="time-input" min="0" placeholder="W"></td>
+                        <td class="time-col"><input type="number" class="time-input" min="0" placeholder="W"></td>
+                        <td class="checkbox-cell"><input type="checkbox" class="checkbox-input"></td>
+                        <td><input type="text" class="notes-input" placeholder="Inhalte, Lernorte, Zeiträume"></td>
+                    </tr>
+                    <tr>
+                        <td class="skill-number">1</td>
+                        <td class="skill-content">
+                            <strong>b)</strong> gegenseitige Rechte und Pflichten aus dem Ausbildungsvertrag nennen
+                        </td>
+                        <td class="time-col"><input type="number" class="time-input" min="0" placeholder="W"></td>
+                        <td class="time-col"><input type="number" class="time-input" min="0" placeholder="W"></td>
+                        <td class="time-col"><input type="number" class="time-input" min="0" placeholder="W"></td>
+                        <td class="checkbox-cell"><input type="checkbox" class="checkbox-input"></td>
+                        <td><input type="text" class="notes-input" placeholder="Inhalte, Lernorte, Zeiträume"></td>
+                    </tr>
+                    <tr>
+                        <td class="skill-number">1</td>
+                        <td class="skill-content">
+                            <strong>c)</strong> Möglichkeiten der beruflichen Fortbildung nennen
+                        </td>
+                        <td class="time-col"><input type="number" class="time-input" min="0" placeholder="W"></td>
+                        <td class="time-col"><input type="number" class="time-input" min="0" placeholder="W"></td>
+                        <td class="time-col"><input type="number" class="time-input" min="0" placeholder="W"></td>
+                        <td class="checkbox-cell"><input type="checkbox" class="checkbox-input"></td>
+                        <td><input type="text" class="notes-input" placeholder="Inhalte, Lernorte, Zeiträume"></td>
+                    </tr>
+
+                    <tr class="section-header">
+                        <td colspan="7">2. Aufbau und Organisation des Ausbildungsbetriebes (§ 3 Nr. 2)</td>
+                    </tr>
+                    <tr>
+                        <td class="skill-number">2</td>
+                        <td class="skill-content">
+                            <strong>a)</strong> Aufbau und Aufgaben des Freizeit- und Bäderbetriebes beschreiben
+                        </td>
+                        <td class="time-col"><input type="number" class="time-input" min="0" placeholder="W"></td>
+                        <td class="time-col"><input type="number" class="time-input" min="0" placeholder="W"></td>
+                        <td class="time-col"><input type="number" class="time-input" min="0" placeholder="W"></td>
+                        <td class="checkbox-cell"><input type="checkbox" class="checkbox-input"></td>
+                        <td><input type="text" class="notes-input" placeholder="Inhalte, Lernorte, Zeiträume"></td>
+                    </tr>
+                    <tr>
+                        <td class="skill-number">2</td>
+                        <td class="skill-content">
+                            <strong>b)</strong> Rechtsform, Aufbau und betriebliche Organisation des Ausbildungsbetriebes erläutern
+                        </td>
+                        <td class="time-col"><input type="number" class="time-input" min="0" placeholder="W"></td>
+                        <td class="time-col"><input type="number" class="time-input" min="0" placeholder="W"></td>
+                        <td class="time-col"><input type="number" class="time-input" min="0" placeholder="W"></td>
+                        <td class="checkbox-cell"><input type="checkbox" class="checkbox-input"></td>
+                        <td><input type="text" class="notes-input" placeholder="Inhalte, Lernorte, Zeiträume"></td>
+                    </tr>
+                    <tr>
+                        <td class="skill-number">2</td>
+                        <td class="skill-content">
+                            <strong>c)</strong> Beziehungen des Ausbildungsbetriebes und seiner Beschäftigten zu Wirtschaftsorganisationen, Berufsvertretungen, Gewerkschaften und Verwaltungen beschreiben
+                        </td>
+                        <td class="time-col"><input type="number" class="time-input" min="0" placeholder="W"></td>
+                        <td class="time-col"><input type="number" class="time-input" min="0" placeholder="W"></td>
+                        <td class="time-col"><input type="number" class="time-input" min="0" placeholder="W"></td>
+                        <td class="checkbox-cell"><input type="checkbox" class="checkbox-input"></td>
+                        <td><input type="text" class="notes-input" placeholder="Inhalte, Lernorte, Zeiträume"></td>
+                    </tr>
+                    <tr>
+                        <td class="skill-number">2</td>
+                        <td class="skill-content">
+                            <strong>d)</strong> Grundlagen, Aufgaben und Arbeitsweise der betriebsverfassungs- oder personalvertretungsrechtlichen Organe des Ausbildungsbetriebes beschreiben
+                        </td>
+                        <td class="time-col"><input type="number" class="time-input" min="0" placeholder="W"></td>
+                        <td class="time-col"><input type="number" class="time-input" min="0" placeholder="W"></td>
+                        <td class="time-col"><input type="number" class="time-input" min="0" placeholder="W"></td>
+                        <td class="checkbox-cell"><input type="checkbox" class="checkbox-input"></td>
+                        <td><input type="text" class="notes-input" placeholder="Inhalte, Lernorte, Zeiträume"></td>
+                    </tr>
+
+                    <tr class="section-header">
+                        <td colspan="7">3. Arbeits- und Tarifrecht, Arbeitsschutz (§ 3 Nr. 3)</td>
+                    </tr>
+                    <tr>
+                        <td class="skill-number">3</td>
+                        <td class="skill-content">
+                            <strong>a)</strong> Auskünfte über Inhalt und Bedeutung des Arbeitsvertrages geben
+                        </td>
+                        <td class="time-col"><input type="number" class="time-input" min="0" placeholder="W"></td>
+                        <td class="time-col"><input type="number" class="time-input" min="0" placeholder="W"></td>
+                        <td class="time-col"><input type="number" class="time-input" min="0" placeholder="W"></td>
+                        <td class="checkbox-cell"><input type="checkbox" class="checkbox-input"></td>
+                        <td><input type="text" class="notes-input" placeholder="Inhalte, Lernorte, Zeiträume"></td>
+                    </tr>
+                    <tr>
+                        <td class="skill-number">3</td>
+                        <td class="skill-content">
+                            <strong>b)</strong> Bestimmungen der für den Ausbildungsbetrieb geltenden Tarifverträge nennen
+                        </td>
+                        <td class="time-col"><input type="number" class="time-input" min="0" placeholder="W"></td>
+                        <td class="time-col"><input type="number" class="time-input" min="0" placeholder="W"></td>
+                        <td class="time-col"><input type="number" class="time-input" min="0" placeholder="W"></td>
+                        <td class="checkbox-cell"><input type="checkbox" class="checkbox-input"></td>
+                        <td><input type="text" class="notes-input" placeholder="Inhalte, Lernorte, Zeiträume"></td>
+                    </tr>
+                    <tr>
+                        <td class="skill-number">3</td>
+                        <td class="skill-content">
+                            <strong>c)</strong> Aufgaben der betrieblichen Arbeitsschutzorganisation, der zuständigen Unfallversicherungsträger und der Gewerbeaufsicht erläutern
+                        </td>
+                        <td class="time-col"><input type="number" class="time-input" min="0" placeholder="W"></td>
+                        <td class="time-col"><input type="number" class="time-input" min="0" placeholder="W"></td>
+                        <td class="time-col"><input type="number" class="time-input" min="0" placeholder="W"></td>
+                        <td class="checkbox-cell"><input type="checkbox" class="checkbox-input"></td>
+                        <td><input type="text" class="notes-input" placeholder="Inhalte, Lernorte, Zeiträume"></td>
+                    </tr>
+                    <tr>
+                        <td class="skill-number">3</td>
+                        <td class="skill-content">
+                            <strong>d)</strong> Bestimmungen der für den Ausbildungsbetrieb geltenden Arbeitsschutzgesetze nennen
+                        </td>
+                        <td class="time-col"><input type="number" class="time-input" min="0" placeholder="W"></td>
+                        <td class="time-col"><input type="number" class="time-input" min="0" placeholder="W"></td>
+                        <td class="time-col"><input type="number" class="time-input" min="0" placeholder="W"></td>
+                        <td class="checkbox-cell"><input type="checkbox" class="checkbox-input"></td>
+                        <td><input type="text" class="notes-input" placeholder="Inhalte, Lernorte, Zeiträume"></td>
+                    </tr>
+                    <tr>
+                        <td class="skill-number">3</td>
+                        <td class="skill-content">
+                            <strong>e)</strong> Bestandteile der Sozialversicherung sowie Träger und Beitragssysteme aufzeigen
+                        </td>
+                        <td class="time-col"><input type="number" class="time-input" min="0" placeholder="W"></td>
+                        <td class="time-col"><input type="number" class="time-input" min="0" placeholder="W"></td>
+                        <td class="time-col"><input type="number" class="time-input" min="0" placeholder="W"></td>
+                        <td class="checkbox-cell"><input type="checkbox" class="checkbox-input"></td>
+                        <td><input type="text" class="notes-input" placeholder="Inhalte, Lernorte, Zeiträume"></td>
+                    </tr>
+
+                    <tr class="section-header">
+                        <td colspan="7">4. Arbeitssicherheit, Umweltschutz und rationelle Energieverwendung (§ 3 Nr. 4)</td>
+                    </tr>
+                    <tr>
+                        <td class="skill-number">4</td>
+                        <td class="skill-content">
+                            <strong>a)</strong> berufsbezogene Vorschriften der Träger der gesetzlichen Unfallversicherung, insbesondere Unfallverhütungsvorschriften, Richtlinien und Merkblätter, beachten
+                        </td>
+                        <td class="time-col"><input type="number" class="time-input" min="0" placeholder="W"></td>
+                        <td class="time-col"><input type="number" class="time-input" min="0" placeholder="W"></td>
+                        <td class="time-col"><input type="number" class="time-input" min="0" placeholder="W"></td>
+                        <td class="checkbox-cell"><input type="checkbox" class="checkbox-input"></td>
+                        <td><input type="text" class="notes-input" placeholder="Inhalte, Lernorte, Zeiträume"></td>
+                    </tr>
+                    <tr>
+                        <td class="skill-number">4</td>
+                        <td class="skill-content">
+                            <strong>b)</strong> Arbeitsschutzvorschriften bei Arbeitsabläufen anwenden
+                        </td>
+                        <td class="time-col"><input type="number" class="time-input" min="0" placeholder="W"></td>
+                        <td class="time-col"><input type="number" class="time-input" min="0" placeholder="W"></td>
+                        <td class="time-col"><input type="number" class="time-input" min="0" placeholder="W"></td>
+                        <td class="checkbox-cell"><input type="checkbox" class="checkbox-input"></td>
+                        <td><input type="text" class="notes-input" placeholder="Inhalte, Lernorte, Zeiträume"></td>
+                    </tr>
+                    <tr>
+                        <td class="skill-number">4</td>
+                        <td class="skill-content">
+                            <strong>c)</strong> geeignete Maßnahmen zur Verhütung von Unfällen im eigenen Arbeitsbereich treffen und bei Unfällen sachgerecht handeln
+                        </td>
+                        <td class="time-col"><input type="number" class="time-input" min="0" placeholder="W"></td>
+                        <td class="time-col"><input type="number" class="time-input" min="0" placeholder="W"></td>
+                        <td class="time-col"><input type="number" class="time-input" min="0" placeholder="W"></td>
+                        <td class="checkbox-cell"><input type="checkbox" class="checkbox-input"></td>
+                        <td><input type="text" class="notes-input" placeholder="Inhalte, Lernorte, Zeiträume"></td>
+                    </tr>
+                    <tr>
+                        <td class="skill-number">4</td>
+                        <td class="skill-content">
+                            <strong>d)</strong> Verhaltensregeln bei Bränden nennen und Maßnahmen zur Brandbekämpfung ergreifen
+                        </td>
+                        <td class="time-col"><input type="number" class="time-input" min="0" placeholder="W"></td>
+                        <td class="time-col"><input type="number" class="time-input" min="0" placeholder="W"></td>
+                        <td class="time-col"><input type="number" class="time-input" min="0" placeholder="W"></td>
+                        <td class="checkbox-cell"><input type="checkbox" class="checkbox-input"></td>
+                        <td><input type="text" class="notes-input" placeholder="Inhalte, Lernorte, Zeiträume"></td>
+                    </tr>
+                    <tr>
+                        <td class="skill-number">4</td>
+                        <td class="skill-content">
+                            <strong>e)</strong> Gefahren durch Gifte, Gase, Dämpfe, leichtentzündliche Stoffe und elektrischen Strom beachten
+                        </td>
+                        <td class="time-col"><input type="number" class="time-input" min="0" placeholder="W"></td>
+                        <td class="time-col"><input type="number" class="time-input" min="0" placeholder="W"></td>
+                        <td class="time-col"><input type="number" class="time-input" min="0" placeholder="W"></td>
+                        <td class="checkbox-cell"><input type="checkbox" class="checkbox-input"></td>
+                        <td><input type="text" class="notes-input" placeholder="Inhalte, Lernorte, Zeiträume"></td>
+                    </tr>
+                    <tr>
+                        <td class="skill-number">4</td>
+                        <td class="skill-content">
+                            <strong>f)</strong> berufsbezogene Vorschriften zum Umgang mit Gefahrstoffen und Gütern anwenden
+                        </td>
+                        <td class="time-col"><input type="number" class="time-input" min="0" placeholder="W"></td>
+                        <td class="time-col"><input type="number" class="time-input" min="0" placeholder="W"></td>
+                        <td class="time-col"><input type="number" class="time-input" min="0" placeholder="W"></td>
+                        <td class="checkbox-cell"><input type="checkbox" class="checkbox-input"></td>
+                        <td><input type="text" class="notes-input" placeholder="Inhalte, Lernorte, Zeiträume"></td>
+                    </tr>
+                    <tr>
+                        <td class="skill-number">4</td>
+                        <td class="skill-content">
+                            <strong>g)</strong> Vorschriften zum Schutz der Gesundheit am Arbeitsplatz anwenden
+                        </td>
+                        <td class="time-col"><input type="number" class="time-input" min="0" placeholder="W"></td>
+                        <td class="time-col"><input type="number" class="time-input" min="0" placeholder="W"></td>
+                        <td class="time-col"><input type="number" class="time-input" min="0" placeholder="W"></td>
+                        <td class="checkbox-cell"><input type="checkbox" class="checkbox-input"></td>
+                        <td><input type="text" class="notes-input" placeholder="Inhalte, Lernorte, Zeiträume"></td>
+                    </tr>
+                    <tr>
+                        <td class="skill-number">4</td>
+                        <td class="skill-content">
+                            <strong>h)</strong> zur Vermeidung betriebsbedingter Umweltbelastungen im beruflichen Einwirkungsbereich nach ökologischen Gesichtspunkten beitragen
+                        </td>
+                        <td class="time-col"><input type="number" class="time-input" min="0" placeholder="W"></td>
+                        <td class="time-col"><input type="number" class="time-input" min="0" placeholder="W"></td>
+                        <td class="time-col"><input type="number" class="time-input" min="0" placeholder="W"></td>
+                        <td class="checkbox-cell"><input type="checkbox" class="checkbox-input"></td>
+                        <td><input type="text" class="notes-input" placeholder="Inhalte, Lernorte, Zeiträume"></td>
+                    </tr>
+                    <tr>
+                        <td class="skill-number">4</td>
+                        <td class="skill-content">
+                            <strong>i)</strong> Maßnahmen zur Entsorgung von Abfällen unter Beachtung betrieblicher und sonstiger berufsbezogener Sicherheitsbestimmungen durchführen
+                        </td>
+                        <td class="time-col"><input type="number" class="time-input" min="0" placeholder="W"></td>
+                        <td class="time-col"><input type="number" class="time-input" min="0" placeholder="W"></td>
+                        <td class="time-col"><input type="number" class="time-input" min="0" placeholder="W"></td>
+                        <td class="checkbox-cell"><input type="checkbox" class="checkbox-input"></td>
+                        <td><input type="text" class="notes-input" placeholder="Inhalte, Lernorte, Zeiträume"></td>
+                    </tr>
+                    <tr>
+                        <td class="skill-number">4</td>
+                        <td class="skill-content">
+                            <strong>j)</strong> zur rationellen Energie- und Materialverwendung im beruflichen Beobachtungs- und Einwirkungsbereich beitragen
+                        </td>
+                        <td class="time-col"><input type="number" class="time-input" min="0" placeholder="W"></td>
+                        <td class="time-col"><input type="number" class="time-input" min="0" placeholder="W"></td>
+                        <td class="time-col"><input type="number" class="time-input" min="0" placeholder="W"></td>
+                        <td class="checkbox-cell"><input type="checkbox" class="checkbox-input"></td>
+                        <td><input type="text" class="notes-input" placeholder="Inhalte, Lernorte, Zeiträume"></td>
+                    </tr>
+                </tbody>
+            </table>
+
+                    <tr class="section-header">
+                        <td colspan="7">5. Aufrechterhaltung der Betriebssicherheit (§ 3 Nr. 5)</td>
+                    </tr>
+                    <tr>
+                        <td class="skill-number">5</td>
+                        <td class="skill-content">
+                            <strong>a)</strong> Rechtsvorschriften und betriebliche Bestimmungen die für den Betrieb des Bades gelten, anwenden
+                        </td>
+                        <td class="time-col"><input type="number" class="time-input" min="0" placeholder="W" value="1"></td>
+                        <td class="time-col"><input type="number" class="time-input" min="0" placeholder="W"></td>
+                        <td class="time-col"><input type="number" class="time-input" min="0" placeholder="W"></td>
+                        <td class="checkbox-cell"><input type="checkbox" class="checkbox-input"></td>
+                        <td><input type="text" class="notes-input" placeholder="Inhalte, Lernorte, Zeiträume"></td>
+                    </tr>
+                    <tr>
+                        <td class="skill-number">5</td>
+                        <td class="skill-content">
+                            <strong>b)</strong> Rechtsvorschriften und betriebliche Grundsätze der Hygiene anwenden
+                        </td>
+                        <td class="time-col"><input type="number" class="time-input" min="0" placeholder="W" value="1"></td>
+                        <td class="time-col"><input type="number" class="time-input" min="0" placeholder="W"></td>
+                        <td class="time-col"><input type="number" class="time-input" min="0" placeholder="W"></td>
+                        <td class="checkbox-cell"><input type="checkbox" class="checkbox-input"></td>
+                        <td><input type="text" class="notes-input" placeholder="Inhalte, Lernorte, Zeiträume"></td>
+                    </tr>
+                    <tr>
+                        <td class="skill-number">5</td>
+                        <td class="skill-content">
+                            <strong>c)</strong> Mittel, Geräte und Verfahren zur Reinigung und Desinfektion anwenden und deren Auswahl begründen
+                        </td>
+                        <td class="time-col"><input type="number" class="time-input" min="0" placeholder="W" value="2"></td>
+                        <td class="time-col"><input type="number" class="time-input" min="0" placeholder="W"></td>
+                        <td class="time-col"><input type="number" class="time-input" min="0" placeholder="W"></td>
+                        <td class="checkbox-cell"><input type="checkbox" class="checkbox-input"></td>
+                        <td><input type="text" class="notes-input" placeholder="Inhalte, Lernorte, Zeiträume"></td>
+                    </tr>
+                    <tr>
+                        <td class="skill-number">5</td>
+                        <td class="skill-content">
+                            <strong>d)</strong> bei der Organisation von Betriebsabläufen des Badebetriebes mitwirken
+                        </td>
+                        <td class="time-col"><input type="number" class="time-input" min="0" placeholder="W" value="6"></td>
+                        <td class="time-col"><input type="number" class="time-input" min="0" placeholder="W"></td>
+                        <td class="time-col"><input type="number" class="time-input" min="0" placeholder="W"></td>
+                        <td class="checkbox-cell"><input type="checkbox" class="checkbox-input"></td>
+                        <td><input type="text" class="notes-input" placeholder="Inhalte, Lernorte, Zeiträume"></td>
+                    </tr>
+                    <tr>
+                        <td class="skill-number">5</td>
+                        <td class="skill-content">
+                            <strong>e)</strong> bei der Kontrolle und Beaufsichtigung von Betriebsabläufen des Badebetriebes mitwirken
+                        </td>
+                        <td class="time-col"><input type="number" class="time-input" min="0" placeholder="W" value="6"></td>
+                        <td class="time-col"><input type="number" class="time-input" min="0" placeholder="W"></td>
+                        <td class="time-col"><input type="number" class="time-input" min="0" placeholder="W"></td>
+                        <td class="checkbox-cell"><input type="checkbox" class="checkbox-input"></td>
+                        <td><input type="text" class="notes-input" placeholder="Inhalte, Lernorte, Zeiträume"></td>
+                    </tr>
+
+                    <tr class="section-header">
+                        <td colspan="7">6. Beaufsichtigen des Badebetriebes (§ 3 Nr. 6)</td>
+                    </tr>
+                    <tr>
+                        <td class="skill-number">6</td>
+                        <td class="skill-content">
+                            <strong>a)</strong> Gefahren des Badebetriebes in und an Naturgewässern erläutern
+                        </td>
+                        <td class="time-col"><input type="number" class="time-input" min="0" placeholder="W" value="4"></td>
+                        <td class="time-col"><input type="number" class="time-input" min="0" placeholder="W"></td>
+                        <td class="time-col"><input type="number" class="time-input" min="0" placeholder="W"></td>
+                        <td class="checkbox-cell"><input type="checkbox" class="checkbox-input"></td>
+                        <td><input type="text" class="notes-input" placeholder="Inhalte, Lernorte, Zeiträume"></td>
+                    </tr>
+                    <tr>
+                        <td class="skill-number">6</td>
+                        <td class="skill-content">
+                            <strong>b)</strong> Rechtsnormen, Verwaltungsvorschriften, Betriebs- und Dienstanweisungen zur Aufsicht im Badebetrieb sowie die Badeordnung anwenden
+                        </td>
+                        <td class="time-col"><input type="number" class="time-input" min="0" placeholder="W"></td>
+                        <td class="time-col"><input type="number" class="time-input" min="0" placeholder="W"></td>
+                        <td class="time-col"><input type="number" class="time-input" min="0" placeholder="W"></td>
+                        <td class="checkbox-cell"><input type="checkbox" class="checkbox-input"></td>
+                        <td><input type="text" class="notes-input" placeholder="Inhalte, Lernorte, Zeiträume"></td>
+                    </tr>
+                    <tr>
+                        <td class="skill-number">6</td>
+                        <td class="skill-content">
+                            <strong>c)</strong> Beaufsichtigung im Badebetrieb, insbesondere im Beckenbereich, durchführen
+                        </td>
+                        <td class="time-col"><input type="number" class="time-input" min="0" placeholder="W" value="6"></td>
+                        <td class="time-col"><input type="number" class="time-input" min="0" placeholder="W"></td>
+                        <td class="time-col"><input type="number" class="time-input" min="0" placeholder="W"></td>
+                        <td class="checkbox-cell"><input type="checkbox" class="checkbox-input"></td>
+                        <td><input type="text" class="notes-input" placeholder="Inhalte, Lernorte, Zeiträume"></td>
+                    </tr>
+                    <tr>
+                        <td class="skill-number">6</td>
+                        <td class="skill-content">
+                            <strong>d)</strong> bei Planung und Organisation des Aufsichtsdienstes mitwirken
+                        </td>
+                        <td class="time-col"><input type="number" class="time-input" min="0" placeholder="W"></td>
+                        <td class="time-col"><input type="number" class="time-input" min="0" placeholder="W" value="8"></td>
+                        <td class="time-col"><input type="number" class="time-input" min="0" placeholder="W"></td>
+                        <td class="checkbox-cell"><input type="checkbox" class="checkbox-input"></td>
+                        <td><input type="text" class="notes-input" placeholder="Inhalte, Lernorte, Zeiträume"></td>
+                    </tr>
+                    <tr>
+                        <td class="skill-number">6</td>
+                        <td class="skill-content">
+                            <strong>e)</strong> bedrohliche Situationen im Badebetrieb feststellen und Sofortmaßnahmen einleiten
+                        </td>
+                        <td class="time-col"><input type="number" class="time-input" min="0" placeholder="W"></td>
+                        <td class="time-col"><input type="number" class="time-input" min="0" placeholder="W"></td>
+                        <td class="time-col"><input type="number" class="time-input" min="0" placeholder="W"></td>
+                        <td class="checkbox-cell"><input type="checkbox" class="checkbox-input"></td>
+                        <td><input type="text" class="notes-input" placeholder="Inhalte, Lernorte, Zeiträume"></td>
+                    </tr>
+
+                    <tr class="section-header">
+                        <td colspan="7">7. Betreuen von Besuchern (§ 3 Nr. 7)</td>
+                    </tr>
+                    <tr>
+                        <td class="skill-number">7</td>
+                        <td class="skill-content">
+                            <strong>a)</strong> Besucher empfangen und informieren
+                        </td>
+                        <td class="time-col"><input type="number" class="time-input" min="0" placeholder="W"></td>
+                        <td class="time-col"><input type="number" class="time-input" min="0" placeholder="W"></td>
+                        <td class="time-col"><input type="number" class="time-input" min="0" placeholder="W"></td>
+                        <td class="checkbox-cell"><input type="checkbox" class="checkbox-input"></td>
+                        <td><input type="text" class="notes-input" placeholder="Inhalte, Lernorte, Zeiträume"></td>
+                    </tr>
+                    <tr>
+                        <td class="skill-number">7</td>
+                        <td class="skill-content">
+                            <strong>b)</strong> Konfliktfelder beschreiben und Möglichkeiten zur Konfliktregelung anwenden
+                        </td>
+                        <td class="time-col"><input type="number" class="time-input" min="0" placeholder="W" value="4"></td>
+                        <td class="time-col"><input type="number" class="time-input" min="0" placeholder="W"></td>
+                        <td class="time-col"><input type="number" class="time-input" min="0" placeholder="W"></td>
+                        <td class="checkbox-cell"><input type="checkbox" class="checkbox-input"></td>
+                        <td><input type="text" class="notes-input" placeholder="Inhalte, Lernorte, Zeiträume"></td>
+                    </tr>
+                    <tr>
+                        <td class="skill-number">7</td>
+                        <td class="skill-content">
+                            <strong>c)</strong> über notwendige Hygienemaßnahmen beraten
+                        </td>
+                        <td class="time-col"><input type="number" class="time-input" min="0" placeholder="W"></td>
+                        <td class="time-col"><input type="number" class="time-input" min="0" placeholder="W"></td>
+                        <td class="time-col"><input type="number" class="time-input" min="0" placeholder="W"></td>
+                        <td class="checkbox-cell"><input type="checkbox" class="checkbox-input"></td>
+                        <td><input type="text" class="notes-input" placeholder="Inhalte, Lernorte, Zeiträume"></td>
+                    </tr>
+                    <tr>
+                        <td class="skill-number">7</td>
+                        <td class="skill-content">
+                            <strong>d)</strong> Besucherwünsche ermitteln und entsprechende Spiel- und Sportarrangements anbieten
+                        </td>
+                        <td class="time-col"><input type="number" class="time-input" min="0" placeholder="W" value="6"></td>
+                        <td class="time-col"><input type="number" class="time-input" min="0" placeholder="W"></td>
+                        <td class="time-col"><input type="number" class="time-input" min="0" placeholder="W"></td>
+                        <td class="checkbox-cell"><input type="checkbox" class="checkbox-input"></td>
+                        <td><input type="text" class="notes-input" placeholder="Inhalte, Lernorte, Zeiträume"></td>
+                    </tr>
+                    <tr>
+                        <td class="skill-number">7</td>
+                        <td class="skill-content">
+                            <strong>e)</strong> Besucher betreuen
+                        </td>
+                        <td class="time-col"><input type="number" class="time-input" min="0" placeholder="W"></td>
+                        <td class="time-col"><input type="number" class="time-input" min="0" placeholder="W"></td>
+                        <td class="time-col"><input type="number" class="time-input" min="0" placeholder="W"></td>
+                        <td class="checkbox-cell"><input type="checkbox" class="checkbox-input"></td>
+                        <td><input type="text" class="notes-input" placeholder="Inhalte, Lernorte, Zeiträume"></td>
+                    </tr>
+                    <tr>
+                        <td class="skill-number">7</td>
+                        <td class="skill-content">
+                            <strong>f)</strong> Kommunikationsregeln in verschiedenen beruflichen Situationen anwenden und zur Vermeidung von Kommunikationsstörungen beitragen
+                        </td>
+                        <td class="time-col"><input type="number" class="time-input" min="0" placeholder="W" value="4"></td>
+                        <td class="time-col"><input type="number" class="time-input" min="0" placeholder="W"></td>
+                        <td class="time-col"><input type="number" class="time-input" min="0" placeholder="W"></td>
+                        <td class="checkbox-cell"><input type="checkbox" class="checkbox-input"></td>
+                        <td><input type="text" class="notes-input" placeholder="Inhalte, Lernorte, Zeiträume"></td>
+                    </tr>
+
+                    <tr class="section-header">
+                        <td colspan="7">8. Schwimmen (§ 3 Nr. 8)</td>
+                    </tr>
+                    <tr>
+                        <td class="skill-number">8</td>
+                        <td class="skill-content">
+                            <strong>a)</strong> Wettkampftechniken einschließlich Start- und Wendetechniken anwenden
+                        </td>
+                        <td class="time-col"><input type="number" class="time-input" min="0" placeholder="W"></td>
+                        <td class="time-col"><input type="number" class="time-input" min="0" placeholder="W"></td>
+                        <td class="time-col"><input type="number" class="time-input" min="0" placeholder="W"></td>
+                        <td class="checkbox-cell"><input type="checkbox" class="checkbox-input"></td>
+                        <td><input type="text" class="notes-input" placeholder="Inhalte, Lernorte, Zeiträume"></td>
+                    </tr>
+                    <tr>
+                        <td class="skill-number">8</td>
+                        <td class="skill-content">
+                            <strong>b)</strong> Techniken des Strecken- und Tieftauchens anwenden
+                        </td>
+                        <td class="time-col"><input type="number" class="time-input" min="0" placeholder="W" value="7"></td>
+                        <td class="time-col"><input type="number" class="time-input" min="0" placeholder="W"></td>
+                        <td class="time-col"><input type="number" class="time-input" min="0" placeholder="W"></td>
+                        <td class="checkbox-cell"><input type="checkbox" class="checkbox-input"></td>
+                        <td><input type="text" class="notes-input" placeholder="Inhalte, Lernorte, Zeiträume"></td>
+                    </tr>
+                    <tr>
+                        <td class="skill-number">8</td>
+                        <td class="skill-content">
+                            <strong>c)</strong> Einfachsprünge ausführen
+                        </td>
+                        <td class="time-col"><input type="number" class="time-input" min="0" placeholder="W"></td>
+                        <td class="time-col"><input type="number" class="time-input" min="0" placeholder="W"></td>
+                        <td class="time-col"><input type="number" class="time-input" min="0" placeholder="W"></td>
+                        <td class="checkbox-cell"><input type="checkbox" class="checkbox-input"></td>
+                        <td><input type="text" class="notes-input" placeholder="Inhalte, Lernorte, Zeiträume"></td>
+                    </tr>
+                    <tr>
+                        <td class="skill-number">8</td>
+                        <td class="skill-content">
+                            <strong>d)</strong> theoretischen und praktischen Schwimmunterricht für Anfänger durchführen
+                        </td>
+                        <td class="time-col"><input type="number" class="time-input" min="0" placeholder="W"></td>
+                        <td class="time-col"><input type="number" class="time-input" min="0" placeholder="W" value="7"></td>
+                        <td class="time-col"><input type="number" class="time-input" min="0" placeholder="W"></td>
+                        <td class="checkbox-cell"><input type="checkbox" class="checkbox-input"></td>
+                        <td><input type="text" class="notes-input" placeholder="Inhalte, Lernorte, Zeiträume"></td>
+                    </tr>
+                    <tr>
+                        <td class="skill-number">8</td>
+                        <td class="skill-content">
+                            <strong>e)</strong> Schwimmunterricht für Fortgeschrittene durchführen
+                        </td>
+                        <td class="time-col"><input type="number" class="time-input" min="0" placeholder="W"></td>
+                        <td class="time-col"><input type="number" class="time-input" min="0" placeholder="W"></td>
+                        <td class="time-col"><input type="number" class="time-input" min="0" placeholder="W" value="6"></td>
+                        <td class="checkbox-cell"><input type="checkbox" class="checkbox-input"></td>
+                        <td><input type="text" class="notes-input" placeholder="Inhalte, Lernorte, Zeiträume"></td>
+                    </tr>
+                    <tr>
+                        <td class="skill-number">8</td>
+                        <td class="skill-content">
+                            <strong>f)</strong> Spring- und Tauchunterricht für Anfänger durchführen
+                        </td>
+                        <td class="time-col"><input type="number" class="time-input" min="0" placeholder="W"></td>
+                        <td class="time-col"><input type="number" class="time-input" min="0" placeholder="W"></td>
+                        <td class="time-col"><input type="number" class="time-input" min="0" placeholder="W"></td>
+                        <td class="checkbox-cell"><input type="checkbox" class="checkbox-input"></td>
+                        <td><input type="text" class="notes-input" placeholder="Inhalte, Lernorte, Zeiträume"></td>
+                    </tr>
+
+                    <tr class="section-header">
+                        <td colspan="7">9. Einleiten und Ausüben von Wasserrettungsmaßnahmen (§ 3 Nr. 9)</td>
+                    </tr>
+                    <tr>
+                        <td class="skill-number">9</td>
+                        <td class="skill-content">
+                            <strong>a)</strong> Rettungsmaßnahmen, insbesondere unter Anwendung der Methoden des Rettungsschwimmens, durchführen
+                        </td>
+                        <td class="time-col"><input type="number" class="time-input" min="0" placeholder="W" value="6"></td>
+                        <td class="time-col"><input type="number" class="time-input" min="0" placeholder="W"></td>
+                        <td class="time-col"><input type="number" class="time-input" min="0" placeholder="W"></td>
+                        <td class="checkbox-cell"><input type="checkbox" class="checkbox-input"></td>
+                        <td><input type="text" class="notes-input" placeholder="Inhalte, Lernorte, Zeiträume"></td>
+                    </tr>
+                    <tr>
+                        <td class="skill-number">9</td>
+                        <td class="skill-content">
+                            <strong>b)</strong> Rettungssituationen erläutern und entsprechende Rettungsmaßnahmen ableiten
+                        </td>
+                        <td class="time-col"><input type="number" class="time-input" min="0" placeholder="W" value="7"></td>
+                        <td class="time-col"><input type="number" class="time-input" min="0" placeholder="W"></td>
+                        <td class="time-col"><input type="number" class="time-input" min="0" placeholder="W"></td>
+                        <td class="checkbox-cell"><input type="checkbox" class="checkbox-input"></td>
+                        <td><input type="text" class="notes-input" placeholder="Inhalte, Lernorte, Zeiträume"></td>
+                    </tr>
+                    <tr>
+                        <td class="skill-number">9</td>
+                        <td class="skill-content">
+                            <strong>c)</strong> Rettungsgeräte für Wasserrettungsmaßnahmen warten und einsetzen
+                        </td>
+                        <td class="time-col"><input type="number" class="time-input" min="0" placeholder="W" value="7"></td>
+                        <td class="time-col"><input type="number" class="time-input" min="0" placeholder="W"></td>
+                        <td class="time-col"><input type="number" class="time-input" min="0" placeholder="W"></td>
+                        <td class="checkbox-cell"><input type="checkbox" class="checkbox-input"></td>
+                        <td><input type="text" class="notes-input" placeholder="Inhalte, Lernorte, Zeiträume"></td>
+                    </tr>
+
+                    <tr class="section-header">
+                        <td colspan="7">10. Durchführen von Erster Hilfe und Wiederbelebungsmaßnahmen (§ 3 Nr. 10)</td>
+                    </tr>
+                    <tr>
+                        <td class="skill-number">10</td>
+                        <td class="skill-content">
+                            <strong>a)</strong> Aufgaben eines Ersthelfers nach den Unfallverhütungsvorschriften des Trägers der gesetzlichen Unfallversicherung erfüllen
+                        </td>
+                        <td class="time-col"><input type="number" class="time-input" min="0" placeholder="W"></td>
+                        <td class="time-col"><input type="number" class="time-input" min="0" placeholder="W"></td>
+                        <td class="time-col"><input type="number" class="time-input" min="0" placeholder="W"></td>
+                        <td class="checkbox-cell"><input type="checkbox" class="checkbox-input"></td>
+                        <td><input type="text" class="notes-input" placeholder="Inhalte, Lernorte, Zeiträume"></td>
+                    </tr>
+                    <tr>
+                        <td class="skill-number">10</td>
+                        <td class="skill-content">
+                            <strong>b)</strong> Herz-Lungen-Wiederbelebungsmaßnahmen an Personen unterschiedlicher Altersgruppen unter Berücksichtigung der verschiedenen anatomischen Gegebenheiten durchführen
+                        </td>
+                        <td class="time-col"><input type="number" class="time-input" min="0" placeholder="W" value="4"></td>
+                        <td class="time-col"><input type="number" class="time-input" min="0" placeholder="W"></td>
+                        <td class="time-col"><input type="number" class="time-input" min="0" placeholder="W"></td>
+                        <td class="checkbox-cell"><input type="checkbox" class="checkbox-input"></td>
+                        <td><input type="text" class="notes-input" placeholder="Inhalte, Lernorte, Zeiträume"></td>
+                    </tr>
+                    <tr>
+                        <td class="skill-number">10</td>
+                        <td class="skill-content">
+                            <strong>c)</strong> Unfallbeteiligte betreuen
+                        </td>
+                        <td class="time-col"><input type="number" class="time-input" min="0" placeholder="W"></td>
+                        <td class="time-col"><input type="number" class="time-input" min="0" placeholder="W" value="2"></td>
+                        <td class="time-col"><input type="number" class="time-input" min="0" placeholder="W"></td>
+                        <td class="checkbox-cell"><input type="checkbox" class="checkbox-input"></td>
+                        <td><input type="text" class="notes-input" placeholder="Inhalte, Lernorte, Zeiträume"></td>
+                    </tr>
+                    <tr>
+                        <td class="skill-number">10</td>
+                        <td class="skill-content">
+                            <strong>d)</strong> Herz-Lungen-Wiederbelebung mit einfachem Gerät, insbesondere Beutel- und Balgbeatmer, durchführen
+                        </td>
+                        <td class="time-col"><input type="number" class="time-input" min="0" placeholder="W"></td>
+                        <td class="time-col"><input type="number" class="time-input" min="0" placeholder="W" value="2"></td>
+                        <td class="time-col"><input type="number" class="time-input" min="0" placeholder="W"></td>
+                        <td class="checkbox-cell"><input type="checkbox" class="checkbox-input"></td>
+                        <td><input type="text" class="notes-input" placeholder="Inhalte, Lernorte, Zeiträume"></td>
+                    </tr>
+                    <tr>
+                        <td class="skill-number">10</td>
+                        <td class="skill-content">
+                            <strong>e)</strong> Verletzte mit und ohne Gerät transportieren
+                        </td>
+                        <td class="time-col"><input type="number" class="time-input" min="0" placeholder="W"></td>
+                        <td class="time-col"><input type="number" class="time-input" min="0" placeholder="W"></td>
+                        <td class="time-col"><input type="number" class="time-input" min="0" placeholder="W"></td>
+                        <td class="checkbox-cell"><input type="checkbox" class="checkbox-input"></td>
+                        <td><input type="text" class="notes-input" placeholder="Inhalte, Lernorte, Zeiträume"></td>
+                    </tr>
+
+                    <tr class="section-header">
+                        <td colspan="7">11. Messen physikalischer und chemischer Größen sowie Bestimmen von Stoffkonstanten (§ 3 Nr. 11)</td>
+                    </tr>
+                    <tr>
+                        <td class="skill-number">11</td>
+                        <td class="skill-content">
+                            <strong>a)</strong> Länge, Masse, Volumen, Temperatur und Druck messen
+                        </td>
+                        <td class="time-col"><input type="number" class="time-input" min="0" placeholder="W"></td>
+                        <td class="time-col"><input type="number" class="time-input" min="0" placeholder="W"></td>
+                        <td class="time-col"><input type="number" class="time-input" min="0" placeholder="W"></td>
+                        <td class="checkbox-cell"><input type="checkbox" class="checkbox-input"></td>
+                        <td><input type="text" class="notes-input" placeholder="Inhalte, Lernorte, Zeiträume"></td>
+                    </tr>
+                    <tr>
+                        <td class="skill-number">11</td>
+                        <td class="skill-content">
+                            <strong>b)</strong> die Bedeutung von Schmelzpunkt, Siedepunkt und Dichte erläutern
+                        </td>
+                        <td class="time-col"><input type="number" class="time-input" min="0" placeholder="W"></td>
+                        <td class="time-col"><input type="number" class="time-input" min="0" placeholder="W" value="2"></td>
+                        <td class="time-col"><input type="number" class="time-input" min="0" placeholder="W"></td>
+                        <td class="checkbox-cell"><input type="checkbox" class="checkbox-input"></td>
+                        <td><input type="text" class="notes-input" placeholder="Inhalte, Lernorte, Zeiträume"></td>
+                    </tr>
+                    <tr>
+                        <td class="skill-number">11</td>
+                        <td class="skill-content">
+                            <strong>c)</strong> pH-Wert und Hygienehilfsparameter bestimmen
+                        </td>
+                        <td class="time-col"><input type="number" class="time-input" min="0" placeholder="W"></td>
+                        <td class="time-col"><input type="number" class="time-input" min="0" placeholder="W"></td>
+                        <td class="time-col"><input type="number" class="time-input" min="0" placeholder="W"></td>
+                        <td class="checkbox-cell"><input type="checkbox" class="checkbox-input"></td>
+                        <td><input type="text" class="notes-input" placeholder="Inhalte, Lernorte, Zeiträume"></td>
+                    </tr>
+                    <tr>
+                        <td class="skill-number">11</td>
+                        <td class="skill-content">
+                            <strong>d)</strong> Proben unter betrieblichen Bedingungen entnehmen
+                        </td>
+                        <td class="time-col"><input type="number" class="time-input" min="0" placeholder="W"></td>
+                        <td class="time-col"><input type="number" class="time-input" min="0" placeholder="W" value="2"></td>
+                        <td class="time-col"><input type="number" class="time-input" min="0" placeholder="W"></td>
+                        <td class="checkbox-cell"><input type="checkbox" class="checkbox-input"></td>
+                        <td><input type="text" class="notes-input" placeholder="Inhalte, Lernorte, Zeiträume"></td>
+                    </tr>
+                    <tr>
+                        <td class="skill-number">11</td>
+                        <td class="skill-content">
+                            <strong>e)</strong> Messgeräte zur Überwachung der Wasserqualität handhaben und pflegen
+                        </td>
+                        <td class="time-col"><input type="number" class="time-input" min="0" placeholder="W"></td>
+                        <td class="time-col"><input type="number" class="time-input" min="0" placeholder="W"></td>
+                        <td class="time-col"><input type="number" class="time-input" min="0" placeholder="W"></td>
+                        <td class="checkbox-cell"><input type="checkbox" class="checkbox-input"></td>
+                        <td><input type="text" class="notes-input" placeholder="Inhalte, Lernorte, Zeiträume"></td>
+                    </tr>
+
+                    <tr class="section-header">
+                        <td colspan="7">12. Kontrollieren und Sichern des technischen Betriebsablaufes (§ 3 Nr. 12)</td>
+                    </tr>
+                    <tr>
+                        <td class="skill-number">12</td>
+                        <td class="skill-content">
+                            <strong>a)</strong> Betriebsabläufe durch regelmäßige Kontrolle der bädertechnischen Anlage und der Betriebszustände sichern
+                        </td>
+                        <td class="time-col"><input type="number" class="time-input" min="0" placeholder="W" value="7"></td>
+                        <td class="time-col"><input type="number" class="time-input" min="0" placeholder="W"></td>
+                        <td class="time-col"><input type="number" class="time-input" min="0" placeholder="W"></td>
+                        <td class="checkbox-cell"><input type="checkbox" class="checkbox-input"></td>
+                        <td><input type="text" class="notes-input" placeholder="Inhalte, Lernorte, Zeiträume"></td>
+                    </tr>
+                    <tr>
+                        <td class="skill-number">12</td>
+                        <td class="skill-content">
+                            <strong>b)</strong> Arbeits- und Bäderhygiene kontrollieren und sichern
+                        </td>
+                        <td class="time-col"><input type="number" class="time-input" min="0" placeholder="W"></td>
+                        <td class="time-col"><input type="number" class="time-input" min="0" placeholder="W"></td>
+                        <td class="time-col"><input type="number" class="time-input" min="0" placeholder="W"></td>
+                        <td class="checkbox-cell"><input type="checkbox" class="checkbox-input"></td>
+                        <td><input type="text" class="notes-input" placeholder="Inhalte, Lernorte, Zeiträume"></td>
+                    </tr>
+                    <tr>
+                        <td class="skill-number">12</td>
+                        <td class="skill-content">
+                            <strong>c)</strong> Betriebsdaten von Steuer-, Regel- und Sicherheitseinrichtungen prüfen und dokumentieren
+                        </td>
+                        <td class="time-col"><input type="number" class="time-input" min="0" placeholder="W"></td>
+                        <td class="time-col"><input type="number" class="time-input" min="0" placeholder="W"></td>
+                        <td class="time-col"><input type="number" class="time-input" min="0" placeholder="W" value="8"></td>
+                        <td class="checkbox-cell"><input type="checkbox" class="checkbox-input"></td>
+                        <td><input type="text" class="notes-input" placeholder="Inhalte, Lernorte, Zeiträume"></td>
+                    </tr>
+                    <tr>
+                        <td class="skill-number">12</td>
+                        <td class="skill-content">
+                            <strong>d)</strong> Notfallpläne zur Bewältigung häufiger Störungen anwenden
+                        </td>
+                        <td class="time-col"><input type="number" class="time-input" min="0" placeholder="W"></td>
+                        <td class="time-col"><input type="number" class="time-input" min="0" placeholder="W"></td>
+                        <td class="time-col"><input type="number" class="time-input" min="0" placeholder="W"></td>
+                        <td class="checkbox-cell"><input type="checkbox" class="checkbox-input"></td>
+                        <td><input type="text" class="notes-input" placeholder="Inhalte, Lernorte, Zeiträume"></td>
+                    </tr>
+                    <tr>
+                        <td class="skill-number">12</td>
+                        <td class="skill-content">
+                            <strong>e)</strong> Prozessabläufe technischer Anlagen, insbesondere zur Schwimm- und Badebeckenwasseraufbereitung, steuern
+                        </td>
+                        <td class="time-col"><input type="number" class="time-input" min="0" placeholder="W"></td>
+                        <td class="time-col"><input type="number" class="time-input" min="0" placeholder="W"></td>
+                        <td class="time-col"><input type="number" class="time-input" min="0" placeholder="W" value="9"></td>
+                        <td class="checkbox-cell"><input type="checkbox" class="checkbox-input"></td>
+                        <td><input type="text" class="notes-input" placeholder="Inhalte, Lernorte, Zeiträume"></td>
+                    </tr>
+                </tbody>
+            </table>
+
+            <p style="margin-top: 30px; color: #666; font-style: italic;">
+                <strong>Hinweis:</strong> Die weiteren Abschnitte (13-15) können bei Bedarf ergänzt werden. 
+                Alle Eingaben werden automatisch im Browser gespeichert.
+            </p>
+        </div>
+
+        <!-- BUTTONS -->
+        <div class="button-group">
+            <button class="save-btn" onclick="saveData()">💾 Daten speichern</button>
+            <button class="print-btn" onclick="window.print()">🖨️ Drucken</button>
+        </div>
+    </div>
+
+    <script>
+        // Speichern der Daten im LocalStorage
+        function saveData() {
+            const formData = {
+                ausbildungsstaette: document.querySelector('input[placeholder="Name der Ausbildungsstätte"]').value,
+                ausbildungsbeginn: document.querySelector('input[type="date"]').value,
+                ausbildungsende: document.querySelectorAll('input[type="date"]')[1].value,
+                ausbilder: document.querySelector('input[placeholder="Name des Ausbilders / der Ausbilderin"]').value,
+                berufsschule: document.querySelector('input[placeholder="Name der Berufsschule"]').value
+            };
+
+            // Speichere alle Eingaben aus der Tabelle
+            const tableData = [];
+            document.querySelectorAll('table tbody tr').forEach((row, index) => {
+                if (!row.classList.contains('section-header')) {
+                    const inputs = row.querySelectorAll('input');
+                    if (inputs.length > 0) {
+                        tableData.push({
+                            row: index,
+                            year1: inputs[0]?.value || '',
+                            year2: inputs[1]?.value || '',
+                            year3: inputs[2]?.value || '',
+                            checked: inputs[3]?.checked || false,
+                            notes: inputs[4]?.value || ''
+                        });
+                    }
+                }
+            });
+
+            const allData = {
+                form: formData,
+                table: tableData
+            };
+
+            localStorage.setItem('ausbildungsplan', JSON.stringify(allData));
+            alert('Daten wurden gespeichert!');
+        }
+
+        // Laden der Daten beim Seitenaufruf
+        window.addEventListener('DOMContentLoaded', function() {
+            const savedData = localStorage.getItem('ausbildungsplan');
+            if (savedData) {
+                try {
+                    const data = JSON.parse(savedData);
+                    
+                    // Formularfelder laden
+                    if (data.form) {
+                        document.querySelector('input[placeholder="Name der Ausbildungsstätte"]').value = data.form.ausbildungsstaette || '';
+                        document.querySelector('input[type="date"]').value = data.form.ausbildungsbeginn || '';
+                        document.querySelectorAll('input[type="date"]')[1].value = data.form.ausbildungsende || '';
+                        document.querySelector('input[placeholder="Name des Ausbilders / der Ausbilderin"]').value = data.form.ausbilder || '';
+                        document.querySelector('input[placeholder="Name der Berufsschule"]').value = data.form.berufsschule || '';
+                    }
+
+                    // Tabellendaten laden
+                    if (data.table) {
+                        const rows = document.querySelectorAll('table tbody tr');
+                        data.table.forEach(item => {
+                            if (rows[item.row] && !rows[item.row].classList.contains('section-header')) {
+                                const inputs = rows[item.row].querySelectorAll('input');
+                                if (inputs.length >= 5) {
+                                    inputs[0].value = item.year1 || '';
+                                    inputs[1].value = item.year2 || '';
+                                    inputs[2].value = item.year3 || '';
+                                    inputs[3].checked = item.checked || false;
+                                    inputs[4].value = item.notes || '';
+                                }
+                            }
+                        });
+                    }
+                } catch (e) {
+                    console.error('Fehler beim Laden der Daten:', e);
+                }
+            }
+        });
+    </script>
+</body>
+</html>
+

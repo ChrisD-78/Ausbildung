@@ -1,0 +1,1080 @@
+<!DOCTYPE html>
+<html lang="de">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Ausbildungsrahmenplan - FAB</title>
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            overflow-x: hidden;
+        }
+
+        .container {
+            max-width: 1400px;
+            margin: 0 auto;
+            padding: 20px;
+        }
+
+        .header {
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            color: white;
+            padding: 40px;
+            border-radius: 20px;
+            margin-bottom: 30px;
+            text-align: center;
+            box-shadow: 0 20px 60px rgba(0,0,0,0.3);
+        }
+
+        .header h1 {
+            font-size: 3em;
+            margin-bottom: 15px;
+        }
+
+        .header p {
+            font-size: 1.2em;
+            opacity: 0.9;
+        }
+
+        .nav-link {
+            display: inline-block;
+            margin-top: 20px;
+            padding: 12px 30px;
+            background: rgba(255,255,255,0.2);
+            color: white;
+            text-decoration: none;
+            border-radius: 25px;
+            transition: all 0.3s ease;
+        }
+
+        .nav-link:hover {
+            background: rgba(255,255,255,0.3);
+            transform: translateY(-2px);
+        }
+
+        .section {
+            background: white;
+            border-radius: 20px;
+            padding: 40px;
+            margin-bottom: 30px;
+            box-shadow: 0 20px 60px rgba(0,0,0,0.3);
+            animation: slideIn 0.6s ease-out;
+        }
+
+        @keyframes slideIn {
+            from {
+                opacity: 0;
+                transform: translateY(30px);
+            }
+            to {
+                opacity: 1;
+                transform: translateY(0);
+            }
+        }
+
+        h2 {
+            font-size: 2.5em;
+            color: #667eea;
+            margin-bottom: 25px;
+            border-bottom: 4px solid #667eea;
+            padding-bottom: 15px;
+        }
+
+        h3 {
+            font-size: 1.8em;
+            color: #764ba2;
+            margin: 30px 0 20px 0;
+            padding: 15px;
+            background: linear-gradient(135deg, #f8f9fa 0%, #e9ecef 100%);
+            border-radius: 10px;
+            border-left: 5px solid #667eea;
+        }
+
+        h4 {
+            font-size: 1.4em;
+            color: #667eea;
+            margin: 25px 0 15px 0;
+        }
+
+        .info-box {
+            background: linear-gradient(135deg, #4facfe 0%, #00f2fe 100%);
+            padding: 25px;
+            border-radius: 15px;
+            margin: 25px 0;
+            color: white;
+            font-size: 1.1em;
+            box-shadow: 0 10px 30px rgba(79,172,254,0.3);
+        }
+
+        .info-box strong {
+            font-size: 1.2em;
+        }
+
+        .learning-area {
+            background: #f8f9fa;
+            padding: 25px;
+            border-radius: 15px;
+            margin: 20px 0;
+            border-left: 5px solid #667eea;
+        }
+
+        .learning-goals {
+            margin: 20px 0;
+        }
+
+        .learning-goals h4 {
+            color: #764ba2;
+            margin-bottom: 15px;
+        }
+
+        .learning-content {
+            background: white;
+            padding: 20px;
+            border-radius: 10px;
+            margin: 15px 0;
+            border: 1px solid #e9ecef;
+        }
+
+        .learning-content ul {
+            list-style: none;
+            padding-left: 0;
+        }
+
+        .learning-content li {
+            padding: 10px 0;
+            padding-left: 30px;
+            position: relative;
+            font-size: 1.05em;
+            line-height: 1.7;
+        }
+
+        .learning-content li:before {
+            content: "•";
+            position: absolute;
+            left: 10px;
+            color: #667eea;
+            font-weight: bold;
+            font-size: 1.5em;
+        }
+
+        .time-indicator {
+            display: inline-block;
+            background: linear-gradient(135deg, #f093fb 0%, #f5576c 100%);
+            color: white;
+            padding: 8px 20px;
+            border-radius: 20px;
+            font-weight: bold;
+            margin-bottom: 15px;
+            font-size: 1.1em;
+        }
+
+        table {
+            width: 100%;
+            border-collapse: collapse;
+            margin: 20px 0;
+            background: white;
+            border-radius: 10px;
+            overflow: hidden;
+            box-shadow: 0 5px 15px rgba(0,0,0,0.1);
+        }
+
+        th {
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            color: white;
+            padding: 15px;
+            text-align: left;
+            font-size: 1.1em;
+        }
+
+        td {
+            padding: 15px;
+            border-bottom: 1px solid #e9ecef;
+            vertical-align: top;
+        }
+
+        tr:hover {
+            background: #f8f9fa;
+        }
+
+        .year-badge {
+            display: inline-block;
+            background: linear-gradient(135deg, #fa709a 0%, #fee140 100%);
+            color: white;
+            padding: 10px 25px;
+            border-radius: 25px;
+            font-weight: bold;
+            font-size: 1.3em;
+            margin-bottom: 20px;
+        }
+
+        .emphasis-box {
+            background: linear-gradient(135deg, #ffecd2 0%, #fcb69f 100%);
+            padding: 25px;
+            border-radius: 15px;
+            margin: 25px 0;
+            border-left: 5px solid #ff6b6b;
+        }
+
+        ul {
+            list-style: none;
+            padding-left: 0;
+        }
+
+        li {
+            padding: 8px 0;
+            padding-left: 30px;
+            position: relative;
+            font-size: 1.05em;
+            line-height: 1.7;
+        }
+
+        li:before {
+            content: "✓";
+            position: absolute;
+            left: 0;
+            color: #667eea;
+            font-weight: bold;
+            font-size: 1.2em;
+        }
+
+        @media (max-width: 768px) {
+            .section {
+                padding: 20px;
+            }
+            
+            h2 {
+                font-size: 1.8em;
+            }
+            
+            h3 {
+                font-size: 1.4em;
+            }
+
+            table {
+                font-size: 0.9em;
+            }
+
+            th, td {
+                padding: 10px;
+            }
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <!-- HEADER -->
+        <div class="header">
+            <h1>📚 Ausbildungsrahmenplan</h1>
+            <p>Fachangestellter/Fachangestellte für Bäderbetriebe</p>
+            <p style="font-size: 1em; margin-top: 10px; opacity: 0.8;">Beschluss der Kultusministerkonferenz vom 21. November 1996</p>
+            <a href="index.html" class="nav-link">← Zurück zur Übersicht</a>
+        </div>
+
+        <!-- ALLGEMEINE VORBEMERKUNGEN -->
+        <div class="section">
+            <h2>📋 Allgemeine Vorbemerkungen</h2>
+            
+            <div class="info-box">
+                <strong>Ziel der Berufsschule:</strong> Vermittlung allgemeiner und berufsbezogener Lerninhalte für die Berufsausbildung, die Berufsausübung und im Hinblick auf die berufliche Weiterbildung.
+            </div>
+
+            <h3>Zielvorstellungen</h3>
+            <p>Die Schüler und Schülerinnen sollen:</p>
+            <ul>
+                <li>eine fundierte Berufsausbildung erhalten, auf deren Grundlage sie befähigt sind, sich auf veränderte Anforderungen einzustellen und neue Aufgaben zu übernehmen</li>
+                <li>unter Berücksichtigung ihrer betrieblichen Erfahrungen Kenntnisse und Einsichten in die Zusammenhänge ihrer Berufstätigkeit erwerben</li>
+                <li>Fähigkeiten und Einstellungen erwerben, die ihr Urteilsvermögen und ihre Handlungsfähigkeit in beruflichen und außerberuflichen Bereichen vergrößern</li>
+                <li>Möglichkeiten und Grenzen der persönlichen Entwicklung durch Arbeit und Berufsausbildung erkennen</li>
+                <li>in der Lage sein, betriebliche, rechtliche sowie wirtschaftliche, ökologische, soziale und politische Zusammenhänge zu erkennen</li>
+                <li>sich der Spannung zwischen den eigenen Ansprüchen und denen ihrer Mit- und Umwelt bewusst werden</li>
+            </ul>
+
+            <div class="emphasis-box">
+                <strong>📌 Struktur:</strong> Der Rahmenlehrplan ist nach Ausbildungsjahren gegliedert und umfasst Lerngebiete, Lernziele, Lerninhalte und Zeitrichtwerte.
+            </div>
+        </div>
+
+        <!-- BERUFSBEZOGENE VORBEMERKUNGEN -->
+        <div class="section">
+            <h2>🎯 Berufsbezogene Vorbemerkungen</h2>
+            
+            <div class="info-box">
+                <strong>Abstimmung:</strong> Der Rahmenlehrplan ist mit der Verordnung zum/zur Fachangestellten für Bäderbetriebe vom 26. März 1996 (BGBl. I. S. 740) abgestimmt.
+            </div>
+
+            <h3>Einsatzbereiche</h3>
+            <p>Fachangestellte für Bäderbetriebe werden in:</p>
+            <ul>
+                <li>öffentlichen Bädern</li>
+                <li>privaten Bädern</li>
+                <li>Freizeiteinrichtungen</li>
+            </ul>
+            <p>eingesetzt.</p>
+
+            <h3>Berufsprofil</h3>
+            <p>Der Beruf enthält folgende Komponenten:</p>
+            <ul>
+                <li>biologisch-gesundheitsspezifische</li>
+                <li>pädagogisch-soziale</li>
+                <li>sportliche</li>
+                <li>technische</li>
+                <li>verwaltungsrechtliche</li>
+                <li>wirtschaftspolitische</li>
+            </ul>
+
+            <div class="emphasis-box">
+                <strong>💡 Ziel:</strong> Fachangestellte für Bäderbetriebe sollen funktionsübergreifend tätig werden können und sich dabei in beruflichen und außerberuflichen Situationen verantwortungsbewusst verhalten.
+            </div>
+        </div>
+
+        <!-- 1. AUSBILDUNGSJAHR -->
+        <div class="section">
+            <span class="year-badge">1. Ausbildungsjahr</span>
+            
+            <div class="learning-area">
+                <h3>1.1 Dienst-, Verwaltungs- und Vertragsrecht für Bäderbetriebe</h3>
+                <span class="time-indicator">⏱️ 20 Stunden</span>
+                
+                <div class="learning-goals">
+                    <h4>Lernziele:</h4>
+                    <div class="learning-content">
+                        <ul>
+                            <li>Rechtsgrundlagen für Verwaltungstätigkeiten beschreiben</li>
+                            <li>einfache Verwaltungstätigkeiten durchführen</li>
+                            <li>Bäderkassen führen</li>
+                        </ul>
+                    </div>
+                </div>
+
+                <div class="learning-goals">
+                    <h4>Lerninhalte:</h4>
+                    <div class="learning-content">
+                        <ul>
+                            <li>Rechts- und Verwaltungsvorschriften</li>
+                            <li>Geschäftsgänge im Bäderbereich, z.B. Beschaffungswesen, Betriebsbuch, Schriftverkehr</li>
+                            <li>EDV-Anwendungen</li>
+                            <li>Organisationsformen und Abrechnung von Kassen</li>
+                        </ul>
+                    </div>
+                </div>
+            </div>
+
+            <div class="learning-area">
+                <h3>1.2 Organisation von Bädern und Grundlagen wirtschaftlicher Betriebsführung</h3>
+                <span class="time-indicator">⏱️ 40 Stunden</span>
+                
+                <div class="learning-goals">
+                    <h4>Lernziele:</h4>
+                    <div class="learning-content">
+                        <ul>
+                            <li>Einsatzpläne, insbesondere unter Berücksichtigung der besonderen Aufsichtspflicht im Beckenbereich, erläutern</li>
+                            <li>besondere Ereignisse und Gefahrensituationen in Freizeit- und Bäderbetrieben beschreiben und daraus Verhaltensregeln für den Aufsichtsdienst entwickeln</li>
+                        </ul>
+                    </div>
+                </div>
+
+                <div class="learning-goals">
+                    <h4>Lerninhalte:</h4>
+                    <div class="learning-content">
+                        <ul>
+                            <li>Einsatzpläne für unterschiedliche Nutzungsarten</li>
+                            <li>Störungen des technischen Betriebsablaufes</li>
+                            <li>Gefahrensituationen, z.B. beim Schwimmen, Springen und Tauchen</li>
+                            <li>Verhaltensregeln und Sofortmaßnahmen</li>
+                        </ul>
+                    </div>
+                </div>
+            </div>
+
+            <div class="learning-area">
+                <h3>1.3 Besucherbetreuung und Öffentlichkeitsarbeit</h3>
+                <span class="time-indicator">⏱️ 20 Stunden</span>
+                
+                <div class="learning-goals">
+                    <h4>Lernziele:</h4>
+                    <div class="learning-content">
+                        <ul>
+                            <li>Kontakte zu Gästen systematisch vorbereiten</li>
+                            <li>Wünsche und Erwartungen von Einzelpersonen und Gruppen ermitteln</li>
+                            <li>Grundsätze des Umgangs mit Gästen, insbesondere jüngeren und älteren, beachten</li>
+                            <li>Lösungsstrategien zur Konfliktbewältigung entwickeln</li>
+                        </ul>
+                    </div>
+                </div>
+
+                <div class="learning-goals">
+                    <h4>Lerninhalte:</h4>
+                    <div class="learning-content">
+                        <ul>
+                            <li>Präsentation des Eingangsbereichs</li>
+                            <li>Informations- und Anzeigetafeln</li>
+                            <li>Meckerkasten</li>
+                            <li>Interviews</li>
+                            <li>mündliche und schriftliche Befragungen</li>
+                            <li>Berücksichtigung des Alters, der Nationalität und der Verhaltensweisen</li>
+                            <li>Rollenspiele zur Konfliktbewältigung</li>
+                            <li>psychosoziale Lösungsstrategien bei aggressivem Verhalten</li>
+                        </ul>
+                    </div>
+                </div>
+            </div>
+
+            <div class="learning-area">
+                <h3>1.4 Wasser</h3>
+                <span class="time-indicator">⏱️ 40 Stunden</span>
+                
+                <div class="learning-goals">
+                    <h4>Lernziele:</h4>
+                    <div class="learning-content">
+                        <ul>
+                            <li>Einfache Analysen von Badewässern durchführen</li>
+                            <li>Wasseraufbereitungsprozeß in verschiedenen Bereichen der Schwimmbäder erläutern</li>
+                        </ul>
+                    </div>
+                </div>
+
+                <div class="learning-goals">
+                    <h4>Lerninhalte:</h4>
+                    <div class="learning-content">
+                        <ul>
+                            <li>Anforderungen an Badewässer</li>
+                            <li>Parameter</li>
+                            <li>photometrische und kolorimetrische Meßmethoden und -geräte</li>
+                            <li>mathematisch-naturwissenschaftliche Grundlagen</li>
+                            <li>Verfahren: Hydraulik, Flockung, Reinigung, Desinfektion, Erwärmung</li>
+                            <li>Kontrolle und Wartung</li>
+                        </ul>
+                    </div>
+                </div>
+            </div>
+
+            <div class="learning-area">
+                <h3>1.5 Bäderarten, Bäderbau und Bädertechnik</h3>
+                <span class="time-indicator">⏱️ 60 Stunden</span>
+                
+                <div class="learning-goals">
+                    <h4>Lernziele:</h4>
+                    <div class="learning-content">
+                        <ul>
+                            <li>beckenhydraulische Anlagen beschreiben</li>
+                            <li>Einflüsse auf Werkstoffe im Bäderbereich beschreiben und Maßnahmen daraus ableiten</li>
+                            <li>Desinfektion in Bädern begründen</li>
+                        </ul>
+                    </div>
+                </div>
+
+                <div class="learning-goals">
+                    <h4>Lerninhalte:</h4>
+                    <div class="learning-content">
+                        <ul>
+                            <li>Durchströmungssysteme</li>
+                            <li>Beckenkopf</li>
+                            <li>Wasserspeicher</li>
+                            <li>Umwelteinflüsse, Witterungseinflüsse</li>
+                            <li>physikalische, technologische und chemische Einflüsse</li>
+                            <li>Bereiche, Methoden, Arten, Geräte, Mittel und Wirkung der Desinfektion</li>
+                            <li>Gefahrstoff-Verordnung</li>
+                            <li>naturwissenschaftliche Grundlagen</li>
+                            <li>ökonomische, ökologische und ergonomische Aspekte</li>
+                        </ul>
+                    </div>
+                </div>
+            </div>
+
+            <div class="learning-area">
+                <h3>1.6 Gesundheitslehre</h3>
+                <span class="time-indicator">⏱️ 20 Stunden</span>
+                
+                <div class="learning-goals">
+                    <h4>Lernziele:</h4>
+                    <div class="learning-content">
+                        <ul>
+                            <li>Maßnahmen zur Erhaltung und Förderung der Gesundheit beschreiben</li>
+                        </ul>
+                    </div>
+                </div>
+
+                <div class="learning-goals">
+                    <h4>Lerninhalte:</h4>
+                    <div class="learning-content">
+                        <ul>
+                            <li>Bewegungsübungen im und am Wasser zur Kräftigung der Organsysteme</li>
+                            <li>Hygiene im Bäderbereich</li>
+                        </ul>
+                    </div>
+                </div>
+            </div>
+
+            <div class="learning-area">
+                <h3>1.7 Hilfeleistung bei Notfällen</h3>
+                <span class="time-indicator">⏱️ 20 Stunden</span>
+                
+                <div class="learning-goals">
+                    <h4>Lernziele:</h4>
+                    <div class="learning-content">
+                        <ul>
+                            <li>Notfälle im Wasser analysieren und notwendige Maßnahmen begründen</li>
+                        </ul>
+                    </div>
+                </div>
+
+                <div class="learning-goals">
+                    <h4>Lerninhalte:</h4>
+                    <div class="learning-content">
+                        <ul>
+                            <li>Wasserrettung: Selbst- und Fremdrettung</li>
+                            <li>Rettungsgeräte</li>
+                            <li>Bootsrettung</li>
+                            <li>Eisrettung</li>
+                            <li>Rettung bei Tauchunfällen</li>
+                        </ul>
+                    </div>
+                </div>
+            </div>
+
+            <div class="learning-area">
+                <h3>1.8 Schwimmlehre</h3>
+                <span class="time-indicator">⏱️ 60 Stunden</span>
+                
+                <div class="learning-goals">
+                    <h4>Lernziele:</h4>
+                    <div class="learning-content">
+                        <ul>
+                            <li>pädagogische Grundsätze, Voraussetzungen und Bedingungen für Schwimmunterricht, Training und Besucherbetreuung erklären und analysieren</li>
+                        </ul>
+                    </div>
+                </div>
+
+                <div class="learning-goals">
+                    <h4>Lerninhalte:</h4>
+                    <div class="learning-content">
+                        <ul>
+                            <li>Analyse der Lernbedingungen</li>
+                            <li>didaktisch-methodische Grundsätze</li>
+                        </ul>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <!-- 2. AUSBILDUNGSJAHR -->
+        <div class="section">
+            <span class="year-badge">2. Ausbildungsjahr</span>
+            
+            <div class="learning-area">
+                <h3>2.1 Dienst-, Verwaltungs- und Vertragsrecht für Bäderbetriebe</h3>
+                <span class="time-indicator">⏱️ 20 Stunden</span>
+                
+                <div class="learning-goals">
+                    <h4>Lernziele:</h4>
+                    <div class="learning-content">
+                        <ul>
+                            <li>Rechtsgrundlagen für Verwaltungstätigkeiten beschreiben</li>
+                            <li>einfache Verwaltungstätigkeiten durchführen</li>
+                            <li>Bäderkassen führen</li>
+                        </ul>
+                    </div>
+                </div>
+
+                <div class="learning-goals">
+                    <h4>Lerninhalte:</h4>
+                    <div class="learning-content">
+                        <ul>
+                            <li>Rechts- und Verwaltungsvorschriften</li>
+                            <li>Geschäftsgänge im Bäderbereich</li>
+                            <li>EDV-Anwendungen</li>
+                            <li>Organisationsformen und Abrechnung von Kassen</li>
+                        </ul>
+                    </div>
+                </div>
+            </div>
+
+            <div class="learning-area">
+                <h3>2.2 Organisation von Bädern und Grundlagen wirtschaftlicher Betriebsführung</h3>
+                <span class="time-indicator">⏱️ 40 Stunden</span>
+                
+                <div class="learning-goals">
+                    <h4>Lernziele:</h4>
+                    <div class="learning-content">
+                        <ul>
+                            <li>Einsatzpläne, insbesondere unter Berücksichtigung der besonderen Aufsichtspflicht im Beckenbereich, erläutern</li>
+                            <li>besondere Ereignisse und Gefahrensituationen in Freizeit- und Bäderbetrieben beschreiben und daraus Verhaltensregeln für den Aufsichtsdienst entwickeln</li>
+                        </ul>
+                    </div>
+                </div>
+
+                <div class="learning-goals">
+                    <h4>Lerninhalte:</h4>
+                    <div class="learning-content">
+                        <ul>
+                            <li>Einsatzpläne für unterschiedliche Nutzungsarten</li>
+                            <li>Störungen des technischen Betriebsablaufes</li>
+                            <li>Gefahrensituationen, z.B. beim Schwimmen, Springen und Tauchen</li>
+                            <li>Verhaltensregeln und Sofortmaßnahmen</li>
+                        </ul>
+                    </div>
+                </div>
+            </div>
+
+            <div class="learning-area">
+                <h3>2.3 Besucherbetreuung und Öffentlichkeitsarbeit</h3>
+                <span class="time-indicator">⏱️ 20 Stunden</span>
+                
+                <div class="learning-goals">
+                    <h4>Lernziele:</h4>
+                    <div class="learning-content">
+                        <ul>
+                            <li>Kontakte zu Gästen systematisch vorbereiten</li>
+                            <li>Wünsche und Erwartungen von Einzelpersonen und Gruppen ermitteln</li>
+                            <li>Grundsätze des Umgangs mit Gästen beachten</li>
+                            <li>Lösungsstrategien zur Konfliktbewältigung entwickeln</li>
+                        </ul>
+                    </div>
+                </div>
+
+                <div class="learning-goals">
+                    <h4>Lerninhalte:</h4>
+                    <div class="learning-content">
+                        <ul>
+                            <li>Präsentation des Eingangsbereichs</li>
+                            <li>Informations- und Anzeigetafeln</li>
+                            <li>Meckerkasten</li>
+                            <li>Interviews</li>
+                            <li>mündliche und schriftliche Befragungen</li>
+                            <li>Berücksichtigung des Alters, der Nationalität und der Verhaltensweisen</li>
+                            <li>Rollenspiele zur Konfliktbewältigung</li>
+                            <li>psychosoziale Lösungsstrategien bei aggressivem Verhalten</li>
+                        </ul>
+                    </div>
+                </div>
+            </div>
+
+            <div class="learning-area">
+                <h3>2.4 Wasser</h3>
+                <span class="time-indicator">⏱️ 40 Stunden</span>
+                
+                <div class="learning-goals">
+                    <h4>Lernziele:</h4>
+                    <div class="learning-content">
+                        <ul>
+                            <li>Einfache Analysen von Badewässern durchführen</li>
+                            <li>Wasseraufbereitungsprozeß in verschiedenen Bereichen der Schwimmbäder erläutern</li>
+                        </ul>
+                    </div>
+                </div>
+
+                <div class="learning-goals">
+                    <h4>Lerninhalte:</h4>
+                    <div class="learning-content">
+                        <ul>
+                            <li>Anforderungen an Badewässer</li>
+                            <li>Parameter</li>
+                            <li>photometrische und kolorimetrische Meßmethoden und -geräte</li>
+                            <li>mathematisch-naturwissenschaftliche Grundlagen</li>
+                            <li>Verfahren: Hydraulik, Flockung, Reinigung, Desinfektion, Erwärmung</li>
+                            <li>Kontrolle und Wartung</li>
+                        </ul>
+                    </div>
+                </div>
+            </div>
+
+            <div class="learning-area">
+                <h3>2.5 Bäderarten, Bäderbau und Bädertechnik</h3>
+                <span class="time-indicator">⏱️ 60 Stunden</span>
+                
+                <div class="learning-goals">
+                    <h4>Lernziele:</h4>
+                    <div class="learning-content">
+                        <ul>
+                            <li>beckenhydraulische Anlagen beschreiben</li>
+                            <li>Einflüsse auf Werkstoffe im Bäderbereich beschreiben und Maßnahmen daraus ableiten</li>
+                            <li>Desinfektion in Bädern begründen</li>
+                        </ul>
+                    </div>
+                </div>
+
+                <div class="learning-goals">
+                    <h4>Lerninhalte:</h4>
+                    <div class="learning-content">
+                        <ul>
+                            <li>Durchströmungssysteme</li>
+                            <li>Beckenkopf</li>
+                            <li>Wasserspeicher</li>
+                            <li>mathematisch-naturwissenschaftliche Grundlagen</li>
+                            <li>Umwelteinflüsse, Witterungseinflüsse</li>
+                            <li>physikalische, technologische und chemische Einflüsse</li>
+                            <li>mathematische Grundlagen</li>
+                            <li>Bereiche, Methoden, Arten, Geräte, Mittel und Wirkung der Desinfektion</li>
+                            <li>Gefahrstoff-Verordnung</li>
+                            <li>naturwissenschaftliche Grundlagen</li>
+                            <li>ökonomische, ökologische und ergonomische Aspekte</li>
+                        </ul>
+                    </div>
+                </div>
+            </div>
+
+            <div class="learning-area">
+                <h3>2.6 Gesundheitslehre</h3>
+                <span class="time-indicator">⏱️ 20 Stunden</span>
+                
+                <div class="learning-goals">
+                    <h4>Lernziele:</h4>
+                    <div class="learning-content">
+                        <ul>
+                            <li>Maßnahmen zur Erhaltung und Förderung der Gesundheit beschreiben</li>
+                        </ul>
+                    </div>
+                </div>
+
+                <div class="learning-goals">
+                    <h4>Lerninhalte:</h4>
+                    <div class="learning-content">
+                        <ul>
+                            <li>Bewegungsübungen im und am Wasser zur Kräftigung der Organsysteme</li>
+                            <li>Hygiene im Bäderbereich</li>
+                        </ul>
+                    </div>
+                </div>
+            </div>
+
+            <div class="learning-area">
+                <h3>2.7 Hilfeleistung bei Notfällen</h3>
+                <span class="time-indicator">⏱️ 20 Stunden</span>
+                
+                <div class="learning-goals">
+                    <h4>Lernziele:</h4>
+                    <div class="learning-content">
+                        <ul>
+                            <li>Notfälle im Wasser analysieren und notwendige Maßnahmen begründen</li>
+                        </ul>
+                    </div>
+                </div>
+
+                <div class="learning-goals">
+                    <h4>Lerninhalte:</h4>
+                    <div class="learning-content">
+                        <ul>
+                            <li>Wasserrettung: Selbst- und Fremdrettung</li>
+                            <li>Rettungsgeräte</li>
+                            <li>Bootsrettung</li>
+                            <li>Eisrettung</li>
+                            <li>Rettung bei Tauchunfällen</li>
+                        </ul>
+                    </div>
+                </div>
+            </div>
+
+            <div class="learning-area">
+                <h3>2.8 Schwimmlehre</h3>
+                <span class="time-indicator">⏱️ 60 Stunden</span>
+                
+                <div class="learning-goals">
+                    <h4>Lernziele:</h4>
+                    <div class="learning-content">
+                        <ul>
+                            <li>pädagogische Grundsätze, Voraussetzungen und Bedingungen für Schwimmunterricht, Training und Besucherbetreuung erklären und analysieren</li>
+                        </ul>
+                    </div>
+                </div>
+
+                <div class="learning-goals">
+                    <h4>Lerninhalte:</h4>
+                    <div class="learning-content">
+                        <ul>
+                            <li>Analyse der Lernbedingungen</li>
+                            <li>didaktisch-methodische Grundsätze</li>
+                        </ul>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <!-- 3. AUSBILDUNGSJAHR -->
+        <div class="section">
+            <span class="year-badge">3. Ausbildungsjahr</span>
+            
+            <div class="learning-area">
+                <h3>3.1 Dienst-, Verwaltungs- und Vertragsrecht für Bäderbetriebe</h3>
+                <span class="time-indicator">⏱️ 20 Stunden</span>
+                
+                <div class="learning-goals">
+                    <h4>Lernziele:</h4>
+                    <div class="learning-content">
+                        <ul>
+                            <li>Rechtsgrundlagen für Verwaltungstätigkeiten beschreiben</li>
+                            <li>einfache Verwaltungstätigkeiten durchführen</li>
+                            <li>Bäderkassen führen</li>
+                        </ul>
+                    </div>
+                </div>
+
+                <div class="learning-goals">
+                    <h4>Lerninhalte:</h4>
+                    <div class="learning-content">
+                        <ul>
+                            <li>Rechts- und Verwaltungsvorschriften</li>
+                            <li>Geschäftsgänge im Bäderbereich, z.B. Beschaffungswesen, Betriebsbuch, Schriftverkehr</li>
+                            <li>EDV-Anwendungen</li>
+                            <li>Organisationsformen und Abrechnung von Kassen</li>
+                        </ul>
+                    </div>
+                </div>
+            </div>
+
+            <div class="learning-area">
+                <h3>3.2 Organisation von Bädern und Grundlagen wirtschaftlicher Betriebsführung</h3>
+                <span class="time-indicator">⏱️ 20 Stunden</span>
+                
+                <div class="learning-goals">
+                    <h4>Lernziele:</h4>
+                    <div class="learning-content">
+                        <ul>
+                            <li>die Notwendigkeit der Anpassung des betrieblichen Handelns an den ständigen strukturellen Wandel in Wirtschaft und Gesellschaft beschreiben</li>
+                        </ul>
+                    </div>
+                </div>
+
+                <div class="learning-goals">
+                    <h4>Lerninhalte:</h4>
+                    <div class="learning-content">
+                        <ul>
+                            <li>struktureller Wandel in Wirtschaft, Politik, Gesellschaft sowie die geografische Situation als Einflußgrößen auf betriebliche Entscheidungen</li>
+                            <li>besondere Bedeutung des Wettbewerbs</li>
+                        </ul>
+                    </div>
+                </div>
+            </div>
+
+            <div class="learning-area">
+                <h3>3.3 Besucherbetreuung und Öffentlichkeitsarbeit</h3>
+                <span class="time-indicator">⏱️ 40 Stunden</span>
+                
+                <div class="learning-goals">
+                    <h4>Lernziele:</h4>
+                    <div class="learning-content">
+                        <ul>
+                            <li>Spiel- und Sportarrangements für unterschiedliche Anlässe und Zielgruppen planen</li>
+                            <li>Freizeitveranstaltungen planen</li>
+                            <li>Zusammenhänge von Besucherverhalten und Angeboten eines Bades erläutern sowie Erhebungsdaten auswerten</li>
+                            <li>Öffentlichkeitsarbeit, Werbung</li>
+                        </ul>
+                    </div>
+                </div>
+
+                <div class="learning-goals">
+                    <h4>Lerninhalte:</h4>
+                    <div class="learning-content">
+                        <ul>
+                            <li>Aquagymnastik, kleine Spiele im Wasser und an Land</li>
+                            <li>Sportwettbewerbe</li>
+                            <li>gesundheitliche Aspekte, Altersgruppen</li>
+                            <li>Spielenachmittage, Kindergeburtstage, Betriebsgruppenfeiern, Beachpartys</li>
+                            <li>Zielgruppenanalyse</li>
+                            <li>Darstellung von Erhebungsdaten</li>
+                            <li>EDV-Anwendungen</li>
+                            <li>Planung und Gestaltung von Veranstaltungen</li>
+                        </ul>
+                    </div>
+                </div>
+            </div>
+
+            <div class="learning-area">
+                <h3>3.4 Wasser</h3>
+                <span class="time-indicator">⏱️ 40 Stunden</span>
+                
+                <div class="learning-goals">
+                    <h4>Lernziele:</h4>
+                    <div class="learning-content">
+                        <ul>
+                            <li>Analysen von Badewässern durchführen und Umweltauswirkungen beurteilen</li>
+                        </ul>
+                    </div>
+                </div>
+
+                <div class="learning-goals">
+                    <h4>Lerninhalte:</h4>
+                    <div class="learning-content">
+                        <ul>
+                            <li>Anforderungen an Badewässer</li>
+                            <li>Parameter</li>
+                            <li>Elektronische Meßmethoden und -geräte</li>
+                            <li>Gefahrstoff-Verordnung</li>
+                            <li>ökonomisch-ökologische Aspekte</li>
+                            <li>mathematisch-naturwissenschaftliche Grundlagen</li>
+                            <li>EDV-Anwendung und Prozeßsteuerung</li>
+                        </ul>
+                    </div>
+                </div>
+            </div>
+
+            <div class="learning-area">
+                <h3>3.5 Bäderarten, Bäderbau und Bädertechnik</h3>
+                <span class="time-indicator">⏱️ 60 Stunden</span>
+                
+                <div class="learning-goals">
+                    <h4>Lernziele:</h4>
+                    <div class="learning-content">
+                        <ul>
+                            <li>beckenhydraulische Geräte beschreiben</li>
+                            <li>Lüftung und Klimatisierung von Hallenbädern beschreiben</li>
+                        </ul>
+                    </div>
+                </div>
+
+                <div class="learning-goals">
+                    <h4>Lerninhalte:</h4>
+                    <div class="learning-content">
+                        <ul>
+                            <li>Pumpen</li>
+                            <li>Armaturen</li>
+                            <li>Kontrolle und Wartung</li>
+                            <li>mathematisch-naturwissenschaftliche Grundlagen</li>
+                            <li>Aufbau und Funktionen von Lüftung und Klimatisierung</li>
+                            <li>Grundlagen der MSR-Anwendungen</li>
+                            <li>ökonomische, ökologische und physiologische Aspekte</li>
+                        </ul>
+                    </div>
+                </div>
+            </div>
+
+            <div class="learning-area">
+                <h3>3.6 Gesundheitslehre</h3>
+                <span class="time-indicator">⏱️ 20 Stunden</span>
+                
+                <div class="learning-goals">
+                    <h4>Lernziele:</h4>
+                    <div class="learning-content">
+                        <ul>
+                            <li>mikrobiologische Anforderungen zur Vermeidung von Infektionskrankheiten beschreiben</li>
+                        </ul>
+                    </div>
+                </div>
+
+                <div class="learning-goals">
+                    <h4>Lerninhalte:</h4>
+                    <div class="learning-content">
+                        <ul>
+                            <li>Gruppen von Krankheitserregern</li>
+                            <li>infektionsepidemiologische Vorgänge</li>
+                            <li>ausgewählte Erkrankungen</li>
+                        </ul>
+                    </div>
+                </div>
+            </div>
+
+            <div class="learning-area">
+                <h3>3.7 Hilfeleistung bei Notfällen</h3>
+                <span class="time-indicator">⏱️ 20 Stunden</span>
+                
+                <div class="learning-goals">
+                    <h4>Lernziele:</h4>
+                    <div class="learning-content">
+                        <ul>
+                            <li>Notfälle im betriebstechnischen Bereich analysieren und notwendige Maßnahmen begründen</li>
+                        </ul>
+                    </div>
+                </div>
+
+                <div class="learning-goals">
+                    <h4>Lerninhalte:</h4>
+                    <div class="learning-content">
+                        <ul>
+                            <li>Unfälle durch Gefahrstoffe</li>
+                            <li>Unfälle mit technischen Anlagen und Geräten</li>
+                            <li>Unfälle mit Sport- und Spielgeräten</li>
+                        </ul>
+                    </div>
+                </div>
+            </div>
+
+            <div class="learning-area">
+                <h3>3.8 Schwimmlehre</h3>
+                <span class="time-indicator">⏱️ 60 Stunden</span>
+                
+                <div class="learning-goals">
+                    <h4>Lernziele:</h4>
+                    <div class="learning-content">
+                        <ul>
+                            <li>Schwimmunterricht und Besucherbetreuung planen</li>
+                        </ul>
+                    </div>
+                </div>
+
+                <div class="learning-goals">
+                    <h4>Lerninhalte:</h4>
+                    <div class="learning-content">
+                        <ul>
+                            <li>methodische Übungsreihen</li>
+                            <li>Entwürfe für Unterricht, Training und Besucherbetreuung</li>
+                            <li>Entwürfe für sportliche, spielerische und gesundheitsfördernde Aktivitäten</li>
+                        </ul>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <!-- FOOTER -->
+        <div class="section" style="text-align: center; background: linear-gradient(135deg, #667eea 0%, #764ba2 100%); color: white;">
+            <h2 style="color: white; border-bottom-color: rgba(255,255,255,0.3);">Quelle</h2>
+            <p style="font-size: 1.1em; margin: 20px 0;">
+                Rahmenlehrplan für den Ausbildungsberuf<br>
+                Fachangestellter/Fachangestellte für Bäderbetriebe
+            </p>
+            <p style="opacity: 0.9;">
+                Beschluss der Kultusministerkonferenz vom 21. November 1996
+            </p>
+            <p style="margin-top: 30px; opacity: 0.8; font-size: 0.9em;">
+                <a href="https://www.kmk.org/fileadmin/Dateien/pdf/Bildung/BeruflicheBildung/rlp/FachangBaederbetriebe96-11-21.pdf" 
+                   target="_blank" 
+                   style="color: white; text-decoration: underline;">
+                    Original-Dokument (PDF)
+                </a>
+            </p>
+            <a href="index.html" class="nav-link" style="margin-top: 30px;">← Zurück zur Übersicht</a>
+        </div>
+    </div>
+
+    <script>
+        // Smooth scroll behavior
+        document.querySelectorAll('a[href^="#"]').forEach(anchor => {
+            anchor.addEventListener('click', function (e) {
+                e.preventDefault();
+                const target = document.querySelector(this.getAttribute('href'));
+                if (target) {
+                    target.scrollIntoView({
+                        behavior: 'smooth'
+                    });
+                }
+            });
+        });
+
+        // Add fade-in animation on scroll
+        const observerOptions = {
+            threshold: 0.1,
+            rootMargin: '0px 0px -100px 0px'
+        };
+
+        const observer = new IntersectionObserver(function(entries) {
+            entries.forEach(entry => {
+                if (entry.isIntersecting) {
+                    entry.target.style.opacity = '1';
+                    entry.target.style.transform = 'translateY(0)';
+                }
+            });
+        }, observerOptions);
+
+        document.querySelectorAll('.section, .learning-area').forEach(element => {
+            observer.observe(element);
+        });
+    </script>
+</body>
+</html>
+
+
