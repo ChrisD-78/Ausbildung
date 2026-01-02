@@ -221,13 +221,190 @@
             color: #ff6b6b;
         }
 
+        .content-grid {
+            display: grid;
+            grid-template-columns: repeat(3, 1fr);
+            gap: 25px;
+            margin-top: 30px;
+        }
+
+        .content-box {
+            background: linear-gradient(135deg, #f5f7fa 0%, #c3cfe2 100%);
+            border-radius: 10px;
+            padding: 25px;
+            text-align: center;
+            transition: transform 0.3s ease;
+        }
+
+        .content-box:hover {
+            transform: translateY(-5px);
+            box-shadow: 0 5px 15px rgba(0,0,0,0.2);
+        }
+
+        .content-icon {
+            font-size: 3em;
+            margin-bottom: 15px;
+        }
+
+        .content-box h3 {
+            color: #667eea;
+            margin-bottom: 10px;
+            font-size: 1.2em;
+        }
+
+        .content-box p {
+            color: #555;
+            line-height: 1.6;
+        }
+
+        .timeline {
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            margin-top: 40px;
+            position: relative;
+            padding: 20px 0;
+        }
+
+        .timeline::before {
+            content: '';
+            position: absolute;
+            top: 50%;
+            left: 0;
+            right: 0;
+            height: 4px;
+            background: linear-gradient(90deg, #667eea 0%, #764ba2 100%);
+            z-index: 0;
+        }
+
+        .timeline-item {
+            background: white;
+            border: 4px solid #667eea;
+            border-radius: 50%;
+            width: 120px;
+            height: 120px;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            justify-content: center;
+            position: relative;
+            z-index: 1;
+            transition: all 0.3s ease;
+        }
+
+        .timeline-item:hover {
+            transform: scale(1.1);
+            background: #667eea;
+            color: white;
+        }
+
+        .timeline-item .year {
+            font-weight: bold;
+            font-size: 1.1em;
+            color: #667eea;
+        }
+
+        .timeline-item:hover .year {
+            color: white;
+        }
+
+        .timeline-item .label {
+            font-size: 0.8em;
+            text-align: center;
+            margin-top: 5px;
+            color: #555;
+        }
+
+        .timeline-item:hover .label {
+            color: white;
+        }
+
+        .problem-solution {
+            display: grid;
+            grid-template-columns: 1fr auto 1fr;
+            gap: 30px;
+            align-items: center;
+            margin-top: 30px;
+        }
+
+        .problem-box, .solution-box {
+            padding: 30px;
+            border-radius: 10px;
+            min-height: 200px;
+        }
+
+        .problem-box {
+            background: linear-gradient(135deg, #ff6b6b 0%, #ee5a6f 100%);
+            color: white;
+        }
+
+        .solution-box {
+            background: linear-gradient(135deg, #51cf66 0%, #37b24d 100%);
+            color: white;
+        }
+
+        .arrow {
+            font-size: 3em;
+            color: #667eea;
+            text-align: center;
+        }
+
+        .highlight-text {
+            background: linear-gradient(120deg, #ffd93d 0%, #ff6b6b 100%);
+            padding: 20px;
+            border-radius: 10px;
+            margin-top: 20px;
+            font-size: 1.1em;
+            color: #333;
+            font-weight: 600;
+        }
+
+        .stats-container {
+            display: flex;
+            justify-content: space-around;
+            margin-top: 40px;
+        }
+
+        .stat-item {
+            text-align: center;
+        }
+
+        .stat-number {
+            font-size: 3em;
+            font-weight: bold;
+            color: #667eea;
+        }
+
+        .stat-label {
+            font-size: 1.1em;
+            color: #555;
+            margin-top: 10px;
+        }
+
         @media (max-width: 768px) {
-            .two-column, .feeling-grid {
+            .two-column, .feeling-grid, .content-grid {
                 grid-template-columns: 1fr;
             }
             
             h2 {
                 font-size: 1.8em;
+            }
+
+            .problem-solution {
+                grid-template-columns: 1fr;
+            }
+
+            .arrow {
+                transform: rotate(90deg);
+            }
+
+            .timeline {
+                flex-direction: column;
+                gap: 20px;
+            }
+
+            .timeline::before {
+                display: none;
             }
         }
     </style>
@@ -256,6 +433,164 @@
                     <li style="font-size: 2.5em; padding: 25px 0; text-align: center; font-weight: 600; color: #667eea;">Offene Runde</li>
                     <li style="font-size: 2.5em; padding: 25px 0; text-align: center; font-weight: 600; color: #667eea;">Abschlussrunde</li>
                 </ul>
+            </div>
+        </div>
+
+        <!-- PERSONALMANGEL FOLIE 1 -->
+        <div class="slide">
+            <h2>📉 Die Herausforderung</h2>
+            <h3>Fachkräftemangel in Freizeitbädern</h3>
+            
+            <div class="content-grid">
+                <div class="content-box">
+                    <div class="content-icon">📉</div>
+                    <h3>Personalrückgang</h3>
+                    <p>Auch wir waren in den letzten Jahren erheblich vom Fachkräftemangel betroffen</p>
+                </div>
+                <div class="content-box">
+                    <div class="content-icon">🔍</div>
+                    <h3>Schwierige Besetzung</h3>
+                    <p>Offene Stellen konnten nur mit großem Aufwand besetzt werden</p>
+                </div>
+                <div class="content-box">
+                    <div class="content-icon">⚠️</div>
+                    <h3>Betriebsauswirkungen</h3>
+                    <p>Auswirkungen auf Öffnungszeiten und Serviceangebot</p>
+                </div>
+            </div>
+
+            <div class="stats-container">
+                <div class="stat-item">
+                    <div class="stat-number">-25%</div>
+                    <div class="stat-label">Bewerbungen</div>
+                </div>
+                <div class="stat-item">
+                    <div class="stat-number">6+</div>
+                    <div class="stat-label">Monate Vakanzzeit</div>
+                </div>
+                <div class="stat-item">
+                    <div class="stat-number">3x</div>
+                    <div class="stat-label">Aufwand Recruiting</div>
+                </div>
+            </div>
+        </div>
+
+        <!-- PERSONALMANGEL FOLIE 2 -->
+        <div class="slide">
+            <h2>🔍 Die Ursache</h2>
+            <h3>Mangelnde Bekanntheit des Berufsbilds</h3>
+            
+            <div class="problem-solution">
+                <div class="problem-box">
+                    <h3 style="font-size: 1.5em; margin-bottom: 20px; color: white;">❌ Problem</h3>
+                    <p style="line-height: 1.8; color: white;">Das Berufsbild des <strong>Fachangestellten für Bäderbetriebe</strong> ist bei Schulabgängern weitgehend unbekannt.</p>
+                    <p style="margin-top: 15px; line-height: 1.8; color: white;">Ein vielseitiger, zukunftssicherer Beruf bleibt unsichtbar.</p>
+                </div>
+                
+                <div class="arrow">→</div>
+                
+                <div class="solution-box">
+                    <h3 style="font-size: 1.5em; margin-bottom: 20px; color: white;">✓ Erkenntnis</h3>
+                    <p style="line-height: 1.8; color: white;">Wir müssen aktiv auf potenzielle Bewerber zugehen und das Berufsbild sichtbar machen.</p>
+                    <p style="margin-top: 15px; line-height: 1.8; color: white;">Berufsorientierung und Öffentlichkeitsarbeit sind entscheidend.</p>
+                </div>
+            </div>
+
+            <div class="highlight-text">
+                💡 Ein unterschätzter Beruf mit vielfältigen Aufgaben: Wasseraufsicht, Technik, Kundenservice, Hygiene und Schwimmunterricht
+            </div>
+        </div>
+
+        <!-- PERSONALMANGEL FOLIE 3 -->
+        <div class="slide">
+            <h2>🔄 Der Wendepunkt</h2>
+            <h3>Neue Impulse durch Führungswechsel</h3>
+            
+            <div class="timeline">
+                <div class="timeline-item">
+                    <div class="year">Vorher</div>
+                    <div class="label">Traditionelle Ansätze</div>
+                </div>
+                <div class="timeline-item">
+                    <div class="year">Vor 1,5 J.</div>
+                    <div class="label">Neuer GF</div>
+                </div>
+                <div class="timeline-item">
+                    <div class="year">Prozesse</div>
+                    <div class="label">Veränderung</div>
+                </div>
+                <div class="timeline-item">
+                    <div class="year">Heute</div>
+                    <div class="label">Erfolge</div>
+                </div>
+            </div>
+
+            <div style="margin-top: 60px; background: linear-gradient(135deg, #f5f7fa 0%, #c3cfe2 100%); padding: 30px; border-radius: 10px;">
+                <h3 style="color: #667eea; font-size: 1.5em; margin-bottom: 20px;">🎯 Der Coach als Impulsgeber</h3>
+                <p style="line-height: 1.8; font-size: 1.1em; color: #333;">
+                    Unser neuer Geschäftsführer brachte als erfahrener Coach frische Perspektiven und innovative Denkansätze ein. Er hinterfragte bestehende Prozesse und initiierte einen umfassenden Veränderungsprozess in allen Bereichen.
+                </p>
+            </div>
+
+            <div class="content-grid" style="margin-top: 30px;">
+                <div class="content-box">
+                    <div class="content-icon">👁️</div>
+                    <h3>Neue Perspektive</h3>
+                    <p>Blick von außen auf interne Strukturen</p>
+                </div>
+                <div class="content-box">
+                    <div class="content-icon">🚀</div>
+                    <h3>Prozessoptimierung</h3>
+                    <p>Anstoß wichtiger Veränderungen</p>
+                </div>
+                <div class="content-box">
+                    <div class="content-icon">💪</div>
+                    <h3>Motivation</h3>
+                    <p>Neuer Schwung im gesamten Team</p>
+                </div>
+            </div>
+        </div>
+
+        <!-- PERSONALMANGEL FOLIE 4 -->
+        <div class="slide">
+            <h2>✅ Unsere Maßnahmen</h2>
+            <h3>Konkrete Schritte gegen den Fachkräftemangel</h3>
+            
+            <div class="content-grid">
+                <div class="content-box">
+                    <div class="content-icon">🏫</div>
+                    <h3>Schulkooperationen</h3>
+                    <p>Direkter Kontakt zu Schülern durch Berufsmessen und Praktika</p>
+                </div>
+                <div class="content-box">
+                    <div class="content-icon">📱</div>
+                    <h3>Social Media</h3>
+                    <p>Moderne Ansprache der Zielgruppe über digitale Kanäle</p>
+                </div>
+                <div class="content-box">
+                    <div class="content-icon">🎓</div>
+                    <h3>Ausbildungsmarketing</h3>
+                    <p>Attraktive Darstellung des Berufsbilds und der Karrierechancen</p>
+                </div>
+                <div class="content-box">
+                    <div class="content-icon">🤝</div>
+                    <h3>Mitarbeitergewinnung</h3>
+                    <p>Optimierte Bewerbungsprozesse und attraktive Arbeitsbedingungen</p>
+                </div>
+                <div class="content-box">
+                    <div class="content-icon">📈</div>
+                    <h3>Employer Branding</h3>
+                    <p>Positionierung als attraktiver Arbeitgeber in der Region</p>
+                </div>
+                <div class="content-box">
+                    <div class="content-icon">🎯</div>
+                    <h3>Langfristige Strategie</h3>
+                    <p>Nachhaltige Personalentwicklung und Bindung</p>
+                </div>
+            </div>
+
+            <div class="highlight-text" style="margin-top: 40px;">
+                ✅ Durch gezielte Maßnahmen und neue Denkansätze konnten wir erste Erfolge erzielen und den Weg für eine nachhaltige Personalstrategie ebnen
             </div>
         </div>
 
