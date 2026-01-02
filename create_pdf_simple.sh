@@ -21,3 +21,4 @@ open dashboard.html
 echo ""
 echo "✅ Browser geöffnet. Bitte folgen Sie den Anweisungen oben."
 
+

@@ -1,0 +1,338 @@
+<!DOCTYPE html>
+<html lang="de">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Startseite - FAB Ausbildung</title>
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            overflow-x: hidden;
+            min-height: 100vh;
+        }
+
+        .container {
+            max-width: 1400px;
+            margin: 0 auto;
+            padding: 20px;
+        }
+
+        .hero-section {
+            text-align: center;
+            padding: 80px 20px;
+            color: white;
+            animation: fadeIn 1s ease-out;
+        }
+
+        @keyframes fadeIn {
+            from {
+                opacity: 0;
+                transform: translateY(30px);
+            }
+            to {
+                opacity: 1;
+                transform: translateY(0);
+            }
+        }
+
+        .hero-section h1 {
+            font-size: 4.5em;
+            margin-bottom: 20px;
+            text-shadow: 0 4px 20px rgba(0,0,0,0.3);
+            animation: slideInDown 0.8s ease-out;
+        }
+
+        @keyframes slideInDown {
+            from {
+                opacity: 0;
+                transform: translateY(-50px);
+            }
+            to {
+                opacity: 1;
+                transform: translateY(0);
+            }
+        }
+
+        .hero-section .subtitle {
+            font-size: 2em;
+            margin-bottom: 40px;
+            opacity: 0.95;
+            font-weight: 300;
+            animation: slideInUp 1s ease-out;
+        }
+
+        @keyframes slideInUp {
+            from {
+                opacity: 0;
+                transform: translateY(50px);
+            }
+            to {
+                opacity: 1;
+                transform: translateY(0);
+            }
+        }
+
+        .cards-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(320px, 1fr));
+            gap: 30px;
+            margin: 60px 0;
+            animation: fadeIn 1.2s ease-out;
+        }
+
+        .card {
+            background: white;
+            border-radius: 20px;
+            padding: 40px;
+            box-shadow: 0 20px 60px rgba(0,0,0,0.3);
+            transition: all 0.3s ease;
+            text-decoration: none;
+            color: inherit;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            text-align: center;
+            min-height: 300px;
+            overflow: hidden;
+            word-wrap: break-word;
+            box-sizing: border-box;
+        }
+
+        .card:hover {
+            transform: translateY(-10px);
+            box-shadow: 0 30px 80px rgba(0,0,0,0.4);
+        }
+
+        .card-icon {
+            font-size: 4em;
+            margin-bottom: 20px;
+            display: block;
+        }
+
+        .card h2 {
+            font-size: 1.8em;
+            color: #667eea;
+            margin-bottom: 15px;
+            border: none;
+            padding: 0;
+            width: 100%;
+            word-wrap: break-word;
+            overflow-wrap: break-word;
+        }
+
+        .card p {
+            font-size: 1em;
+            color: #666;
+            line-height: 1.6;
+            margin-top: 10px;
+            width: 100%;
+            word-wrap: break-word;
+            overflow-wrap: break-word;
+            flex-grow: 1;
+        }
+
+        .card-primary {
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            color: white;
+        }
+
+        .card-primary h2 {
+            color: white;
+        }
+
+        .card-primary p {
+            color: rgba(255,255,255,0.9);
+        }
+
+        .info-section {
+            background: white;
+            border-radius: 20px;
+            padding: 40px;
+            margin: 40px 0;
+            color: #333;
+            text-align: center;
+            box-shadow: 0 20px 60px rgba(0,0,0,0.3);
+            overflow: hidden;
+            word-wrap: break-word;
+        }
+
+        .info-section h3 {
+            font-size: 2em;
+            margin-bottom: 20px;
+            color: #667eea;
+            border-bottom: 4px solid #667eea;
+            padding-bottom: 15px;
+            width: 100%;
+            word-wrap: break-word;
+        }
+
+        .info-section p {
+            font-size: 1.1em;
+            line-height: 1.8;
+            color: #555;
+            width: 100%;
+            word-wrap: break-word;
+            margin: 15px 0;
+        }
+
+        .presentation-link {
+            display: inline-block;
+            margin-top: 30px;
+            padding: 15px 40px;
+            background: white;
+            color: #667eea;
+            text-decoration: none;
+            border-radius: 30px;
+            font-size: 1.2em;
+            font-weight: bold;
+            transition: all 0.3s ease;
+            box-shadow: 0 5px 20px rgba(0,0,0,0.2);
+        }
+
+        .presentation-link:hover {
+            transform: translateY(-3px);
+            box-shadow: 0 8px 25px rgba(0,0,0,0.3);
+            background: #f8f9fa;
+        }
+
+        .footer {
+            text-align: center;
+            padding: 40px 20px;
+            color: white;
+            opacity: 0.8;
+            font-size: 0.9em;
+        }
+
+        @media (max-width: 768px) {
+            .hero-section h1 {
+                font-size: 2.5em;
+            }
+            
+            .hero-section .subtitle {
+                font-size: 1.3em;
+            }
+            
+            .cards-grid {
+                grid-template-columns: 1fr;
+            }
+            
+            .card {
+                min-height: 250px;
+            }
+        }
+
+        .badge {
+            display: inline-block;
+            background: rgba(255,255,255,0.2);
+            padding: 8px 20px;
+            border-radius: 20px;
+            font-size: 0.9em;
+            margin: 10px 5px;
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <!-- HERO SECTION -->
+        <div class="hero-section">
+            <h1>🏊 Fachangestellte für Bäderbetriebe</h1>
+            <p class="subtitle">Ausbildungsinformationen & Neuordnung 2026</p>
+            <div>
+                <span class="badge">Südpfalz Bäder</span>
+                <span class="badge">2026</span>
+                <span class="badge">Modernisierung</span>
+            </div>
+        </div>
+
+        <!-- CARDS GRID -->
+        <div class="cards-grid">
+            <a href="index.html" class="card card-primary">
+                <span class="card-icon">📊</span>
+                <h2>Neuordnung des Berufsbildes</h2>
+                <p>Umfassende Informationen zur geplanten Modernisierung der Ausbildung von 1997. Voruntersuchung 2022-2024.</p>
+            </a>
+
+            <a href="ausbildungsrahmenplan.html" class="card">
+                <span class="card-icon">📚</span>
+                <h2>Ausbildungsrahmenplan</h2>
+                <p>Vollständiger Rahmenlehrplan nach KMK-Beschluss vom 21. November 1996. Alle 3 Ausbildungsjahre mit Lerngebieten.</p>
+            </a>
+
+            <a href="ausbildungsplan.html" class="card">
+                <span class="card-icon">📋</span>
+                <h2>Interaktiver Ausbildungsplan</h2>
+                <p>Ausfüllbares Formular für die Ausbildungsplanung. Zeitrichtwerte, Checkboxen und Anmerkungen.</p>
+            </a>
+        </div>
+
+        <!-- PRESENTATION CARD -->
+        <a href="praesentation-2026.html" class="card" style="margin-top: 30px;">
+            <span class="card-icon">📊</span>
+            <h2>Präsentation 2026</h2>
+            <p>Change-Prozess, GFK und Team-Werte. Vollständige Inhalte der Präsentation "2026-BL Südpfalz Bäder".</p>
+        </a>
+
+        <!-- INFO SECTION -->
+        <div class="info-section">
+            <h3>📄 PowerPoint-Datei</h3>
+            <p>Die Original-Präsentation "2026-BL Südpfalz Bäder" finden Sie auf dem Desktop.</p>
+            <p style="margin-top: 15px; font-size: 1em; color: #666;">
+                <strong>Dateiname:</strong> 2026-BL Südpfalz Bäder.pptx
+            </p>
+            <a href="file:///Users/christofdrost/Desktop/2026-BL%20Südpfalz%20Bäder.pptx" class="presentation-link" download>
+                📥 PowerPoint öffnen
+            </a>
+        </div>
+
+        <!-- FOOTER -->
+        <div class="footer">
+            <p>© 2026 | Fachangestellte für Bäderbetriebe - Südpfalz</p>
+            <p style="margin-top: 10px; font-size: 0.85em;">
+                BIBB Abschlussbericht | Voruntersuchung Bäderbetriebe 2022-2024
+            </p>
+        </div>
+    </div>
+
+    <script>
+        // Smooth scroll behavior
+        document.querySelectorAll('a[href^="#"]').forEach(anchor => {
+            anchor.addEventListener('click', function (e) {
+                e.preventDefault();
+                const target = document.querySelector(this.getAttribute('href'));
+                if (target) {
+                    target.scrollIntoView({
+                        behavior: 'smooth'
+                    });
+                }
+            });
+        });
+
+        // Add fade-in animation on scroll
+        const observerOptions = {
+            threshold: 0.1,
+            rootMargin: '0px 0px -50px 0px'
+        };
+
+        const observer = new IntersectionObserver(function(entries) {
+            entries.forEach(entry => {
+                if (entry.isIntersecting) {
+                    entry.target.style.opacity = '1';
+                    entry.target.style.transform = 'translateY(0)';
+                }
+            });
+        }, observerOptions);
+
+        document.querySelectorAll('.card, .info-section').forEach(element => {
+            observer.observe(element);
+        });
+    </script>
+</body>
+</html>
+
