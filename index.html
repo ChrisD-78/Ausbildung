@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Neuordnung FAB</title>
+    <title>Startseite - FAB Ausbildung Südpfalz Bäder</title>
     <style>
         * {
             margin: 0;
@@ -17,22 +17,55 @@
             overflow-x: hidden;
         }
 
-        .presentation {
-            max-width: 1200px;
+        .container {
+            max-width: 1400px;
             margin: 0 auto;
             padding: 20px;
+        }
+
+        .header {
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            color: white;
+            padding: 40px;
+            border-radius: 20px;
+            margin-bottom: 30px;
+            text-align: center;
+            box-shadow: 0 20px 60px rgba(0,0,0,0.3);
+        }
+
+        .header h1 {
+            font-size: 3em;
+            margin-bottom: 15px;
+        }
+
+        .header p {
+            font-size: 1.2em;
+            opacity: 0.9;
+        }
+
+        .nav-link {
+            display: inline-block;
+            margin-top: 20px;
+            margin-right: 10px;
+            padding: 12px 30px;
+            background: rgba(255,255,255,0.2);
+            color: white;
+            text-decoration: none;
+            border-radius: 25px;
+            transition: all 0.3s ease;
+        }
+
+        .nav-link:hover {
+            background: rgba(255,255,255,0.3);
+            transform: translateY(-2px);
         }
 
         .slide {
             background: white;
             border-radius: 20px;
-            padding: 60px;
+            padding: 40px;
             margin-bottom: 30px;
             box-shadow: 0 20px 60px rgba(0,0,0,0.3);
-            min-height: 600px;
-            display: flex;
-            flex-direction: column;
-            justify-content: center;
             animation: slideIn 0.6s ease-out;
         }
 
@@ -47,22 +80,10 @@
             }
         }
 
-        .slide-title {
-            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
-            text-align: center;
-            color: white;
-        }
-
-        h1 {
-            font-size: 3.5em;
-            margin-bottom: 20px;
-            color: white;
-        }
-
         h2 {
             font-size: 2.5em;
             color: #667eea;
-            margin-bottom: 30px;
+            margin-bottom: 25px;
             border-bottom: 4px solid #667eea;
             padding-bottom: 15px;
         }
@@ -70,58 +91,49 @@
         h3 {
             font-size: 1.8em;
             color: #764ba2;
-            margin: 25px 0 15px 0;
+            margin: 30px 0 20px 0;
+            padding: 15px;
+            background: linear-gradient(135deg, #f8f9fa 0%, #e9ecef 100%);
+            border-radius: 10px;
+            border-left: 5px solid #667eea;
         }
 
-        .subtitle {
-            font-size: 1.5em;
-            color: rgba(255,255,255,0.9);
-            margin-top: 10px;
-        }
-
-        .problem-box {
-            background: linear-gradient(135deg, #ff6b6b 0%, #ee5a6f 100%);
-            color: white;
-            padding: 30px;
-            border-radius: 15px;
-            margin: 20px 0;
-            box-shadow: 0 10px 30px rgba(255,107,107,0.3);
-        }
-
-        .problem-box h3 {
-            color: white;
-            margin-top: 0;
-        }
-
-        .change-grid {
-            display: grid;
-            grid-template-columns: repeat(2, 1fr);
-            gap: 25px;
-            margin: 30px 0;
-        }
-
-        .change-card {
-            background: linear-gradient(135deg, #f093fb 0%, #f5576c 100%);
+        .info-box {
+            background: linear-gradient(135deg, #4facfe 0%, #00f2fe 100%);
             padding: 25px;
             border-radius: 15px;
+            margin: 25px 0;
             color: white;
-            box-shadow: 0 8px 25px rgba(0,0,0,0.15);
-            transition: transform 0.3s ease;
+            font-size: 1.1em;
+            box-shadow: 0 10px 30px rgba(79,172,254,0.3);
         }
 
-        .change-card:hover {
-            transform: translateY(-5px);
+        .highlight-box {
+            background: linear-gradient(135deg, #a8edea 0%, #fed6e3 100%);
+            padding: 25px;
+            border-radius: 15px;
+            margin: 25px 0;
+            border-left: 5px solid #667eea;
         }
 
-        .change-card h3 {
-            color: white;
-            font-size: 1.5em;
+        .two-column {
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 25px;
+            margin: 25px 0;
+        }
+
+        .card {
+            background: #f8f9fa;
+            padding: 25px;
+            border-radius: 15px;
+            border-top: 4px solid #667eea;
+        }
+
+        .card h4 {
+            color: #667eea;
+            font-size: 1.4em;
             margin-bottom: 15px;
-        }
-
-        .icon {
-            font-size: 2.5em;
-            margin-bottom: 10px;
         }
 
         ul {
@@ -130,534 +142,404 @@
         }
 
         li {
-            padding: 12px 0;
-            padding-left: 35px;
+            padding: 10px 0;
+            padding-left: 30px;
             position: relative;
-            font-size: 1.1em;
-            line-height: 1.6;
+            font-size: 1.05em;
+            line-height: 1.7;
         }
 
         li:before {
-            content: "✓";
+            content: "•";
             position: absolute;
-            left: 0;
+            left: 10px;
             color: #667eea;
             font-weight: bold;
-            font-size: 1.3em;
+            font-size: 1.5em;
         }
 
-        .remove-list li:before {
-            content: "✗";
-            color: #ff6b6b;
+        .ablauf-list li:before {
+            display: none;
         }
 
-        .highlight-box {
-            background: linear-gradient(135deg, #4facfe 0%, #00f2fe 100%);
+        .step-box {
+            background: linear-gradient(135deg, #f093fb 0%, #f5576c 100%);
             padding: 30px;
             border-radius: 15px;
-            margin: 25px 0;
+            margin: 20px 0;
             color: white;
-            font-size: 1.2em;
-            box-shadow: 0 10px 30px rgba(79,172,254,0.3);
+            box-shadow: 0 10px 30px rgba(240,147,251,0.3);
         }
 
-        .stats-container {
-            display: flex;
-            justify-content: space-around;
-            margin: 40px 0;
+        .step-box h4 {
+            color: white;
+            font-size: 1.6em;
+            margin-bottom: 15px;
         }
 
-        .stat-box {
-            text-align: center;
-            padding: 30px;
-            background: linear-gradient(135deg, #a8edea 0%, #fed6e3 100%);
-            border-radius: 15px;
-            min-width: 200px;
-            box-shadow: 0 8px 25px rgba(0,0,0,0.1);
-        }
-
-        .stat-number {
-            font-size: 3.5em;
+        .step-number {
+            display: inline-block;
+            background: rgba(255,255,255,0.3);
+            padding: 8px 20px;
+            border-radius: 20px;
             font-weight: bold;
-            color: #667eea;
-            display: block;
+            margin-bottom: 15px;
         }
 
-        .stat-label {
-            font-size: 1.1em;
-            color: #555;
-            margin-top: 10px;
+        .feeling-grid {
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 20px;
+            margin: 20px 0;
         }
 
-        .timeline {
-            background: #f8f9fa;
-            padding: 30px;
+        .feeling-box {
+            background: white;
+            padding: 20px;
             border-radius: 15px;
             border-left: 5px solid #667eea;
         }
 
-        .timeline-item {
-            margin: 20px 0;
-            padding-left: 25px;
-            border-left: 3px dashed #764ba2;
-            position: relative;
+        .feeling-box.positive {
+            border-left-color: #4facfe;
         }
 
-        .timeline-item:before {
-            content: "●";
-            position: absolute;
-            left: -9px;
-            color: #764ba2;
-            font-size: 1.5em;
+        .feeling-box.negative {
+            border-left-color: #ff6b6b;
         }
 
-        .conclusion-box {
-            background: linear-gradient(135deg, #f093fb 0%, #f5576c 100%);
-            color: white;
-            padding: 40px;
-            border-radius: 20px;
-            text-align: center;
-            font-size: 1.3em;
-            line-height: 1.8;
-            margin-top: 30px;
-            box-shadow: 0 15px 40px rgba(240,147,251,0.4);
+        .feeling-box h4 {
+            color: #667eea;
+            margin-bottom: 15px;
         }
 
-        .two-column {
-            display: grid;
-            grid-template-columns: 1fr 1fr;
-            gap: 30px;
+        .feeling-box.positive h4 {
+            color: #4facfe;
         }
 
-        .column-box {
-            background: #f8f9fa;
-            padding: 25px;
-            border-radius: 15px;
-            border-top: 4px solid #667eea;
-        }
-
-        .emphasis {
-            background: linear-gradient(135deg, #ffecd2 0%, #fcb69f 100%);
-            padding: 25px;
-            border-radius: 15px;
-            margin: 20px 0;
-            border-left: 5px solid #ff6b6b;
-        }
-
-        .nav-link {
-            display: inline-block;
-            margin-top: 20px;
-            padding: 12px 30px;
-            background: rgba(255,255,255,0.2);
-            color: white;
-            text-decoration: none;
-            border-radius: 25px;
-            transition: all 0.3s ease;
-            font-size: 1.1em;
-        }
-
-        .nav-link:hover {
-            background: rgba(255,255,255,0.3);
-            transform: translateY(-2px);
+        .feeling-box.negative h4 {
+            color: #ff6b6b;
         }
 
         @media (max-width: 768px) {
-            .slide {
-                padding: 30px 20px;
-            }
-            
-            h1 {
-                font-size: 2em;
+            .two-column, .feeling-grid {
+                grid-template-columns: 1fr;
             }
             
             h2 {
                 font-size: 1.8em;
             }
-            
-            .change-grid, .two-column {
-                grid-template-columns: 1fr;
-            }
         }
     </style>
 </head>
 <body>
-    <div class="presentation">
-        
-        <!-- TITELFOLIE -->
-        <div class="slide slide-title">
-            <div>
-                <h1>🏊 Neuordnung des Berufsbildes</h1>
-                <h1>Fachangestellte für Bäderbetriebe</h1>
-                <p class="subtitle">Modernisierung der Ausbildung von 1997</p>
-                <p class="subtitle" style="margin-top: 40px; font-size: 1.2em;">Voruntersuchung 2022-2024</p>
-                <a href="ausbildungsrahmenplan.html" class="nav-link" style="margin-top: 40px;">📚 Zum Ausbildungsrahmenplan</a>
-                <a href="ausbildungsplan.html" class="nav-link" style="margin-top: 10px;">📋 Zum Ausbildungsplan</a>
-            </div>
+    <div class="container">
+        <!-- HEADER -->
+        <div class="header">
+            <h1>📊 Präsentation 2026</h1>
+            <p>BL Südpfalz Bäder - Change-Prozess & GFK</p>
+            <a href="start.html" class="nav-link">🏠 Startseite</a>
+            <a href="neuordnung.html" class="nav-link">📊 Neuordnung</a>
+            <a href="ausbildungsrahmenplan.html" class="nav-link">📚 Rahmenplan</a>
+            <a href="ausbildungsplan.html" class="nav-link">📋 Ausbildungsplan</a>
         </div>
 
-        <!-- AKTUELLE SITUATION -->
+        <!-- ABLAUF -->
         <div class="slide">
-            <h2>📊 Aktuelle Situation</h2>
-            
-            <div class="stats-container">
-                <div class="stat-box">
-                    <span class="stat-number">1997</span>
-                    <span class="stat-label">Letzte Novellierung<br>der Ausbildung</span>
-                </div>
-                <div class="stat-box">
-                    <span class="stat-number">594</span>
-                    <span class="stat-label">Neuabschlüsse<br>pro Jahr (2022)</span>
-                </div>
-                <div class="stat-box">
-                    <span class="stat-number">73-78%</span>
-                    <span class="stat-label">Bestehensquote<br>(unter Durchschnitt)</span>
-                </div>
-            </div>
-
-            <div class="problem-box">
-                <h3>🚨 Kernprobleme</h3>
-                <ul style="color: white; font-size: 1.1em;">
-                    <li style="color: white;">Digitalisierung nicht ausreichend abgebildet</li>
-                    <li style="color: white;">Zu wenig Fokus auf Kommunikation & Konfliktmanagement</li>
-                    <li style="color: white;">Prüfungsanforderungen teilweise nicht mehr zeitgemäß</li>
-                    <li style="color: white;">Unzureichende Abgrenzung zur Meisterfortbildung</li>
+            <h2>📋 Ablauf</h2>
+            <div style="text-align: center; margin: 40px 0;">
+                <ul class="ablauf-list" style="list-style: none; padding: 0; display: inline-block; text-align: center;">
+                    <li style="font-size: 2.5em; padding: 25px 0; text-align: center; font-weight: 600; color: #667eea;">Begrüßung</li>
+                    <li style="font-size: 2.5em; padding: 25px 0; text-align: center; font-weight: 600; color: #667eea;">Kennenlernrunde</li>
+                    <li style="font-size: 2.5em; padding: 25px 0; text-align: center; font-weight: 600; color: #667eea;">Changeprozess - Was ist das?</li>
+                    <li style="font-size: 2.5em; padding: 25px 0; text-align: center; font-weight: 600; color: #667eea;">Zusammenfassung der Neuordnung des Ausbildungsberufes</li>
+                    <li style="font-size: 2.5em; padding: 25px 0; text-align: center; font-weight: 600; color: #667eea;">Austausch möglicher Zusammenarbeit</li>
+                    <li style="font-size: 2.5em; padding: 25px 0; text-align: center; font-weight: 600; color: #667eea;">Offene Runde</li>
+                    <li style="font-size: 2.5em; padding: 25px 0; text-align: center; font-weight: 600; color: #667eea;">Abschlussrunde</li>
                 </ul>
             </div>
         </div>
 
-        <!-- HAUPTÄNDERUNGEN ÜBERSICHT -->
+        <!-- CHANGE PROZESS -->
         <div class="slide">
-            <h2>🎯 Hauptänderungen auf einen Blick</h2>
-            
-            <div class="change-grid">
-                <div class="change-card">
-                    <div class="icon">💻</div>
-                    <h3>Digitalisierung</h3>
-                    <p>Moderne IT-Systeme, Social Media, Datenschutz</p>
-                </div>
-                
-                <div class="change-card">
-                    <div class="icon">🗣️</div>
-                    <h3>Kommunikation</h3>
-                    <p>Deeskalation, Konfliktmanagement, Interkulturelle Kompetenz</p>
-                </div>
-                
-                <div class="change-card">
-                    <div class="icon">🔧</div>
-                    <h3>Bädertechnik</h3>
-                    <p>Gebäudeleittechnik, Digitale Steuerung, Energiemanagement</p>
-                </div>
-                
-                <div class="change-card">
-                    <div class="icon">🧖</div>
-                    <h3>Sauna & Wellness</h3>
-                    <p>Saunaaufsicht, Aufgüsse, Freizeitangebote</p>
-                </div>
+            <h2>🔄 Change-Prozess</h2>
+            <div class="info-box">
+                <strong>Durchgeführte Maßnahmen:</strong>
             </div>
-
-            <div class="highlight-box">
-                <strong>📌 Ziel:</strong> Die Ausbildung muss digitaler, kommunikativer und serviceorientierter werden!
-            </div>
+            <ul>
+                <li>Sternstunden und Brennpunkte mit dem Team ermittelt</li>
+                <li>Workshops in verschiedenen Teams zu den 5 Dysfunktionen eines Teams erarbeitet</li>
+                <li>Werte einzelner Mitarbeiter ermittelt</li>
+                <li>Workshop zu Konflikten / Gewaltfreie Kommunikation</li>
+            </ul>
         </div>
 
-        <!-- DIGITALISIERUNG & BÜROWIRTSCHAFT -->
+        <!-- TEAM WERTE -->
         <div class="slide">
-            <h2>💻 Digitalisierung & Bürowirtschaft</h2>
-            
-            <h3>Neu bzw. verstärkt zu vermitteln:</h3>
-            <ul>
-                <li>Computergestützte Bürokommunikation</li>
-                <li>Digitale Kassen- und Abrechnungssysteme</li>
-                <li>Social Media und neue Medien (z.B. Facebook, Instagram)</li>
-                <li>Datenschutz und Datensicherheit (DSGVO)</li>
-                <li>Qualitätsmanagement und Dokumentation</li>
-            </ul>
-
-            <div class="emphasis">
-                <strong>⚡ Hintergrund:</strong> Moderne Bäder nutzen digitale Kassensysteme, Online-Buchungen und Social Media für Marketing. Die Auszubildenden müssen diese Systeme sicher beherrschen.
-            </div>
-        </div>
-
-        <!-- BÄDERTECHNIK -->
-        <div class="slide">
-            <h2>🔧 Bädertechnik im digitalen Zeitalter</h2>
-            
-            <h3>Schwerpunkte der Modernisierung:</h3>
-            <ul>
-                <li>Digital gestützte Überwachung und Steuerung von Bädertechnik (92% Zustimmung)</li>
-                <li>Gebäudeleittechnik und MSR-Technik (87% Zustimmung)</li>
-                <li>Rationelle Energieverwendung (85% Zustimmung)</li>
-                <li>Mess-, Steuer- und Regelanlagen (83% Zustimmung)</li>
-                <li>Umweltschutz und Nachhaltigkeit (80% Zustimmung)</li>
-            </ul>
-
+            <h2>💎 Rückblick unserer Werte</h2>
             <div class="two-column">
-                <div class="column-box">
-                    <h3 style="color: #667eea;">✓ Beibehalten</h3>
-                    <ul style="font-size: 0.95em;">
-                        <li>Grundlegende technische Kompetenzen</li>
-                        <li>Notfallreparaturen und Instandhaltung</li>
-                        <li>Verständnis für Verfahrensabläufe</li>
-                    </ul>
+                <div class="card">
+                    <h4>Vertrauen</h4>
+                    <p><strong>TEAM:</strong> 6,7</p>
+                    <p><strong>SF:</strong> 8,2</p>
                 </div>
-                <div class="column-box">
-                    <h3 style="color: #ff6b6b;">↻ Aktualisieren</h3>
-                    <ul style="font-size: 0.95em;">
-                        <li>Veraltete Filtersysteme entfernen</li>
-                        <li>Digitale Steuerungssysteme aufnehmen</li>
-                        <li>Energieeffizienz verstärken</li>
-                    </ul>
+                <div class="card">
+                    <h4>Verantwortung</h4>
+                    <p><strong>TEAM:</strong> 6,5</p>
+                    <p><strong>SF:</strong> 8,5</p>
                 </div>
+            </div>
+            <div class="card" style="margin-top: 20px;">
+                <h4>Harmonie</h4>
+                <p><strong>TEAM:</strong> 7</p>
+                <p><strong>SF:</strong> 8,8</p>
             </div>
         </div>
 
-        <!-- KOMMUNIKATION -->
+        <!-- VERTRAUEN -->
         <div class="slide">
-            <h2>🗣️ Kundenkommunikation & Deeskalation</h2>
-            
+            <h2>🤝 Was ist Vertrauen?</h2>
             <div class="highlight-box">
-                <strong>🔥 Top-Priorität:</strong> Gewaltprävention und Deeskalation (93% Zustimmung!)
+                <h3>1. Dysfunktion "Vertrauen"</h3>
+                <p>Vertrauen ist die Grundlage eines funktionierenden und zusammenhaltenden Teams. Ohne Vertrauen ist Teamarbeit so gut wie unmöglich.</p>
+                <p style="margin-top: 15px;"><strong>Ergebnis:</strong> Es wurde ein Team mit Vertrauen und ein Team ohne Vertrauen ermittelt.</p>
             </div>
-
-            <h3>Neue Schwerpunkte:</h3>
-            <ul>
-                <li><strong>Maßnahmen zur Gewaltprävention und Deeskalation</strong> (93% Zustimmung)</li>
-                <li>Umgang mit Extremsituationen - Unfälle, Havarien (91% Zustimmung)</li>
-                <li>Interkulturelle Kompetenzen (74% Zustimmung)</li>
-                <li>Serviceorientierter Umgang mit Badegästen</li>
-                <li>Konfliktmanagement und Beschwerdebearbeitung</li>
-            </ul>
-
-            <div class="emphasis">
-                <strong>📈 Begründung:</strong> Verändertes Besucherverhalten, steigende Ansprüche und zunehmende Konfliktsituationen erfordern deutlich bessere Kommunikationskompetenzen.
+            <div class="info-box">
+                <strong>Durch den Aufbau von "Vertrauen" werden Konflikte im Team erst möglich.</strong><br>
+                Das Team wird leidenschaftlich, schreckt nicht mehr zurück, denn sie haben das Vertrauen, dass sie nicht destruktiv kritisiert werden.
             </div>
         </div>
 
-        <!-- SAUNA & FREIZEITANGEBOTE -->
+        <!-- GFK EINLEITUNG -->
         <div class="slide">
-            <h2>🧖 Sauna & Freizeitangebote</h2>
-            
-            <h3>Neu in die Ausbildung aufnehmen:</h3>
-            <div class="change-grid">
-                <div class="change-card" style="background: linear-gradient(135deg, #fa709a 0%, #fee140 100%);">
-                    <div class="icon">🧖‍♂️</div>
-                    <h3>Saunabereich</h3>
-                    <ul style="color: white;">
-                        <li style="color: white;">Kontrollieren von Saunaanlagen</li>
-                        <li style="color: white;">Betreuen von Saunagästen</li>
-                        <li style="color: white;">Durchführen von Aufgüssen</li>
-                    </ul>
-                </div>
-                
-                <div class="change-card" style="background: linear-gradient(135deg, #30cfd0 0%, #330867 100%);">
-                    <div class="icon">🎯</div>
-                    <h3>Freizeitangebote</h3>
-                    <ul style="color: white;">
-                        <li style="color: white;">Methodik & Didaktik von Angeboten</li>
-                        <li style="color: white;">Schwimmunterricht verstärken</li>
-                        <li style="color: white;">Sport- und Spaßangebote</li>
-                    </ul>
-                </div>
+            <h2>💬 Gewaltfreie Kommunikation (GFK)</h2>
+            <div class="info-box">
+                <strong>Was ist GFK überhaupt? Was sind die Merkmale?</strong>
             </div>
-
-            <div class="emphasis">
-                <strong>🎯 Ziel:</strong> Saunaanlagen gehören heute zum Standardangebot fast aller Bäder. FABs müssen sowohl technische als auch kundenorientierte Kompetenzen in diesem Bereich haben.
+            <p style="margin: 20px 0; line-height: 1.8;">
+                Gewalt ist ein fester Bestandteil unserer Welt, und viele Konflikte scheinen unveränderlich. 
+                Marshall Rosenberg rät, den Frieden bei uns selbst zu beginnen.
+            </p>
+            <div class="highlight-box">
+                <ul>
+                    <li>Worte können verletzender sein als Taten</li>
+                    <li>GFK zielt darauf ab, unser Sprech- und Hörverhalten zu transformieren</li>
+                    <li>Sie lehrt, beziehungsfördernd und respektvoll zu kommunizieren</li>
+                    <li>Durch regelmäßiges Üben können wir diese Haltung automatisieren</li>
+                    <li>GFK fördert die Selbstbestimmung und Wertschätzung</li>
+                </ul>
             </div>
-        </div>
-
-        <!-- PRÜFUNGSÄNDERUNGEN -->
-        <div class="slide">
-            <h2>📝 Änderungen bei der Prüfung</h2>
-            
             <div class="two-column">
-                <div class="column-box" style="border-top-color: #ff6b6b;">
-                    <h3 style="color: #ff6b6b;">✗ Streichen / Ändern</h3>
-                    <ul class="remove-list">
-                        <li>3-Meter-Kopfsprung → Fußsprung ODER streichen</li>
-                        <li>Kleiderschwimmen 300m → Distanz ggf. reduzieren</li>
-                        <li>7 Prüfungsbereiche → <strong>auf 5 reduzieren</strong></li>
-                        <li>Einzelne Kompetenzen → handlungsorientierte Prüfungen</li>
-                    </ul>
+                <div class="card">
+                    <h4>Wir verstehen die Bedürfnisse</h4>
                 </div>
-                
-                <div class="column-box" style="border-top-color: #4facfe;">
-                    <h3 style="color: #4facfe;">✓ Aufnehmen / Verstärken</h3>
+                <div class="card">
+                    <h4>Wir schätzen uns und finden gemeinsam einen Weg</h4>
+                </div>
+            </div>
+        </div>
+
+        <!-- GFK VORTEILE -->
+        <div class="slide">
+            <h2>✨ Was ergibt sich, wenn wir die GFK anwenden?</h2>
+            <div class="two-column">
+                <div class="card">
+                    <h4>Positive Effekte:</h4>
                     <ul>
-                        <li>Kommunikation und Konfliktmanagement</li>
-                        <li>Umgang mit Badegästen integrieren</li>
-                        <li>Berufstypische vollständige Handlungen</li>
-                        <li>Wasserrettung verstärken</li>
+                        <li>Innerer Frieden</li>
+                        <li>Mehr Ruhe</li>
+                        <li>Beziehungen sind tiefer, herzlicher</li>
+                        <li>Mehr Bezug was man selber fühlt</li>
+                        <li>Man spricht offener miteinander</li>
+                    </ul>
+                </div>
+                <div class="card">
+                    <h4>Konfliktlösung:</h4>
+                    <ul>
+                        <li>Weniger Konflikte</li>
+                        <li>Möglichkeit, Konflikte ohne Verletzung zu lösen</li>
+                        <li>Gemeinsam etwas gestalten</li>
+                        <li>Eine Begegnung der Liebe und nicht aus der Angst heraus</li>
                     </ul>
                 </div>
             </div>
+        </div>
 
+        <!-- GEFÜHLSINVENTAR -->
+        <div class="slide">
+            <h2>😊 Gefühlsinventar</h2>
+            <div class="feeling-grid">
+                <div class="feeling-box positive">
+                    <h4>Positive Gefühle</h4>
+                    <p>Ausgeruht, angenehm, aufgeregt, aufgekratzt, ausgeglichen, aufmerksam, beflügelt, berührt, bewegt, cool, entschlossen, erstaunt, ergriffen, geblendet, neugierig, mutig, überrascht, unschuldig, offen, motiviert, jubelnd, optimistisch, verzaubert, herzlich</p>
+                </div>
+                <div class="feeling-box negative">
+                    <h4>Negative Gefühle</h4>
+                    <p>Abgespannt, aggressiv, allein, ängstlich, aufgeregt, besorgt, bestürzt, beunruhigt, irritiert, kaputt, erschöpft, faul, matt, schrecklich, sauer, skeptisch, sorgevoll, unter Druck, unsicher, unzufrieden, verwirrt, verletzt, verloren, wütend, zornig, zerrissen</p>
+                </div>
+            </div>
+            <div class="info-box" style="margin-top: 25px;">
+                <strong>Formulierungshilfen:</strong><br>
+                "Ich kann verstehen, warum du dich so fühlst."<br>
+                "Es scheint, dass du dich überfordert fühlst."<br>
+                "Möchtest du mir mehr darüber erzählen, was dir bei der Arbeit dieses Gefühl vermittelt?"
+            </div>
+        </div>
+
+        <!-- DIE VIER SCHRITTE -->
+        <div class="slide">
+            <h2>🎯 Die vier Schritte zur GFK</h2>
+            
+            <div class="step-box">
+                <span class="step-number">1. BEOBACHTUNG</span>
+                <h4>Teile zunächst deine Beobachtung mit. Gebe keine Bewertung ab.</h4>
+                <p style="margin-top: 15px;"><strong>Wir sagen NICHT:</strong> "Du bist unordentlich"</p>
+                <p><strong>Wir sagen:</strong> "Mir ist aufgefallen, dass die Reinigungsutensilien nicht wie üblich an ihrem Platz liegen."</p>
+                <div style="margin-top: 20px; padding: 15px; background: rgba(255,255,255,0.2); border-radius: 10px;">
+                    <p><strong>Objektiv:</strong> "Du bist 30 min. zu spät zur Besprechung gekommen." (Tatsache)</p>
+                    <p style="margin-top: 10px;"><strong>Subjektiv:</strong> "Du schätzt meine Zeit nicht wert, da du 30 min zu spät zur Besprechung gekommen bist." (Bewertung)</p>
+                </div>
+            </div>
+
+            <div class="step-box">
+                <span class="step-number">2. GEFÜHL/EMOTION</span>
+                <h4>Beschreibe deine Gefühle. Konzentriere dich auf den Gegenüber, erkenne seine Emotionen.</h4>
+                <ul style="color: white; margin-top: 15px;">
+                    <li>Stelle offene Fragen</li>
+                    <li>Würdige die Gefühle der anderen Person</li>
+                    <li>Unterbrechen Sie nicht</li>
+                    <li>Geben Sie keine ungebetenen Ratschläge</li>
+                </ul>
+            </div>
+
+            <div class="step-box">
+                <span class="step-number">3. BEDÜRFNIS</span>
+                <h4>Was brauchst du? Welches Bedürfnis ist dir zu kurz gekommen?</h4>
+                <p style="margin-top: 15px;"><strong>Formulierungen:</strong></p>
+                <ul style="color: white;">
+                    <li>"Mir ist wichtig, dass..."</li>
+                    <li>"Ich brauche jetzt..."</li>
+                    <li>"Ich möchte jetzt..."</li>
+                    <li>"Ich fühle mich gestresst..."</li>
+                    <li>"Ich wäre dankbar, wenn du..."</li>
+                </ul>
+                <div style="margin-top: 20px; padding: 15px; background: rgba(255,255,255,0.2); border-radius: 10px;">
+                    <p><strong>Mögliche Bedürfnisse:</strong> Abenteuer, Herausforderung, Anregung, Gesundheit, Klarheit, Mitgefühl, Lernen, Kompetenz, Bewegung, Beitragen, Ehrlichkeit, Kontakt, Offenheit, Frieden, Fortschritt, Authentizität, Raum und Zeit, Teilhabe, Wertschätzung, Zusammenwirken, Vertrauen, Verlässlichkeit, Verantwortung</p>
+                </div>
+            </div>
+
+            <div class="step-box">
+                <span class="step-number">4. BITTE</span>
+                <h4>Eine Bitte ist nur dann eine echte Bitte, wenn die andere Person auch nein sagen darf.</h4>
+                <p style="margin-top: 15px;"><strong>Wichtig:</strong></p>
+                <ul style="color: white;">
+                    <li>Spezifität: Die Genauigkeit führt zur besseren Zusammenarbeit</li>
+                    <li>Beobachtbare Handlungen: Bitten sollten sich auf beobachtbare und messbare Handlungen konzentrieren</li>
+                    <li>Rechtzeitigkeit: Geben Sie an, wann die gewünschte Handlung ausgeführt werden soll</li>
+                    <li>Verbindung zu Bedürfnissen: Bringen Sie die Bitte mit dem zugrunde liegenden Bedürfnis in Verbindung</li>
+                </ul>
+                <p style="margin-top: 15px;"><strong>Beispiel:</strong> "Sag mir bitte rechtzeitig Bescheid, wenn du dich das nächste Mal verspätest."</p>
+                <p style="margin-top: 10px;"><strong>Wenn die Person NEIN sagt:</strong> "Was könntest du ändern oder was schlägst du stattdessen vor?"</p>
+            </div>
+        </div>
+
+        <!-- KONFLIKTE -->
+        <div class="slide">
+            <h2>⚔️ Ein Team, das Konflikte austragen kann</h2>
+            <div class="info-box">
+                <strong>VORAUSSETZUNG: VERTRAUEN</strong>
+            </div>
             <div class="highlight-box">
-                <strong>🔄 Gestreckte Abschlussprüfung (GAP):</strong><br>
-                Tendenz positiv, aber keine eindeutige Empfehlung → Im Neuordnungsverfahren zu prüfen
+                <ul>
+                    <li>Teams haben lebhafte und interessante Meetings</li>
+                    <li>Erschließen und erweitern die Ideen aller Teammitglieder</li>
+                    <li>Lösen Probleme wirklich schnell und vollständig</li>
+                    <li>Legen kritische Probleme zur Diskussion auf den Tisch</li>
+                </ul>
+            </div>
+            <div class="card" style="margin-top: 20px;">
+                <h4>Wichtig:</h4>
+                <p>Eine Auseinandersetzung sollte konstruktiv sein. Es geht nur um die bestmögliche Lösung für das Team.</p>
+                <p style="margin-top: 15px;"><strong>Übung:</strong> Wenn ein Team dazu neigt, Konflikte aus dem Weg zu gehen, muss es einen Konflikt-Schlichter geben. Diese Person braucht Mut und Selbstvertrauen, um heikle Themen anzusprechen.</p>
             </div>
         </div>
 
-        <!-- SICHERHEIT & AUFSICHT -->
+        <!-- KRITIK -->
         <div class="slide">
-            <h2>🛡️ Sicherheit & Aufsicht</h2>
-            
-            <h3>Zu verstärken:</h3>
-            <ul>
-                <li>Mitwirken bei der Organisation von Betriebsabläufen</li>
-                <li>Kontrolle der Verkehrssicherungspflicht</li>
-                <li>Wasserrettungsmaßnahmen (höherer Umfang)</li>
-                <li>Erste Hilfe und Betreuen von Unfallbeteiligten</li>
-            </ul>
-
-            <div class="stats-container">
-                <div class="stat-box">
-                    <span class="stat-number">88%</span>
-                    <span class="stat-label">Aufsichts- und Verkehrssicherungspflichten<br>gehören zu den Hauptaufgaben</span>
-                </div>
-                <div class="stat-box">
-                    <span class="stat-number">91%</span>
-                    <span class="stat-label">wünschen verstärkte Vermittlung von Extremsituationen</span>
-                </div>
-            </div>
-
-            <div class="emphasis">
-                <strong>⚖️ Wichtig:</strong> Die Verkehrssicherungspflicht ist eine zentrale rechtliche Verantwortung. FABs müssen hier umfassend qualifiziert werden.
-            </div>
-        </div>
-
-        <!-- MEISTER-FORTBILDUNG -->
-        <div class="slide">
-            <h2>👔 Meister-Fortbildung: Klare Abgrenzung!</h2>
-            
-            <div class="problem-box">
-                <h3>❌ Aktuelles Problem</h3>
-                <p style="color: white; font-size: 1.1em;">Zu viele Überschneidungen mit der Ausbildung → Meister machen oft dieselben Aufgaben wie Fachangestellte!</p>
-            </div>
-
+            <h2>💬 Der Unterschied zwischen konstruktiver und destruktiver Kritik</h2>
             <div class="two-column">
-                <div class="column-box" style="border-top-color: #ff6b6b;">
-                    <h3 style="color: #ff6b6b;">✗ Aus Meister-Fortbildung streichen:</h3>
-                    <ul class="remove-list" style="font-size: 0.95em;">
-                        <li>Rettungsschwimmen (Kleiderschwimmen)</li>
-                        <li>Wettkampftechniken</li>
-                        <li>Math. und naturwiss. Grundlagen</li>
-                        <li>Grundlagen Bädertechnik</li>
-                        <li>Gesundheitslehre (Basics)</li>
+                <div class="card" style="border-top-color: #4facfe;">
+                    <h4 style="color: #4facfe;">Konstruktive Kritik</h4>
+                    <p>Eine ehrliche, offene und respektvolle Bewertung, die Schwächen aufzeigt, aber immer darauf abzielt, Lösungen zu finden und zu verbessern.</p>
+                    <p style="margin-top: 15px;"><strong>Bedeutet:</strong> Die Suche nach Kompromissen, von denen beide Seiten etwas haben oder ihr Ziel erreichen.</p>
+                </div>
+                <div class="card" style="border-top-color: #ff6b6b;">
+                    <h4 style="color: #ff6b6b;">Destruktive Kritik</h4>
+                    <p>Kommt meist ungefiltert, unangenehm und ohne erkennbare Hilfsbereitschaft. Sie fühlt sich an wie ein Schlag ins Gesicht, oft lässt man nur den Frust ab und macht Machtanweisungen.</p>
+                </div>
+            </div>
+            <div class="info-box" style="margin-top: 25px;">
+                <strong>Kritik vs. Feedback:</strong><br>
+                <strong>Kritik</strong> bedeutet sich mit etwas auseinanderzusetzen, Schwachstellen oder Verbesserungsmöglichkeiten zu identifizieren und diese zu äußern.<br>
+                <strong>Feedback</strong> ist oft weicher formuliert und mehr auf Beziehungsebene bedacht.
+            </div>
+        </div>
+
+        <!-- KRITIKGESPRÄCHE -->
+        <div class="slide">
+            <h2>🗣️ Tipps für Kritikgespräche</h2>
+            <div class="highlight-box">
+                <h3>Formulierungen:</h3>
+                <ul>
+                    <li><strong>"Mir ist aufgefallen, dass..."</strong><br>
+                    Beispiel: "Mir ist aufgefallen, dass die Absprachen im Team nicht ganz klar sind. Ich schlage vor, wir setzen uns zusammen und klären die Rollen genauer."</li>
+                    <li><strong>"Wie könnten wir ... verbessern?"</strong><br>
+                    Beispiel: "Wie könnten wir die Kommunikation im Team verbessern?"</li>
+                    <li><strong>"Lassen Sie uns die Sache aus einer anderen Perspektive betrachten."</strong><br>
+                    Beispiel: "Wenn wir uns in die Position des Gastes versetzen, wirkt das etwas übersichtlich. Wollen wir es gemeinsam überarbeiten?"</li>
+                </ul>
+            </div>
+        </div>
+
+        <!-- UMGANG MIT KRITIK -->
+        <div class="slide">
+            <h2>🛡️ Der Umgang mit Kritik</h2>
+            <div class="info-box">
+                <strong>Zu lernen, wie man mit Kritik umgeht, ist für eine effektive Kommunikation unerlässlich.</strong>
+            </div>
+            <div class="two-column">
+                <div class="card">
+                    <h4>Techniken:</h4>
+                    <ul>
+                        <li>Unterscheiden Sie zwischen Meinung und Fakten</li>
+                        <li>Erkennen Sie alle gültigen Punkte an: "Ich stimme zu, dass es Bereiche gibt, in denen ich mich verbessern muss..."</li>
+                        <li>Setzen Sie Ihren Emotionen Grenzen: Erinnern Sie sich, dass die Kritik auf ein bestimmtes Verhalten oder Ergebnis bezogen ist und nicht auf Sie persönlich</li>
+                        <li>Schaffen Sie eine Feedback-Schleife</li>
                     </ul>
                 </div>
-                
-                <div class="column-box" style="border-top-color: #667eea;">
-                    <h3 style="color: #667eea;">✓ In Meister-Fortbildung verstärken:</h3>
-                    <ul style="font-size: 0.95em;">
-                        <li><strong>Personalführung</strong> & Mitarbeitermotivation</li>
-                        <li><strong>Betriebswirtschaft</strong> & Strategieentwicklung</li>
-                        <li>Qualitätsmanagement</li>
-                        <li>Marketing & Kundenorientierung</li>
-                        <li>Energiemanagement</li>
+                <div class="card">
+                    <h4>Unter Druck ruhig bleiben:</h4>
+                    <ul>
+                        <li>Achten Sie auf die richtige Einstellung - bleib positiv</li>
+                        <li>Üben Sie sich darin, Kritik frei von Emotionen zu bewerten</li>
+                        <li>Bewahren Sie Professionalität</li>
+                        <li>Widersprechen Sie entschieden, wenn nötig</li>
+                        <li>Fragen Sie nach Einzelheiten</li>
+                        <li>Bieten Sie Alternativen an</li>
                     </ul>
                 </div>
             </div>
         </div>
 
-        <!-- AUSBILDUNGSSTRUKTUR -->
-        <div class="slide">
-            <h2>🎓 Ausbildungsstruktur</h2>
-            
-            <div class="highlight-box" style="font-size: 1.4em; padding: 40px;">
-                <strong>✓ MONOBERUF BEIBEHALTEN</strong><br><br>
-                Keine Spezialisierung während der Ausbildung
-            </div>
-
-            <h3>Begründung:</h3>
-            <ul>
-                <li>Generalistische Ausbildung wird bevorzugt (65% Zustimmung)</li>
-                <li>Umfassende Einsatzfähigkeit wichtiger als Spezialisierung</li>
-                <li>Kleine Bäder benötigen Allrounder</li>
-                <li>Flexibilität beim Berufseinstieg wird erhöht</li>
-            </ul>
-
-            <div class="emphasis">
-                <strong>💡 Hinweis:</strong> Spezialisierungen können nach der Ausbildung durch Zusatzqualifikationen erfolgen (z.B. Geprüfte Berufsspezialisten).
-            </div>
+        <!-- FOOTER -->
+        <div class="slide" style="text-align: center; background: linear-gradient(135deg, #667eea 0%, #764ba2 100%); color: white;">
+            <h2 style="color: white; border-bottom-color: rgba(255,255,255,0.3);">Ende</h2>
+            <p style="font-size: 1.2em; margin: 30px 0;">
+                Vielen Dank für Ihre Aufmerksamkeit!
+            </p>
+            <a href="start.html" class="nav-link" style="margin-top: 20px;">🏠 Zur Startseite</a>
+            <a href="neuordnung.html" class="nav-link" style="margin-top: 10px;">📊 Neuordnung</a>
         </div>
-
-        <!-- ZEITPLAN -->
-        <div class="slide">
-            <h2>📅 Zeitplan & Umsetzung</h2>
-            
-            <div class="timeline">
-                <div class="timeline-item">
-                    <strong>2022-2024</strong><br>
-                    Voruntersuchung durch BIBB durchgeführt
-                </div>
-                
-                <div class="timeline-item">
-                    <strong>2024/2025</strong><br>
-                    Übergabe des Abschlussberichts an Ministerien
-                </div>
-                
-                <div class="timeline-item">
-                    <strong>Nächste Schritte</strong><br>
-                    Entscheidung über Neuordnungsverfahren
-                </div>
-                
-                <div class="timeline-item">
-                    <strong>Empfehlung</strong><br>
-                    <strong>Parallele Neuordnung</strong> von Ausbildung und Meisterfortbildung
-                </div>
-            </div>
-
-            <div class="highlight-box" style="margin-top: 30px;">
-                <strong>🔗 Wichtig:</strong> Klare Trennung der Profile zwischen Fachangestellten und Meistern etablieren!
-            </div>
-        </div>
-
-        <!-- FAZIT -->
-        <div class="slide">
-            <h2>🎯 Fazit</h2>
-            
-            <div class="conclusion-box">
-                <strong style="font-size: 1.3em;">Die Ausbildung muss in drei Bereichen modernisiert werden:</strong>
-                <br><br>
-                <div style="text-align: left; max-width: 800px; margin: 20px auto;">
-                    <p><strong>1️⃣ DIGITALER</strong> → IT-Systeme, Gebäudeleittechnik, Social Media</p>
-                    <p><strong>2️⃣ KOMMUNIKATIVER</strong> → Deeskalation, Konfliktmanagement, Service</p>
-                    <p><strong>3️⃣ SERVICEORIENTIERTER</strong> → Sauna, Wellness, Freizeitangebote</p>
-                </div>
-                <br>
-                <strong>Die Meisterfortbildung muss sich auf Führung und Management konzentrieren!</strong>
-            </div>
-
-            <div class="stats-container" style="margin-top: 40px;">
-                <div class="stat-box">
-                    <span class="stat-number">1.515</span>
-                    <span class="stat-label">Befragte in der<br>Online-Befragung</span>
-                </div>
-                <div class="stat-box">
-                    <span class="stat-number">27</span>
-                    <span class="stat-label">Experten-<br>Interviews</span>
-                </div>
-                <div class="stat-box">
-                    <span class="stat-number">2022-24</span>
-                    <span class="stat-label">Untersuchungs-<br>zeitraum</span>
-                </div>
-            </div>
-        </div>
-
-        <!-- DANKE -->
-        <div class="slide slide-title">
-            <div>
-                <h1>Vielen Dank!</h1>
-                <p class="subtitle">Fragen und Diskussion</p>
-                <div style="margin-top: 60px; font-size: 1.2em; opacity: 0.9;">
-                    <p>📄 Quelle: BIBB Abschlussbericht</p>
-                    <p>Voruntersuchung Bäderbetriebe 2022-2024</p>
-                </div>
-                <a href="ausbildungsrahmenplan.html" class="nav-link" style="margin-top: 40px;">📚 Zum Ausbildungsrahmenplan</a>
-                <a href="ausbildungsplan.html" class="nav-link" style="margin-top: 10px;">📋 Zum Ausbildungsplan</a>
-            </div>
-        </div>
-
     </div>
 
     <script>
@@ -665,9 +547,12 @@
         document.querySelectorAll('a[href^="#"]').forEach(anchor => {
             anchor.addEventListener('click', function (e) {
                 e.preventDefault();
-                document.querySelector(this.getAttribute('href')).scrollIntoView({
-                    behavior: 'smooth'
-                });
+                const target = document.querySelector(this.getAttribute('href'));
+                if (target) {
+                    target.scrollIntoView({
+                        behavior: 'smooth'
+                    });
+                }
             });
         });
 
