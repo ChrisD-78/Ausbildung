@@ -1,13 +1,14 @@
-const { getStore } = require("./umfrage-store");
+const { updateStore } = require("./umfrage-store");
 
 exports.handler = async (event) => {
   try {
     const body = event.body ? JSON.parse(event.body) : {};
     const { eventId = "default" } = body || {};
 
-    const store = getStore();
-    if (store.answersByEvent[eventId]) delete store.answersByEvent[eventId];
-    if (store.stateByEvent[eventId]) delete store.stateByEvent[eventId];
+    updateStore((store) => {
+      if (store.answersByEvent[eventId]) delete store.answersByEvent[eventId];
+      if (store.stateByEvent[eventId]) delete store.stateByEvent[eventId];
+    });
 
     return {
       statusCode: 200,

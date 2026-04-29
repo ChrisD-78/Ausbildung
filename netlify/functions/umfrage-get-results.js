@@ -1,4 +1,4 @@
-const { getStore } = require("./umfrage-store");
+const { loadStore } = require("./umfrage-store");
 
 exports.handler = async (event) => {
   try {
@@ -13,7 +13,7 @@ exports.handler = async (event) => {
       };
     }
 
-    const store = getStore();
+    const store = loadStore();
     const byFrage = store.answersByEvent[eventId]?.[fragenId] || {};
     const antworten = Object.values(byFrage);
 

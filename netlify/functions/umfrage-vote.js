@@ -1,4 +1,4 @@
-const { getStore } = require("./umfrage-store");
+const { updateStore } = require("./umfrage-store");
 
 exports.handler = async (event) => {
   try {
@@ -20,18 +20,20 @@ exports.handler = async (event) => {
       };
     }
 
-    const store = getStore();
-    if (!store.answersByEvent[eventId]) store.answersByEvent[eventId] = {};
-    if (!store.answersByEvent[eventId][fragenId]) store.answersByEvent[eventId][fragenId] = {};
-
     const zeitpunkt = new Date().toISOString();
-    store.answersByEvent[eventId][fragenId][teilnehmerId] = {
-      fragenId,
-      teilnehmerId,
-      name,
-      antwort,
-      zeitpunkt,
-    };
+    updateStore((store) => {
+      if (!store.answersByEvent[eventId]) store.answersByEvent[eventId] = {};
+      if (!store.answersByEvent[eventId][fragenId])
+        store.answersByEvent[eventId][fragenId] = {};
+
+      store.answersByEvent[eventId][fragenId][teilnehmerId] = {
+        fragenId,
+        teilnehmerId,
+        name,
+        antwort,
+        zeitpunkt,
+      };
+    });
 
     return {
       statusCode: 200,

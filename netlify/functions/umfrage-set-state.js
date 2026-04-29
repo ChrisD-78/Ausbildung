@@ -1,4 +1,4 @@
-const { getStore } = require("./umfrage-store");
+const { updateStore, loadStore } = require("./umfrage-store");
 
 exports.handler = async (event) => {
   try {
@@ -13,8 +13,10 @@ exports.handler = async (event) => {
     const body = JSON.parse(event.body);
     const { eventId = "default", aktuelleFrage = "" } = body || {};
 
-    const store = getStore();
-    store.stateByEvent[eventId] = aktuelleFrage;
+    // Laden/Schreiben über File-Persistence
+    updateStore((store) => {
+      store.stateByEvent[eventId] = aktuelleFrage;
+    });
 
     return {
       statusCode: 200,

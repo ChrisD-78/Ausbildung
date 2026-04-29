@@ -1,4 +1,4 @@
-const { getStore } = require("./umfrage-store");
+const { updateStore } = require("./umfrage-store");
 
 exports.handler = async (event) => {
   try {
@@ -12,11 +12,10 @@ exports.handler = async (event) => {
       };
     }
 
-    const store = getStore();
-    const byEvent = store.answersByEvent[eventId];
-    if (byEvent?.[fragenId]) {
-      delete byEvent[fragenId];
-    }
+    updateStore((store) => {
+      const byEvent = store.answersByEvent[eventId];
+      if (byEvent && byEvent[fragenId]) delete byEvent[fragenId];
+    });
 
     return {
       statusCode: 200,

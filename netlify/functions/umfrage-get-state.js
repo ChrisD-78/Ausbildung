@@ -1,10 +1,10 @@
-const { getStore } = require("./umfrage-store");
+const { loadStore } = require("./umfrage-store");
 
 exports.handler = async (event) => {
   try {
     const qs = event.queryStringParameters || {};
     const eventId = qs.eventId || "default";
-    const store = getStore();
+    const store = loadStore();
     const aktuelleFrage = store.stateByEvent[eventId] || "";
 
     return {
