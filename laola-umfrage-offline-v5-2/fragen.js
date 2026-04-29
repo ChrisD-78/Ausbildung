@@ -327,6 +327,8 @@ window.FOLIEN_NACH = [
 window.VERANSTALTUNG = {
   titel: "2. Treffen Arbeitskreis",
   untertitel: "Nachwuchsgewinnung in den Bädern",
+  // Einheitliche Event-ID für Beamer-Handy-Synchronisation (Netlify Functions)
+  eventId: "laola-umfrage-v5-2",
   teilnehmerUrl: "https://laola-ausbildung.netlify.app/laola-umfrage-offline-v5-2/umfrage.html",
 };
 
