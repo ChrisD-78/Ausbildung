@@ -241,19 +241,26 @@
   document.getElementById("hdr-titel").textContent = VERANSTALTUNG.titel || "Live-Umfrage";
   document.getElementById("hdr-untertitel").textContent = VERANSTALTUNG.untertitel || "";
 
-  let teilnehmerId = sessionStorage.getItem("teilnehmerId");
+  let teilnehmerId = "";
+  try {
+    teilnehmerId = sessionStorage.getItem("teilnehmerId") || "";
+  } catch (e) {
+    teilnehmerId = "";
+  }
   if (!teilnehmerId) {
     teilnehmerId = "t-" + Date.now() + "-" + Math.random().toString(36).slice(2, 9);
-    sessionStorage.setItem("teilnehmerId", teilnehmerId);
+    try { sessionStorage.setItem("teilnehmerId", teilnehmerId); } catch (e) {}
   }
 
   let aktuelleId = "";
-  let teilnehmerName = sessionStorage.getItem("teilnehmerName") || "";
-  let bereitsAbgegeben = JSON.parse(sessionStorage.getItem("abgegeben") || "{}");
+  let teilnehmerName = "";
+  try { teilnehmerName = sessionStorage.getItem("teilnehmerName") || ""; } catch (e) {}
+  let bereitsAbgegeben = {};
+  try { bereitsAbgegeben = JSON.parse(sessionStorage.getItem("abgegeben") || "{}"); } catch (e) { bereitsAbgegeben = {}; }
 
   function speichereAbgegeben(fragenId) {
     bereitsAbgegeben[fragenId] = true;
-    sessionStorage.setItem("abgegeben", JSON.stringify(bereitsAbgegeben));
+    try { sessionStorage.setItem("abgegeben", JSON.stringify(bereitsAbgegeben)); } catch (e) {}
   }
 
   async function aktualisieren() {
@@ -300,12 +307,23 @@
       const input = document.getElementById("teilnehmer-name");
       if (input) input.focus();
       document.getElementById("name-speichern").onclick = () => {
-        const val = (document.getElementById("teilnehmer-name")?.value || "").trim();
+        const inp = document.getElementById("teilnehmer-name");
+        const val = (inp && inp.value ? inp.value : "").trim();
         if (!val) return;
         teilnehmerName = val;
-        sessionStorage.setItem("teilnehmerName", teilnehmerName);
+        try { sessionStorage.setItem("teilnehmerName", teilnehmerName); } catch (e) {}
         render();
       };
+
+      // Enter-Taste unterstützt schnelleres Weiterklicken
+      if (input) {
+        input.addEventListener("keydown", (e) => {
+          if (e.key === "Enter") {
+            const btn = document.getElementById("name-speichern");
+            if (btn) btn.click();
+          }
+        });
+      }
       return;
     }
 

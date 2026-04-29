@@ -14,6 +14,10 @@
   const eventId = (window.VERANSTALTUNG && window.VERANSTALTUNG.eventId) || "default";
   let offlineMode = false;
 
+  // Fallback-Speicher, falls localStorage in iframe/Browser-Settings blockiert ist.
+  let memState = "";
+  let memAnswers = {};
+
   // Fallback für lokale Tests (kein Netlify-Backend verfügbar).
   const KEY_STATE = "umfrage:state";
   const KEY_ANTWORTEN = "umfrage:antworten";
@@ -22,20 +26,32 @@
     try {
       return JSON.parse(localStorage.getItem(KEY_ANTWORTEN) || "{}");
     } catch {
-      return {};
+      return memAnswers || {};
     }
   }
 
   function speichereAntwortenLocal(obj) {
-    localStorage.setItem(KEY_ANTWORTEN, JSON.stringify(obj));
+    try {
+      localStorage.setItem(KEY_ANTWORTEN, JSON.stringify(obj));
+    } catch {
+      memAnswers = obj || {};
+    }
   }
 
   async function localGetState() {
-    return { aktuelleFrage: localStorage.getItem(KEY_STATE) || "" };
+    try {
+      return { aktuelleFrage: localStorage.getItem(KEY_STATE) || "" };
+    } catch {
+      return { aktuelleFrage: memState || "" };
+    }
   }
 
   async function localSetState(fragenId) {
-    localStorage.setItem(KEY_STATE, fragenId || "");
+    try {
+      localStorage.setItem(KEY_STATE, fragenId || "");
+    } catch {
+      memState = fragenId || "";
+    }
     return { ok: true };
   }
 
@@ -69,8 +85,13 @@
   }
 
   async function localResetAlles() {
-    localStorage.removeItem(KEY_ANTWORTEN);
-    localStorage.removeItem(KEY_STATE);
+    try {
+      localStorage.removeItem(KEY_ANTWORTEN);
+      localStorage.removeItem(KEY_STATE);
+    } catch {
+      memAnswers = {};
+      memState = "";
+    }
     return { ok: true };
   }
 
