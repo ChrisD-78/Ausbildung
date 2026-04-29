@@ -25,13 +25,14 @@ function saveStore(store) {
   const pathMod = require("path");
   try {
     const dir = pathMod.dirname(STORE_PATH);
+    let mkdirRes = { existed: fs.existsSync(dir), ok: true };
     try {
-      if (!fs.existsSync(dir)) fs.mkdirSync(dir, { recursive: true });
-    } catch {
-      // ignore
+      if (!mkdirRes.existed) fs.mkdirSync(dir, { recursive: true });
+    } catch (e) {
+      mkdirRes = { ...mkdirRes, ok: false, error: String(e?.message || e) };
     }
     fs.writeFileSync(STORE_PATH, JSON.stringify(store));
-    return { ok: true };
+    return { ok: true, mkdirRes };
   } catch (e) {
     return { ok: false, error: String(e?.message || e) };
   }
