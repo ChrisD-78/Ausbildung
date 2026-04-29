@@ -14,7 +14,7 @@ exports.handler = async (event) => {
     const { eventId = "default", aktuelleFrage = "" } = body || {};
 
     // Laden/Schreiben über File-Persistence
-    updateStore((store) => {
+    const { saveRes } = updateStore((store) => {
       store.stateByEvent[eventId] = aktuelleFrage;
     });
     const verifyStore = loadStore();
@@ -26,6 +26,7 @@ exports.handler = async (event) => {
       body: JSON.stringify({
         ok: true,
         verify: { eventId, aktuelleFrage: verifyAktuelleFrage },
+        saveRes,
       }),
     };
   } catch (e) {

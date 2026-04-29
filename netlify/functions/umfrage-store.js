@@ -22,24 +22,26 @@ function loadStore() {
 }
 
 function saveStore(store) {
+  const pathMod = require("path");
   try {
-    const dir = require("path").dirname(STORE_PATH);
+    const dir = pathMod.dirname(STORE_PATH);
     try {
       if (!fs.existsSync(dir)) fs.mkdirSync(dir, { recursive: true });
     } catch {
       // ignore
     }
     fs.writeFileSync(STORE_PATH, JSON.stringify(store));
+    return { ok: true };
   } catch (e) {
-    // Wenn Schreibzugriff nicht klappt, machen wir wenigstens nicht komplett kaputt.
+    return { ok: false, error: String(e?.message || e) };
   }
 }
 
 function updateStore(mutator) {
   const store = loadStore();
   mutator(store);
-  saveStore(store);
-  return store;
+  const saveRes = saveStore(store);
+  return { store, saveRes };
 }
 
 module.exports = { loadStore, saveStore, updateStore };
