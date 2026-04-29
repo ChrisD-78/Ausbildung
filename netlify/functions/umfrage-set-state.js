@@ -17,11 +17,16 @@ exports.handler = async (event) => {
     updateStore((store) => {
       store.stateByEvent[eventId] = aktuelleFrage;
     });
+    const verifyStore = loadStore();
+    const verifyAktuelleFrage = verifyStore.stateByEvent[eventId] || "";
 
     return {
       statusCode: 200,
       headers: { "content-type": "application/json" },
-      body: JSON.stringify({ ok: true }),
+      body: JSON.stringify({
+        ok: true,
+        verify: { eventId, aktuelleFrage: verifyAktuelleFrage },
+      }),
     };
   } catch (e) {
     return {
