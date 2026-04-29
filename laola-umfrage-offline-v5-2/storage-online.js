@@ -127,11 +127,20 @@
     async setState(fragenId) {
       if (offlineMode) return localSetState(fragenId);
       try {
-        await jsonFetch(`/.netlify/functions/umfrage-set-state`, {
+        const res = await jsonFetch(`/.netlify/functions/umfrage-set-state`, {
           method: "POST",
           headers: { "content-type": "application/json" },
           body: JSON.stringify({ eventId, aktuelleFrage: fragenId || "" }),
         });
+        // Wenn der Backend-State nicht wirklich persistiert (verify bleibt leer),
+        // schalten wir auf Offline-Fallback um.
+        const expected = fragenId || "";
+        const verified = res?.verify?.aktuelleFrage;
+        if (typeof verified === "string" && verified !== expected) {
+          throw new Error(
+            `Backend-State nicht persistent: expected="${expected}", got="${verified}"`
+          );
+        }
         return { ok: true };
       } catch (e) {
         offlineMode = true;
