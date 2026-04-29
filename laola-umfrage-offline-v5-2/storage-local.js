@@ -43,6 +43,7 @@
       alle[key] = {
         fragenId,
         teilnehmerId,
+        name: arguments.length >= 4 ? arguments[3] : "",
         antwort,
         zeitpunkt: new Date().toISOString(),
       };

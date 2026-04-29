@@ -571,6 +571,24 @@
     to { opacity: 1; transform: scale(1); }
   }
 
+  .teilnehmer-antworten {
+    margin-top: 1.5rem;
+    padding-top: 1.25rem;
+    border-top: 2px solid var(--border);
+    display: flex;
+    flex-direction: column;
+    gap: 0.7rem;
+  }
+
+  .teilnehmer-antworten .teilnehmer-antwort {
+    background: var(--bg);
+    border: 1px solid var(--border);
+    border-radius: 12px;
+    padding: 0.85rem 1rem;
+    font-size: 1rem;
+    line-height: 1.35;
+  }
+
   .choice-antworten { display: flex; flex-direction: column; gap: 1rem; }
   .balken-zeile {
     display: grid;
@@ -1185,7 +1203,20 @@
       const label = e.count > 1 ? `${e.text} (${e.count})` : e.text;
       return `<div class="antwort ${klasse}">${escape(label)}</div>`;
     }).join("");
-    root.innerHTML = `<div class="text-antworten">${html}</div>`;
+
+    // Zusätzlich: einzelne Antworten (inkl. Name) anzeigen
+    const teilnehmerHtml = antworten
+      .map((a) => {
+        const name = a.name || a.teilnehmerId || "Teilnehmer";
+        const arr = Array.isArray(a.antwort) ? a.antwort : [a.antwort];
+        const label = arr.map((t) => String(t).trim()).filter(Boolean).join(", ");
+        return `<div class="teilnehmer-antwort"><strong>${escape(name)}:</strong> ${escape(
+          label || "-"
+        )}</div>`;
+      })
+      .join("");
+
+    root.innerHTML = `<div class="text-antworten">${html}</div><div class="teilnehmer-antworten">${teilnehmerHtml}</div>`;
   }
 
   function rendereChoice(root, frage, antworten) {
@@ -1212,7 +1243,18 @@
           </div>
         </div>`;
     }).join("");
-    root.innerHTML = `<div class="choice-antworten">${html}</div>`;
+    const teilnehmerHtml = antworten
+      .map((a) => {
+        const name = a.name || a.teilnehmerId || "Teilnehmer";
+        const arr = Array.isArray(a.antwort) ? a.antwort : [a.antwort];
+        const label = arr.map((t) => String(t).trim()).filter(Boolean).join(", ");
+        return `<div class="teilnehmer-antwort"><strong>${escape(name)}:</strong> ${escape(
+          label || "-"
+        )}</div>`;
+      })
+      .join("");
+
+    root.innerHTML = `<div class="choice-antworten">${html}</div><div class="teilnehmer-antworten">${teilnehmerHtml}</div>`;
   }
 
   function rendereScale(root, frage, antworten) {
@@ -1239,6 +1281,18 @@
       balkenHtml.push(`<div class="skala-balken" style="height: ${hoehe}%">${anzahl > 0 ? anzahl : ""}</div>`);
       labelsHtml.push(`<div>${i}</div>`);
     }
+
+    // Zusätzlich: einzelne Bewertungen (inkl. Name) listen
+    const teilnehmerHtml = antworten
+      .map((a) => {
+        const name = a.name || a.teilnehmerId || "Teilnehmer";
+        const wert = Array.isArray(a.antwort) ? a.antwort.join(", ") : a.antwort;
+        return `<div class="teilnehmer-antwort"><strong>${escape(name)}:</strong> ${escape(
+          String(wert ?? "-")
+        )}</div>`;
+      })
+      .join("");
+
     root.innerHTML = `
       <div class="skala-summary">
         <div class="skala-stat"><div class="wert">${durchschnitt}</div><div class="label">Durchschnitt</div></div>
@@ -1246,7 +1300,8 @@
         <div class="skala-stat"><div class="wert">${werte.length}</div><div class="label">Antworten</div></div>
       </div>
       <div class="skala-verteilung">${balkenHtml.join("")}</div>
-      <div class="skala-labels">${labelsHtml.join("")}</div>`;
+      <div class="skala-labels">${labelsHtml.join("")}</div>
+      <div class="teilnehmer-antworten">${teilnehmerHtml}</div>`;
   }
 
   function escape(s) {

@@ -248,6 +248,7 @@
   }
 
   let aktuelleId = "";
+  let teilnehmerName = sessionStorage.getItem("teilnehmerName") || "";
   let bereitsAbgegeben = JSON.parse(sessionStorage.getItem("abgegeben") || "{}");
 
   function speichereAbgegeben(fragenId) {
@@ -268,6 +269,45 @@
 
   function render() {
     const root = document.getElementById("content");
+
+    // Name/zuordnung erforderlich (damit Antworten auf dem Bildschirm angezeigt werden können)
+    if (!teilnehmerName) {
+      root.innerHTML = `
+        <div class="karte status-karte">
+          <span class="icon">👤</span>
+          <h2>Name anmelden</h2>
+          <p style="max-width: 32ch; margin: 0 auto; color: var(--muted);">
+            Damit ihr eure Antworten zuordnen könnt: bitte einen Namen eingeben.
+          </p>
+          <div class="text-eingabe" style="margin-top: 1rem;">
+            <input
+              type="text"
+              id="teilnehmer-name"
+              placeholder="z.B. Lisa / Team Schichtführer"
+              maxlength="40"
+              autocomplete="off"
+              autocapitalize="words"
+              spellcheck="false"
+            />
+          </div>
+          <button class="submit-btn" id="name-speichern">Weiter</button>
+          <p style="font-size: 0.85rem; margin-top: 0.75rem; color: var(--muted);">
+            (Teilnehmer-ID: ${escape(teilnehmerId)})
+          </p>
+        </div>
+      `;
+
+      const input = document.getElementById("teilnehmer-name");
+      if (input) input.focus();
+      document.getElementById("name-speichern").onclick = () => {
+        const val = (document.getElementById("teilnehmer-name")?.value || "").trim();
+        if (!val) return;
+        teilnehmerName = val;
+        sessionStorage.setItem("teilnehmerName", teilnehmerName);
+        render();
+      };
+      return;
+    }
 
     if (!aktuelleId) {
       root.innerHTML = `
@@ -448,7 +488,7 @@
   async function sendeAntwort(fragenId, antwort) {
     try {
       document.querySelectorAll("button, input").forEach((el) => (el.disabled = true));
-      await UmfrageAPI.vote(fragenId, teilnehmerId, antwort);
+      await UmfrageAPI.vote(fragenId, teilnehmerId, antwort, teilnehmerName);
       speichereAbgegeben(fragenId);
       render();
     } catch (e) {
