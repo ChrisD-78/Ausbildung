@@ -955,6 +955,14 @@
   let linkQrErstellt = "";
 
   // Hilfsfunktionen
+  function resetScroll() {
+    // Bei iframe-Umgebungen kann es passieren, dass nach Folienwechsel
+    // der Viewport „unten“ bleibt. Dann springt die Ansicht zurück nach oben.
+    try { window.scrollTo(0, 0); } catch (e) {}
+    try { document.documentElement.scrollTop = 0; } catch (e) {}
+    try { document.body.scrollTop = 0; } catch (e) {}
+  }
+
   function findeFolie(id) {
     return FOLIEN_VOR.find(f => f.id === id) || FOLIEN_NACH.find(f => f.id === id);
   }
@@ -1018,10 +1026,12 @@
     alleVerstecken();
     document.getElementById("warte").style.display = "flex";
     document.getElementById("hdr-badge").textContent = "Live-Umfrage";
+    resetScroll();
   }
 
   function zeigeFolie(folie) {
     alleVerstecken();
+    resetScroll();
     const istVor = FOLIEN_VOR.includes(folie);
 
     // Hintergrund-Farbe je nach Folie
@@ -1164,6 +1174,7 @@
     document.getElementById("frage-nummer").textContent =
       `Frage ${idx + 1} / ${FRAGEN.length}`;
     document.getElementById("auswertung").innerHTML = "";
+    resetScroll();
   }
 
   function rendereAuswertung(frage, antworten) {
