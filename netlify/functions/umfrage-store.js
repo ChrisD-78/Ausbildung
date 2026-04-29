@@ -1,7 +1,7 @@
 const fs = require("fs");
 
 const STORE_PATH =
-  process.env.LAOLA_UMFRAGE_STORE_PATH || "/tmp/laola-umfrage-store.json";
+  process.env.LAOLA_UMFRAGE_STORE_PATH || "/.netlify/state/laola-umfrage-store.json";
 
 function defaultStore() {
   return {
@@ -23,6 +23,12 @@ function loadStore() {
 
 function saveStore(store) {
   try {
+    const dir = require("path").dirname(STORE_PATH);
+    try {
+      if (!fs.existsSync(dir)) fs.mkdirSync(dir, { recursive: true });
+    } catch {
+      // ignore
+    }
     fs.writeFileSync(STORE_PATH, JSON.stringify(store));
   } catch (e) {
     // Wenn Schreibzugriff nicht klappt, machen wir wenigstens nicht komplett kaputt.
