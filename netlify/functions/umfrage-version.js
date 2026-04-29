@@ -6,7 +6,7 @@ exports.handler = async (event, context) => {
     statusCode: 200,
     headers: { "content-type": "application/json" },
     body: JSON.stringify({
-      version: "debug-umfrage-version",
+      version: "debug-umfrage-version-v2",
       at: new Date().toISOString(),
       contextKeys: Object.keys(c),
       cacheType,
