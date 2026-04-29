@@ -31,6 +31,7 @@ function saveStore(store) {
     } catch (e) {
       mkdirRes = { ...mkdirRes, ok: false, error: String(e?.message || e) };
     }
+    if (!mkdirRes.ok) return { ok: false, mkdirRes };
     fs.writeFileSync(STORE_PATH, JSON.stringify(store));
     return { ok: true, mkdirRes };
   } catch (e) {
