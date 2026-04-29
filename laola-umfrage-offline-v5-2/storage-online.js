@@ -95,7 +95,7 @@
       if (offlineMode) return localGetState();
       try {
         return await jsonFetch(
-          `/api/umfrage-get-state?eventId=${encodeURIComponent(eventId)}`
+          `/.netlify/functions/umfrage-get-state?eventId=${encodeURIComponent(eventId)}`
         );
       } catch (e) {
         offlineMode = true;
@@ -106,7 +106,7 @@
     async setState(fragenId) {
       if (offlineMode) return localSetState(fragenId);
       try {
-        await jsonFetch(`/api/umfrage-set-state`, {
+        await jsonFetch(`/.netlify/functions/umfrage-set-state`, {
           method: "POST",
           headers: { "content-type": "application/json" },
           body: JSON.stringify({ eventId, aktuelleFrage: fragenId || "" }),
@@ -121,7 +121,7 @@
     async vote(fragenId, teilnehmerId, antwort, name = "") {
       if (offlineMode) return localVote(fragenId, teilnehmerId, antwort, name);
       try {
-        await jsonFetch(`/api/umfrage-vote`, {
+        await jsonFetch(`/.netlify/functions/umfrage-vote`, {
           method: "POST",
           headers: { "content-type": "application/json" },
           body: JSON.stringify({
@@ -143,7 +143,7 @@
       if (offlineMode) return localGetResults(fragenId);
       try {
         return await jsonFetch(
-          `/api/umfrage-get-results?eventId=${encodeURIComponent(eventId)}&fragenId=${encodeURIComponent(
+          `/.netlify/functions/umfrage-get-results?eventId=${encodeURIComponent(eventId)}&fragenId=${encodeURIComponent(
             fragenId
           )}`
         );
@@ -156,7 +156,7 @@
     async resetFrage(fragenId) {
       if (offlineMode) return localResetFrage(fragenId);
       try {
-        await jsonFetch(`/api/umfrage-reset-frage`, {
+        await jsonFetch(`/.netlify/functions/umfrage-reset-frage`, {
           method: "POST",
           headers: { "content-type": "application/json" },
           body: JSON.stringify({ eventId, fragenId }),
@@ -171,7 +171,7 @@
     async resetAlles() {
       if (offlineMode) return localResetAlles();
       try {
-        await jsonFetch(`/api/umfrage-reset-alles`, {
+        await jsonFetch(`/.netlify/functions/umfrage-reset-alles`, {
           method: "POST",
           headers: { "content-type": "application/json" },
           body: JSON.stringify({ eventId }),
