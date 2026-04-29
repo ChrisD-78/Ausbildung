@@ -23,3 +23,4 @@ echo "✅ Browser geöffnet. Bitte folgen Sie den Anweisungen oben."
 
 
 
+

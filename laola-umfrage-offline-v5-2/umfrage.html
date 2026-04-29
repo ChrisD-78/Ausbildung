@@ -1,0 +1,472 @@
+<!DOCTYPE html>
+<html lang="de">
+<head>
+<meta charset="UTF-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0" />
+<title>📱 Umfrage – 2. Treffen Arbeitskreis</title>
+<script src="storage-local.js"></script>
+<script src="fragen.js"></script>
+<style>
+  :root {
+    --primary: #0077b6;
+    --primary-dark: #023e8a;
+    --accent: #00b4d8;
+    --light: #caf0f8;
+    --bg: #f8fafc;
+    --text: #1e293b;
+    --muted: #64748b;
+    --border: #e2e8f0;
+    --success: #16a34a;
+    --recap: #8b5cf6;
+    --recap-light: #ede9fe;
+  }
+  * { box-sizing: border-box; margin: 0; padding: 0; -webkit-tap-highlight-color: transparent; }
+  html, body {
+    font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, sans-serif;
+    color: var(--text);
+    background: linear-gradient(135deg, #f8fafc 0%, #e0f2fe 100%);
+    min-height: 100vh;
+  }
+  body { padding: 1.25rem; max-width: 600px; margin: 0 auto; padding-top: 3rem; }
+
+  .test-banner {
+    position: fixed; top: 0; left: 0; right: 0;
+    background: #f59e0b; color: white; text-align: center;
+    padding: 0.4rem; font-size: 0.8rem; font-weight: 600; z-index: 1000;
+  }
+
+  header {
+    text-align: center;
+    padding: 1rem 0 1.5rem;
+    border-bottom: 2px solid var(--primary);
+    margin-bottom: 1.5rem;
+  }
+  header h1 { font-size: 1.4rem; color: var(--primary-dark); font-weight: 700; }
+  header .untertitel { font-size: 0.9rem; color: var(--muted); margin-top: 0.25rem; }
+
+  .karte {
+    background: white;
+    border-radius: 16px;
+    padding: 1.75rem 1.5rem;
+    box-shadow: 0 10px 30px rgba(0, 119, 182, 0.08);
+    margin-bottom: 1rem;
+  }
+  .karte.recap {
+    background: linear-gradient(135deg, white, var(--recap-light));
+    border: 2px solid var(--recap);
+  }
+
+  .frage-meta {
+    color: var(--primary);
+    font-size: 0.85rem;
+    font-weight: 700;
+    text-transform: uppercase;
+    letter-spacing: 0.05em;
+    margin-bottom: 0.75rem;
+  }
+  .frage-titel {
+    font-size: 1.5rem;
+    font-weight: 700;
+    color: var(--primary-dark);
+    line-height: 1.3;
+    margin-bottom: 0.5rem;
+  }
+  .frage-untertitel {
+    font-size: 1rem;
+    color: var(--muted);
+    margin-bottom: 1.5rem;
+  }
+
+  .text-eingabe { display: flex; flex-direction: column; gap: 0.75rem; }
+  .text-eingabe input {
+    width: 100%;
+    padding: 1rem;
+    border: 2px solid var(--border);
+    border-radius: 12px;
+    font-size: 1.05rem;
+    font-family: inherit;
+    background: var(--bg);
+  }
+  .text-eingabe input:focus { outline: none; border-color: var(--primary); background: white; }
+  .text-eingabe-hinweis { font-size: 0.85rem; color: var(--muted); margin-top: 0.5rem; }
+
+  .optionen { display: flex; flex-direction: column; gap: 0.6rem; }
+  .option {
+    display: flex;
+    align-items: center;
+    padding: 1rem 1.25rem;
+    border: 2px solid var(--border);
+    border-radius: 12px;
+    background: var(--bg);
+    cursor: pointer;
+    font-size: 1rem;
+    line-height: 1.4;
+    user-select: none;
+  }
+  .option:active { transform: scale(0.98); }
+  .option.aktiv {
+    border-color: var(--primary);
+    background: var(--light);
+    color: var(--primary-dark);
+    font-weight: 600;
+  }
+  .option .check {
+    width: 24px; height: 24px;
+    border-radius: 6px;
+    border: 2px solid var(--border);
+    margin-right: 0.75rem;
+    flex-shrink: 0;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    background: white;
+  }
+  .option.aktiv .check { background: var(--primary); border-color: var(--primary); color: white; }
+  .option.aktiv .check::after { content: "✓"; font-weight: 700; }
+  .option.radio .check { border-radius: 50%; }
+  .option.radio.aktiv .check::after { content: ""; width: 10px; height: 10px; background: white; border-radius: 50%; }
+
+  .skala-wrap { padding: 1rem 0; }
+  .skala-anzeige {
+    text-align: center;
+    font-size: 4rem;
+    font-weight: 800;
+    color: var(--primary);
+    line-height: 1;
+    margin-bottom: 0.5rem;
+  }
+  .skala-anzeige.leer { color: var(--border); }
+  .skala-labels {
+    display: flex;
+    justify-content: space-between;
+    color: var(--muted);
+    font-size: 0.9rem;
+    font-weight: 500;
+    margin-bottom: 1rem;
+  }
+  .skala-input {
+    width: 100%;
+    -webkit-appearance: none;
+    appearance: none;
+    height: 8px;
+    background: var(--border);
+    border-radius: 999px;
+    outline: none;
+  }
+  .skala-input::-webkit-slider-thumb {
+    -webkit-appearance: none;
+    width: 36px; height: 36px;
+    border-radius: 50%;
+    background: var(--primary);
+    cursor: pointer;
+    border: 4px solid white;
+    box-shadow: 0 4px 12px rgba(0, 119, 182, 0.4);
+  }
+  .skala-input::-moz-range-thumb {
+    width: 36px; height: 36px;
+    border-radius: 50%;
+    background: var(--primary);
+    cursor: pointer;
+    border: 4px solid white;
+  }
+  .skala-skala {
+    display: flex;
+    justify-content: space-between;
+    margin-top: 0.5rem;
+    font-size: 0.75rem;
+    color: var(--muted);
+  }
+
+  .submit-btn {
+    width: 100%;
+    padding: 1.1rem;
+    background: var(--primary);
+    color: white;
+    border: none;
+    border-radius: 12px;
+    font-size: 1.1rem;
+    font-weight: 600;
+    cursor: pointer;
+    margin-top: 1.5rem;
+    font-family: inherit;
+  }
+  .submit-btn:active { transform: scale(0.98); }
+  .submit-btn:disabled {
+    background: var(--border);
+    color: var(--muted);
+    cursor: not-allowed;
+  }
+
+  .status-karte { text-align: center; padding: 3rem 2rem; }
+  .status-karte .icon {
+    font-size: 4rem;
+    display: block;
+    margin-bottom: 1rem;
+  }
+  .status-karte h2 { color: var(--primary-dark); font-size: 1.5rem; margin-bottom: 0.75rem; }
+  .karte.recap h2 { color: var(--recap); }
+  .status-karte p { color: var(--muted); line-height: 1.5; font-size: 1rem; }
+
+  .pulse-dot {
+    width: 12px; height: 12px;
+    background: var(--primary);
+    border-radius: 50%;
+    display: inline-block;
+    animation: pulse 1.5s infinite;
+    margin-right: 0.5rem;
+  }
+  .karte.recap .pulse-dot { background: var(--recap); }
+  @keyframes pulse {
+    0%, 100% { opacity: 1; transform: scale(1); }
+    50% { opacity: 0.4; transform: scale(0.8); }
+  }
+</style>
+</head>
+<body>
+
+<div class="test-banner">🧪 OFFLINE-VORSCHAU – Test-Modus</div>
+
+<header>
+  <h1 id="hdr-titel">2. Treffen Arbeitskreis</h1>
+  <div class="untertitel" id="hdr-untertitel">Nachwuchsgewinnung in den Bädern</div>
+</header>
+
+<div id="content"></div>
+
+<script>
+  const FRAGEN = window.FRAGEN || [];
+  const FOLIEN_VOR = window.FOLIEN_VOR || window.RECAP_FOLIEN || [];
+  const FOLIEN_NACH = window.FOLIEN_NACH || [];
+  const VERANSTALTUNG = window.VERANSTALTUNG || {};
+  document.getElementById("hdr-titel").textContent = VERANSTALTUNG.titel || "Live-Umfrage";
+  document.getElementById("hdr-untertitel").textContent = VERANSTALTUNG.untertitel || "";
+
+  let teilnehmerId = sessionStorage.getItem("teilnehmerId");
+  if (!teilnehmerId) {
+    teilnehmerId = "t-" + Date.now() + "-" + Math.random().toString(36).slice(2, 9);
+    sessionStorage.setItem("teilnehmerId", teilnehmerId);
+  }
+
+  let aktuelleId = "";
+  let bereitsAbgegeben = JSON.parse(sessionStorage.getItem("abgegeben") || "{}");
+
+  function speichereAbgegeben(fragenId) {
+    bereitsAbgegeben[fragenId] = true;
+    sessionStorage.setItem("abgegeben", JSON.stringify(bereitsAbgegeben));
+  }
+
+  async function aktualisieren() {
+    try {
+      const state = await UmfrageAPI.getState();
+      const neueId = state.aktuelleFrage || "";
+      if (neueId !== aktuelleId) {
+        aktuelleId = neueId;
+        render();
+      }
+    } catch (e) { console.error(e); }
+  }
+
+  function render() {
+    const root = document.getElementById("content");
+
+    if (!aktuelleId) {
+      root.innerHTML = `
+        <div class="karte status-karte">
+          <span class="icon">⏳</span>
+          <h2><span class="pulse-dot"></span>Bitte warten</h2>
+          <p>Die Umfrage hat noch nicht begonnen.<br><br>
+          Sobald der Moderator eine Frage freischaltet, erscheint sie hier automatisch.</p>
+        </div>`;
+      return;
+    }
+
+    // Folie aktiv? (vor oder nach der Umfrage)
+    const folieVor = FOLIEN_VOR.find((r) => r.id === aktuelleId);
+    const folieNach = FOLIEN_NACH.find((r) => r.id === aktuelleId);
+    const folie = folieVor || folieNach;
+    if (folie) {
+      const istVor = !!folieVor;
+      const idx = istVor
+        ? FOLIEN_VOR.findIndex((r) => r.id === aktuelleId)
+        : FOLIEN_NACH.findIndex((r) => r.id === aktuelleId);
+      const gesamt = istVor ? FOLIEN_VOR.length : FOLIEN_NACH.length;
+      const positionsText = istVor
+        ? `Rückblick-Folie ${idx + 1} von ${gesamt} – die Umfrage startet gleich.`
+        : `Folie ${idx + 1} von ${gesamt} im Anschluss-Block.`;
+
+      // Bei Link-Folien: zusätzlich Link auch aufs Handy (zum Direktbesuch)
+      const linkHtml = folie.type === "link" && folie.linkUrl
+        ? `<p style="margin-top: 1rem;">
+            <a href="${escape(folie.linkUrl)}" target="_blank" rel="noopener"
+               style="display: inline-block; padding: 0.75rem 1.25rem; background: var(--primary); color: white; text-decoration: none; border-radius: 8px; font-weight: 600;">
+              🔗 ${escape(folie.buttonLabel || folie.linkLabel || folie.linkUrl)}
+            </a>
+          </p>`
+        : "";
+
+      root.innerHTML = `
+        <div class="karte recap status-karte">
+          <span class="icon">${escape(folie.icon || "📋")}</span>
+          <h2><span class="pulse-dot"></span>Bitte zum Beamer schauen</h2>
+          <p style="color: var(--text); font-weight: 600; margin-bottom: 0.5rem;">${escape(folie.titel)}</p>
+          <p style="font-size: 0.9rem; margin-bottom: 1rem;">${escape(folie.untertitel || "")}</p>
+          ${linkHtml}
+          <p style="font-size: 0.85rem; color: var(--muted); margin-top: 1rem;">
+            ${positionsText}
+          </p>
+        </div>`;
+      return;
+    }
+
+    // Frage aktiv?
+    const frage = FRAGEN.find((f) => f.id === aktuelleId);
+    if (!frage) {
+      root.innerHTML = `<div class="karte status-karte"><span class="icon">❓</span><h2>Inhalt nicht gefunden</h2></div>`;
+      return;
+    }
+
+    if (bereitsAbgegeben[frage.id]) {
+      root.innerHTML = `
+        <div class="karte status-karte">
+          <span class="icon">✅</span>
+          <h2>Antwort gespeichert</h2>
+          <p>Vielen Dank! Deine Antwort ist auf dem Beamer zu sehen.<br><br>
+          Sobald die nächste Frage freigeschaltet wird, geht es hier weiter.</p>
+        </div>`;
+      return;
+    }
+
+    if (frage.type === "text") rendereTextFrage(root, frage);
+    else if (frage.type === "choice") rendereChoiceFrage(root, frage);
+    else if (frage.type === "scale") rendereScaleFrage(root, frage);
+  }
+
+  function rendereTextFrage(root, frage) {
+    const idx = FRAGEN.findIndex((f) => f.id === frage.id);
+    const max = frage.maxAntworten || 1;
+    const inputs = [];
+    for (let i = 0; i < max; i++) {
+      inputs.push(`<input type="text" id="txt-${i}" placeholder="${escape(frage.placeholder || "Deine Antwort...")}" maxlength="80" autocomplete="off" />`);
+    }
+    root.innerHTML = `
+      <div class="karte">
+        <div class="frage-meta">Frage ${idx + 1} von ${FRAGEN.length}</div>
+        <h2 class="frage-titel">${escape(frage.titel)}</h2>
+        <p class="frage-untertitel">${escape(frage.untertitel || "")}</p>
+        <div class="text-eingabe">${inputs.join("")}</div>
+        ${max > 1 ? `<p class="text-eingabe-hinweis">Du kannst bis zu ${max} Stichworte angeben (auch weniger).</p>` : ""}
+        <button class="submit-btn" id="absenden">Antwort absenden</button>
+      </div>`;
+    document.getElementById("absenden").onclick = async () => {
+      const werte = [];
+      for (let i = 0; i < max; i++) {
+        const v = document.getElementById(`txt-${i}`).value.trim();
+        if (v) werte.push(v);
+      }
+      if (!werte.length) { alert("Bitte gib mindestens eine Antwort ein."); return; }
+      await sendeAntwort(frage.id, max > 1 ? werte : werte[0]);
+    };
+  }
+
+  function rendereChoiceFrage(root, frage) {
+    const idx = FRAGEN.findIndex((f) => f.id === frage.id);
+    const multi = !!frage.multi;
+    const klasse = multi ? "" : "radio";
+    const optionenHtml = frage.optionen.map((opt) => `
+      <div class="option ${klasse}" data-option="${escape(opt)}">
+        <div class="check"></div>
+        <div>${escape(opt)}</div>
+      </div>`).join("");
+    root.innerHTML = `
+      <div class="karte">
+        <div class="frage-meta">Frage ${idx + 1} von ${FRAGEN.length}</div>
+        <h2 class="frage-titel">${escape(frage.titel)}</h2>
+        <p class="frage-untertitel">${escape(frage.untertitel || "")}</p>
+        <div class="optionen">${optionenHtml}</div>
+        <button class="submit-btn" id="absenden" disabled>${multi ? "Antworten absenden" : "Antwort absenden"}</button>
+      </div>`;
+    const ausgewaehlt = new Set();
+    const btn = document.getElementById("absenden");
+    root.querySelectorAll(".option").forEach((el) => {
+      el.onclick = () => {
+        const opt = el.dataset.option;
+        if (multi) {
+          if (ausgewaehlt.has(opt)) { ausgewaehlt.delete(opt); el.classList.remove("aktiv"); }
+          else { ausgewaehlt.add(opt); el.classList.add("aktiv"); }
+        } else {
+          ausgewaehlt.clear(); ausgewaehlt.add(opt);
+          root.querySelectorAll(".option").forEach((o) => o.classList.remove("aktiv"));
+          el.classList.add("aktiv");
+        }
+        btn.disabled = ausgewaehlt.size === 0;
+      };
+    });
+    btn.onclick = async () => {
+      if (!ausgewaehlt.size) return;
+      const wert = multi ? [...ausgewaehlt] : [...ausgewaehlt][0];
+      await sendeAntwort(frage.id, wert);
+    };
+  }
+
+  function rendereScaleFrage(root, frage) {
+    const idx = FRAGEN.findIndex((f) => f.id === frage.id);
+    const min = frage.min || 1, max = frage.max || 10;
+    const start = Math.round((min + max) / 2);
+    root.innerHTML = `
+      <div class="karte">
+        <div class="frage-meta">Frage ${idx + 1} von ${FRAGEN.length}</div>
+        <h2 class="frage-titel">${escape(frage.titel)}</h2>
+        <p class="frage-untertitel">${escape(frage.untertitel || "")}</p>
+        <div class="skala-wrap">
+          <div class="skala-anzeige leer" id="anzeige">–</div>
+          <div class="skala-labels">
+            <span>${escape(frage.minLabel || min)}</span>
+            <span>${escape(frage.maxLabel || max)}</span>
+          </div>
+          <input type="range" class="skala-input" id="skala" min="${min}" max="${max}" value="${start}" />
+          <div class="skala-skala">
+            ${Array.from({ length: max - min + 1 }, (_, i) => `<span>${min + i}</span>`).join("")}
+          </div>
+        </div>
+        <button class="submit-btn" id="absenden" disabled>Bewertung absenden</button>
+      </div>`;
+    const slider = document.getElementById("skala");
+    const anzeige = document.getElementById("anzeige");
+    const btn = document.getElementById("absenden");
+    let beruehrt = false;
+    function update() {
+      anzeige.textContent = slider.value;
+      anzeige.classList.remove("leer");
+      btn.disabled = false;
+      beruehrt = true;
+    }
+    slider.addEventListener("input", update);
+    slider.addEventListener("change", update);
+    btn.onclick = async () => { if (!beruehrt) return; await sendeAntwort(frage.id, Number(slider.value)); };
+  }
+
+  async function sendeAntwort(fragenId, antwort) {
+    try {
+      document.querySelectorAll("button, input").forEach((el) => (el.disabled = true));
+      await UmfrageAPI.vote(fragenId, teilnehmerId, antwort);
+      speichereAbgegeben(fragenId);
+      render();
+    } catch (e) {
+      alert("Fehler beim Senden.");
+      document.querySelectorAll("button, input").forEach((el) => (el.disabled = false));
+    }
+  }
+
+  function escape(s) {
+    return String(s).replace(/[&<>"']/g, (c) => ({
+      "&": "&amp;", "<": "&lt;", ">": "&gt;", '"': "&quot;", "'": "&#39;"
+    }[c]));
+  }
+
+  UmfrageAPI.onChange(aktualisieren);
+  aktualisieren();
+  setInterval(aktualisieren, 2000);
+</script>
+
+</body>
+</html>

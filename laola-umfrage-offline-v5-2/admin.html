@@ -1,0 +1,626 @@
+<!DOCTYPE html>
+<html lang="de">
+<head>
+<meta charset="UTF-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1.0" />
+<title>🎛️ Moderation – Live-Umfrage</title>
+<script src="storage-local.js"></script>
+<script src="fragen.js"></script>
+<style>
+  :root {
+    --primary: #0077b6;
+    --primary-dark: #023e8a;
+    --accent: #00b4d8;
+    --light: #caf0f8;
+    --bg: #f8fafc;
+    --text: #1e293b;
+    --muted: #64748b;
+    --border: #e2e8f0;
+    --success: #16a34a;
+    --danger: #dc2626;
+    --warning: #f59e0b;
+    --recap: #8b5cf6;
+    --recap-light: #ede9fe;
+  }
+  * { box-sizing: border-box; margin: 0; padding: 0; }
+  html, body {
+    font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, sans-serif;
+    color: var(--text);
+    background: var(--bg);
+    min-height: 100vh;
+  }
+  body { padding: 1.5rem; padding-top: 3rem; max-width: 950px; margin: 0 auto; }
+
+  .test-banner {
+    position: fixed; top: 0; left: 0; right: 0;
+    background: #f59e0b; color: white; text-align: center;
+    padding: 0.4rem; font-size: 0.85rem; font-weight: 600; z-index: 1000;
+  }
+
+  header {
+    padding-bottom: 1.5rem;
+    border-bottom: 3px solid var(--primary);
+    margin-bottom: 2rem;
+  }
+  header h1 { font-size: 1.6rem; color: var(--primary-dark); }
+  header .untertitel { color: var(--muted); margin-top: 0.25rem; }
+
+  .links-leiste {
+    display: flex;
+    gap: 0.75rem;
+    flex-wrap: wrap;
+    margin-bottom: 1.5rem;
+  }
+  .link-btn {
+    padding: 0.6rem 1rem;
+    background: white;
+    border: 2px solid var(--border);
+    border-radius: 8px;
+    color: var(--primary-dark);
+    text-decoration: none;
+    font-weight: 600;
+    font-size: 0.9rem;
+  }
+  .link-btn:hover { border-color: var(--primary); background: var(--light); }
+
+  /* Steuerleiste oben - Vor/Zurück */
+  .nav-leiste {
+    background: white;
+    border-radius: 12px;
+    padding: 1.25rem;
+    margin-bottom: 1.5rem;
+    border: 2px solid var(--border);
+    display: grid;
+    grid-template-columns: 1fr auto 1fr;
+    gap: 1rem;
+    align-items: center;
+  }
+  .nav-leiste.aktiv { border-color: var(--primary); }
+  .nav-info {
+    text-align: center;
+    color: var(--text);
+  }
+  .nav-info .label {
+    color: var(--muted);
+    font-size: 0.8rem;
+    text-transform: uppercase;
+    letter-spacing: 0.05em;
+    font-weight: 600;
+    margin-bottom: 0.3rem;
+  }
+  .nav-info .wert {
+    font-size: 1.05rem;
+    font-weight: 600;
+    color: var(--primary-dark);
+  }
+  .nav-btn {
+    padding: 0.85rem 1.4rem;
+    border: 2px solid var(--border);
+    border-radius: 10px;
+    background: white;
+    color: var(--text);
+    font-weight: 600;
+    cursor: pointer;
+    font-family: inherit;
+    font-size: 0.95rem;
+  }
+  .nav-btn:hover:not(:disabled) { border-color: var(--primary); }
+  .nav-btn:disabled { opacity: 0.4; cursor: not-allowed; }
+  .nav-btn-primary {
+    background: var(--primary);
+    color: white;
+    border-color: var(--primary);
+  }
+  .nav-btn-primary:hover:not(:disabled) {
+    background: var(--primary-dark);
+    border-color: var(--primary-dark);
+  }
+  .nav-btn-stop {
+    background: white;
+    color: var(--warning);
+    border-color: var(--warning);
+  }
+  .nav-btn-stop:hover { background: #fef3c7; }
+  .nav-zaehler {
+    display: inline-block;
+    background: var(--primary-dark);
+    color: white;
+    padding: 0.2rem 0.6rem;
+    border-radius: 6px;
+    font-size: 0.85rem;
+    font-weight: 700;
+    margin-left: 0.5rem;
+  }
+  .nav-buttons-row {
+    grid-column: 1 / -1;
+    display: flex;
+    gap: 0.5rem;
+    justify-content: center;
+    margin-top: 1rem;
+    padding-top: 1rem;
+    border-top: 1px solid var(--border);
+    flex-wrap: wrap;
+  }
+
+  /* Sektion-Überschrift */
+  .sektion-titel {
+    font-size: 1rem;
+    color: var(--muted);
+    font-weight: 600;
+    text-transform: uppercase;
+    letter-spacing: 0.05em;
+    margin: 2rem 0 1rem;
+    padding-left: 0.5rem;
+    display: flex;
+    align-items: center;
+    gap: 0.5rem;
+  }
+  .sektion-titel::before {
+    content: "";
+    width: 4px;
+    height: 20px;
+    background: var(--primary);
+    border-radius: 2px;
+  }
+  .sektion-titel.recap::before { background: var(--recap); }
+
+  .karte {
+    background: white;
+    border-radius: 12px;
+    padding: 1.25rem;
+    margin-bottom: 0.75rem;
+    border: 2px solid var(--border);
+    transition: all 0.2s;
+  }
+  .karte.aktiv {
+    border-color: var(--primary);
+    box-shadow: 0 4px 20px rgba(0, 119, 182, 0.15);
+  }
+  .karte.recap.aktiv {
+    border-color: var(--recap);
+    box-shadow: 0 4px 20px rgba(139, 92, 246, 0.15);
+  }
+  .karte-kopf {
+    display: flex;
+    justify-content: space-between;
+    align-items: flex-start;
+    gap: 1rem;
+    margin-bottom: 0.5rem;
+  }
+  .karte-kopf h3 {
+    color: var(--primary-dark);
+    font-size: 1.05rem;
+    line-height: 1.4;
+  }
+  .karte.recap .karte-kopf h3 { color: var(--recap); }
+  .karte-typ {
+    background: var(--light);
+    color: var(--primary-dark);
+    padding: 0.25rem 0.75rem;
+    border-radius: 999px;
+    font-size: 0.7rem;
+    font-weight: 700;
+    text-transform: uppercase;
+    letter-spacing: 0.05em;
+    flex-shrink: 0;
+    white-space: nowrap;
+  }
+  .karte.recap .karte-typ {
+    background: var(--recap-light);
+    color: var(--recap);
+  }
+  .karte-typ.aktiv { background: var(--primary); color: white; }
+  .karte.recap .karte-typ.aktiv { background: var(--recap); color: white; }
+  .karte-info { color: var(--muted); font-size: 0.88rem; margin-bottom: 0.75rem; }
+  .karte-aktionen { display: flex; gap: 0.5rem; flex-wrap: wrap; }
+
+  button {
+    padding: 0.5rem 0.9rem;
+    border: 2px solid var(--border);
+    border-radius: 8px;
+    background: white;
+    color: var(--text);
+    font-weight: 600;
+    font-size: 0.85rem;
+    cursor: pointer;
+    font-family: inherit;
+  }
+  button:hover:not(:disabled) { border-color: var(--primary); }
+  button:disabled { opacity: 0.5; cursor: not-allowed; }
+
+  .btn-primary {
+    background: var(--primary);
+    color: white;
+    border-color: var(--primary);
+  }
+  .btn-primary:hover:not(:disabled) {
+    background: var(--primary-dark);
+    border-color: var(--primary-dark);
+  }
+  .btn-recap {
+    background: var(--recap);
+    color: white;
+    border-color: var(--recap);
+  }
+  .btn-recap:hover:not(:disabled) { background: #7c3aed; border-color: #7c3aed; }
+  .btn-danger { background: white; color: var(--danger); }
+  .btn-danger:hover { border-color: var(--danger); background: #fef2f2; }
+
+  .global-aktionen {
+    display: flex;
+    gap: 0.75rem;
+    margin-top: 2rem;
+    padding-top: 1.5rem;
+    border-top: 2px solid var(--border);
+    flex-wrap: wrap;
+  }
+
+  .live-badge {
+    display: inline-flex;
+    align-items: center;
+    gap: 0.4rem;
+    background: var(--primary);
+    color: white;
+    padding: 0.2rem 0.65rem;
+    border-radius: 999px;
+    font-size: 0.7rem;
+    font-weight: 700;
+    text-transform: uppercase;
+    letter-spacing: 0.05em;
+    margin-left: 0.5rem;
+  }
+  .live-badge.recap { background: var(--recap); }
+  .live-badge::before {
+    content: "";
+    width: 7px; height: 7px;
+    background: white;
+    border-radius: 50%;
+    animation: pulse 1.5s infinite;
+  }
+  @keyframes pulse { 0%, 100% { opacity: 1; } 50% { opacity: 0.3; } }
+
+  .anzahl-badge {
+    background: var(--primary-dark);
+    color: white;
+    padding: 0.2rem 0.55rem;
+    border-radius: 6px;
+    font-size: 0.8rem;
+    font-weight: 700;
+    margin-left: 0.4rem;
+  }
+
+  .hinweis {
+    background: #fef3c7;
+    border: 2px solid var(--warning);
+    border-radius: 8px;
+    padding: 1rem;
+    margin-bottom: 1.5rem;
+    font-size: 0.9rem;
+    color: #78350f;
+  }
+  .hinweis code {
+    background: white;
+    padding: 0.1rem 0.4rem;
+    border-radius: 4px;
+    font-size: 0.9em;
+  }
+</style>
+</head>
+<body>
+
+<div class="test-banner">🧪 OFFLINE-VORSCHAU – Test-Modus</div>
+
+<header>
+  <h1>🎛️ Moderation – Live-Umfrage</h1>
+  <div class="untertitel" id="hdr-untertitel"></div>
+</header>
+
+<div class="hinweis">
+  <strong>💡 Test-Modus:</strong> Öffne <code>praesentation.html</code>
+  und <code>umfrage.html</code> in separaten Tabs. Mit den Vor/Zurück-Buttons
+  kannst du die Folien und Fragen nacheinander durchschalten.
+</div>
+
+<div class="links-leiste">
+  <a href="start.html" class="link-btn">↩️ Zur Übersicht</a>
+  <a href="praesentation.html" target="_blank" class="link-btn">📺 Präsentation öffnen</a>
+  <a href="umfrage.html" target="_blank" class="link-btn">📱 Teilnehmeransicht</a>
+</div>
+
+<!-- Hauptsteuerung: Vor/Zurück -->
+<div class="nav-leiste" id="nav-leiste">
+  <button class="nav-btn" id="btn-zurueck">⬅️ Zurück</button>
+  <div class="nav-info">
+    <div class="label">Aktuell auf dem Beamer</div>
+    <div class="wert" id="nav-info-wert">– Wartebildschirm –</div>
+  </div>
+  <button class="nav-btn nav-btn-primary" id="btn-vor">Weiter ➡️</button>
+
+  <div class="nav-buttons-row">
+    <button class="nav-btn" id="btn-anfang">⏮️ Zum Anfang</button>
+    <button class="nav-btn nav-btn-primary" id="btn-start">▶️ Umfrage starten</button>
+    <button class="nav-btn nav-btn-stop" id="btn-stopp">⏸️ Pausieren</button>
+  </div>
+</div>
+
+<!-- Recap-Folien -->
+<div class="sektion-titel recap">📋 Vor der Umfrage: Rückblick 1. Treffen</div>
+<div id="recap-liste"></div>
+
+<!-- Fragen -->
+<div class="sektion-titel">📊 Umfrage-Fragen</div>
+<div id="fragen-liste"></div>
+
+<!-- Folien nach der Umfrage -->
+<div class="sektion-titel recap">🔮 Nach der Umfrage: Empfehlungen & Themen</div>
+<div id="nach-liste"></div>
+
+<div class="global-aktionen">
+  <button class="btn-danger" onclick="alleAntwortenLoeschen()">🗑️ ALLE Antworten zurücksetzen</button>
+</div>
+
+<script>
+  const FRAGEN = window.FRAGEN || [];
+  const FOLIEN_VOR = window.FOLIEN_VOR || window.RECAP_FOLIEN || [];
+  const FOLIEN_NACH = window.FOLIEN_NACH || [];
+  // Abwärtskompatibilität (Variable wird unten an einigen Stellen genutzt)
+  const RECAP = FOLIEN_VOR;
+  const VERANSTALTUNG = window.VERANSTALTUNG || {};
+  document.getElementById("hdr-untertitel").textContent =
+    (VERANSTALTUNG.titel || "") + " – " + (VERANSTALTUNG.untertitel || "");
+
+  // Komplette Reihenfolge: vor → Fragen → nach
+  const ABLAUF = [
+    ...FOLIEN_VOR.map((r) => ({ ...r, kind: "vor" })),
+    ...FRAGEN.map((f) => ({ ...f, kind: "frage" })),
+    ...FOLIEN_NACH.map((r) => ({ ...r, kind: "nach" })),
+  ];
+
+  let aktuelleId = "";
+  let antwortZahlen = {};
+
+  // ============================================================
+  // Navigation
+  // ============================================================
+  function getAktuelleIndex() {
+    if (!aktuelleId) return -1;
+    return ABLAUF.findIndex((x) => x.id === aktuelleId);
+  }
+
+  async function gehe(richtung) {
+    const idx = getAktuelleIndex();
+    let neuerIdx;
+    if (idx === -1) {
+      // Nichts aktiv → bei "Weiter" auf erste Folie, bei "Zurück" nichts
+      if (richtung === 1) neuerIdx = 0;
+      else return;
+    } else {
+      neuerIdx = idx + richtung;
+    }
+    if (neuerIdx < 0 || neuerIdx >= ABLAUF.length) return;
+    await UmfrageAPI.setState(ABLAUF[neuerIdx].id);
+    aktuelleId = ABLAUF[neuerIdx].id;
+    rendereAlles();
+  }
+
+  async function aktivieren(id) {
+    await UmfrageAPI.setState(id);
+    aktuelleId = id;
+    rendereAlles();
+  }
+
+  async function pausieren() {
+    if (!aktuelleId) return;
+    if (!confirm("Auf Wartebildschirm zurückschalten? Teilnehmer sehen dann den Wartebildschirm.")) return;
+    await UmfrageAPI.setState("");
+    aktuelleId = "";
+    rendereAlles();
+  }
+
+  async function starten() {
+    if (!ABLAUF.length) return;
+    await UmfrageAPI.setState(ABLAUF[0].id);
+    aktuelleId = ABLAUF[0].id;
+    rendereAlles();
+  }
+
+  async function antwortenLoeschen(id) {
+    if (!confirm("Wirklich alle Antworten zu dieser Frage löschen?")) return;
+    await UmfrageAPI.resetFrage(id);
+    antwortZahlen[id] = 0;
+    rendereAlles();
+  }
+
+  async function alleAntwortenLoeschen() {
+    if (!confirm("ALLE Antworten ALLER Fragen löschen?")) return;
+    await UmfrageAPI.resetAlles();
+    antwortZahlen = {};
+    rendereAlles();
+  }
+
+  document.getElementById("btn-zurueck").onclick = () => gehe(-1);
+  document.getElementById("btn-vor").onclick = () => gehe(1);
+  document.getElementById("btn-anfang").onclick = () => starten();
+  document.getElementById("btn-start").onclick = () => starten();
+  document.getElementById("btn-stopp").onclick = () => pausieren();
+
+  // ============================================================
+  // Rendering
+  // ============================================================
+  function rendereAlles() {
+    rendereNavLeiste();
+    rendereRecap();
+    rendereFragen();
+    rendereNach();
+  }
+
+  function rendereNavLeiste() {
+    const idx = getAktuelleIndex();
+    const leiste = document.getElementById("nav-leiste");
+    const info = document.getElementById("nav-info-wert");
+    const btnZurueck = document.getElementById("btn-zurueck");
+    const btnVor = document.getElementById("btn-vor");
+    const btnStopp = document.getElementById("btn-stopp");
+
+    if (!aktuelleId) {
+      leiste.classList.remove("aktiv");
+      info.innerHTML = "– Wartebildschirm aktiv –";
+      btnZurueck.disabled = true;
+      btnVor.disabled = false;
+      btnVor.textContent = "▶️ Mit erstem Element starten";
+      btnStopp.disabled = true;
+    } else {
+      leiste.classList.add("aktiv");
+      const item = ABLAUF[idx];
+      const istLetztes = idx === ABLAUF.length - 1;
+      const position = `${idx + 1} / ${ABLAUF.length}`;
+      let kindLabel;
+      if (item.kind === "vor") kindLabel = "Rückblick-Folie";
+      else if (item.kind === "frage") kindLabel = "Frage";
+      else if (item.kind === "nach") kindLabel = "Anschluss-Folie";
+      else kindLabel = "Folie";
+      const istFolie = item.kind !== "frage";
+      const badge = istFolie
+        ? '<span class="live-badge recap">Live</span>'
+        : '<span class="live-badge">Live</span>';
+      info.innerHTML = `${badge} ${kindLabel} ${position}: <strong>${escape(item.titel)}</strong>`;
+      btnZurueck.disabled = idx === 0;
+      btnVor.disabled = istLetztes;
+      btnVor.textContent = istLetztes ? "🏁 Ende erreicht" : "Weiter ➡️";
+      btnStopp.disabled = false;
+    }
+  }
+
+  function rendereRecap() {
+    const root = document.getElementById("recap-liste");
+    if (!RECAP.length) {
+      root.innerHTML = `<div style="color: var(--muted); padding: 1rem;">Keine Recap-Folien konfiguriert.</div>`;
+      return;
+    }
+    root.innerHTML = RECAP.map((r, i) => {
+      const aktiv = r.id === aktuelleId;
+      return `
+        <div class="karte recap ${aktiv ? "aktiv" : ""}">
+          <div class="karte-kopf">
+            <h3>
+              <span style="color: var(--muted);">Folie ${i + 1}:</span>
+              ${escape(r.icon || "")} ${escape(r.titel)}
+              ${aktiv ? '<span class="live-badge recap">Live</span>' : ""}
+            </h3>
+            <span class="karte-typ ${aktiv ? "aktiv" : ""}">📋 Recap</span>
+          </div>
+          ${r.untertitel ? `<div class="karte-info">${escape(r.untertitel)}</div>` : ""}
+          <div class="karte-aktionen">
+            <button class="btn-recap" onclick="aktivieren('${r.id}')" ${aktiv ? "disabled" : ""}>
+              ${aktiv ? "✓ Aktiv" : "▶️ Anzeigen"}
+            </button>
+          </div>
+        </div>`;
+    }).join("");
+  }
+
+  function rendereNach() {
+    const root = document.getElementById("nach-liste");
+    if (!FOLIEN_NACH.length) {
+      root.innerHTML = `<div style="color: var(--muted); padding: 1rem;">Keine Anschluss-Folien konfiguriert.</div>`;
+      return;
+    }
+    const typLabels = {
+      info: "📋 Info",
+      link: "🔗 Link",
+      uebersicht: "📊 Übersicht",
+    };
+    root.innerHTML = FOLIEN_NACH.map((r, i) => {
+      const aktiv = r.id === aktuelleId;
+      const typ = typLabels[r.type] || "📋 Folie";
+      return `
+        <div class="karte recap ${aktiv ? "aktiv" : ""}">
+          <div class="karte-kopf">
+            <h3>
+              <span style="color: var(--muted);">Folie ${i + 1}:</span>
+              ${escape(r.icon || "")} ${escape(r.titel)}
+              ${aktiv ? '<span class="live-badge recap">Live</span>' : ""}
+            </h3>
+            <span class="karte-typ ${aktiv ? "aktiv" : ""}">${typ}</span>
+          </div>
+          ${r.untertitel ? `<div class="karte-info">${escape(r.untertitel)}</div>` : ""}
+          <div class="karte-aktionen">
+            <button class="btn-recap" onclick="aktivieren('${r.id}')" ${aktiv ? "disabled" : ""}>
+              ${aktiv ? "✓ Aktiv" : "▶️ Anzeigen"}
+            </button>
+          </div>
+        </div>`;
+    }).join("");
+  }
+
+  function rendereFragen() {
+    const root = document.getElementById("fragen-liste");
+    if (!FRAGEN.length) {
+      root.innerHTML = `<div style="color: var(--muted); padding: 1rem;">Keine Fragen konfiguriert.</div>`;
+      return;
+    }
+    root.innerHTML = FRAGEN.map((f, i) => {
+      const aktiv = f.id === aktuelleId;
+      const typLabels = {
+        text: "📝 Text",
+        choice: f.multi ? "☑️ Mehrfachauswahl" : "🔘 Auswahl",
+        scale: "📊 Skala",
+      };
+      const anzahl = antwortZahlen[f.id] || 0;
+      return `
+        <div class="karte ${aktiv ? "aktiv" : ""}">
+          <div class="karte-kopf">
+            <h3>
+              <span style="color: var(--muted);">Frage ${i + 1}:</span> ${escape(f.titel)}
+              ${aktiv ? '<span class="live-badge">Live</span>' : ""}
+              ${anzahl > 0 ? `<span class="anzahl-badge">${anzahl} Antw.</span>` : ""}
+            </h3>
+            <span class="karte-typ ${aktiv ? "aktiv" : ""}">${typLabels[f.type] || f.type}</span>
+          </div>
+          ${f.untertitel ? `<div class="karte-info">${escape(f.untertitel)}</div>` : ""}
+          <div class="karte-aktionen">
+            <button class="btn-primary" onclick="aktivieren('${f.id}')" ${aktiv ? "disabled" : ""}>
+              ${aktiv ? "✓ Aktiv" : "▶️ Aktivieren"}
+            </button>
+            <button onclick="antwortenLoeschen('${f.id}')" ${anzahl === 0 ? "disabled" : ""}>
+              🔄 Antworten löschen
+            </button>
+          </div>
+        </div>`;
+    }).join("");
+  }
+
+  // ============================================================
+  // Polling für Antwortzahlen
+  // ============================================================
+  async function aktualisieren() {
+    try {
+      const s = await UmfrageAPI.getState();
+      aktuelleId = s.aktuelleFrage || "";
+      for (const f of FRAGEN) {
+        const d = await UmfrageAPI.getResults(f.id);
+        antwortZahlen[f.id] = d.anzahl || 0;
+      }
+      rendereAlles();
+    } catch (e) { console.error(e); }
+  }
+
+  function escape(s) {
+    return String(s).replace(/[&<>"']/g, (c) => ({
+      "&": "&amp;", "<": "&lt;", ">": "&gt;", '"': "&quot;", "'": "&#39;"
+    }[c]));
+  }
+
+  // Globale Funktionen für inline onclick
+  window.aktivieren = aktivieren;
+  window.antwortenLoeschen = antwortenLoeschen;
+  window.alleAntwortenLoeschen = alleAntwortenLoeschen;
+
+  rendereAlles();
+  UmfrageAPI.onChange(aktualisieren);
+  aktualisieren();
+  setInterval(aktualisieren, 3000);
+</script>
+
+</body>
+</html>

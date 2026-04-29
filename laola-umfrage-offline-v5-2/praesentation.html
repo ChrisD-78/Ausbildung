@@ -1,0 +1,1359 @@
+<!DOCTYPE html>
+<html lang="de">
+<head>
+<meta charset="UTF-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1.0" />
+<title>📊 Live-Umfrage – 2. Treffen Arbeitskreis</title>
+<script src="https://cdn.jsdelivr.net/npm/qrcodejs@1.0.0/qrcode.min.js"></script>
+<script src="storage-local.js"></script>
+<script src="fragen.js"></script>
+<style>
+  :root {
+    --primary: #0077b6;
+    --primary-dark: #023e8a;
+    --accent: #00b4d8;
+    --light: #caf0f8;
+    --bg: #f8fafc;
+    --text: #1e293b;
+    --muted: #64748b;
+    --border: #e2e8f0;
+    --success: #16a34a;
+    --warning: #f59e0b;
+    --recap: #8b5cf6;
+    --recap-dark: #6d28d9;
+    --recap-light: #ede9fe;
+  }
+  * { box-sizing: border-box; margin: 0; padding: 0; }
+  html, body {
+    height: 100%;
+    font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, sans-serif;
+    color: var(--text);
+    background: linear-gradient(135deg, #f8fafc 0%, #e0f2fe 100%);
+    overflow-x: hidden;
+  }
+  body { min-height: 100vh; padding: 2rem 3rem; transition: background 0.5s; }
+
+  /* Recap-Modus: lila Hintergrund */
+  body.recap-modus { background: linear-gradient(135deg, #f8fafc 0%, #ede9fe 100%); }
+
+  .test-banner {
+    position: fixed; top: 0; left: 0; right: 0;
+    background: #f59e0b; color: white; text-align: center;
+    padding: 0.4rem; font-size: 0.85rem; font-weight: 600; z-index: 1000;
+  }
+  body.mit-banner { padding-top: 3rem; }
+
+  header {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    padding-bottom: 1.5rem;
+    border-bottom: 3px solid var(--primary);
+    margin-bottom: 2rem;
+    transition: border-color 0.5s;
+  }
+  body.recap-modus header { border-bottom-color: var(--recap); }
+  header h1 {
+    font-size: 2rem;
+    color: var(--primary-dark);
+    font-weight: 700;
+    transition: color 0.5s;
+  }
+  body.recap-modus header h1 { color: var(--recap-dark); }
+  header .untertitel {
+    font-size: 1.1rem;
+    color: var(--muted);
+    margin-top: 0.25rem;
+  }
+  header .badge {
+    background: var(--primary);
+    color: white;
+    padding: 0.5rem 1.25rem;
+    border-radius: 999px;
+    font-weight: 600;
+    font-size: 0.9rem;
+    letter-spacing: 0.05em;
+    text-transform: uppercase;
+    transition: background 0.5s;
+  }
+  body.recap-modus header .badge { background: var(--recap); }
+
+  /* === WARTE-SCREEN === */
+  .warte-screen {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    text-align: center;
+    min-height: calc(100vh - 200px);
+    gap: 2.5rem;
+  }
+  .warte-screen h2 {
+    font-size: 3rem;
+    color: var(--primary-dark);
+    font-weight: 700;
+  }
+  .warte-screen p {
+    font-size: 1.5rem;
+    color: var(--muted);
+    max-width: 700px;
+    line-height: 1.5;
+  }
+  .qr-container {
+    background: white;
+    padding: 2.5rem;
+    border-radius: 24px;
+    box-shadow: 0 20px 60px rgba(0, 119, 182, 0.15);
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    gap: 1.5rem;
+  }
+  .qr-container .url {
+    font-family: ui-monospace, "SF Mono", Menlo, monospace;
+    font-size: 1.25rem;
+    color: var(--primary-dark);
+    background: var(--light);
+    padding: 0.75rem 1.5rem;
+    border-radius: 8px;
+  }
+  #qrcode-warte img, #qrcode-warte canvas { display: block; }
+
+  /* === RECAP-SCREEN === */
+  .recap-screen {
+    min-height: calc(100vh - 180px);
+    display: flex;
+    flex-direction: column;
+    animation: einblenden-folie 0.5s ease;
+  }
+  @keyframes einblenden-folie {
+    from { opacity: 0; transform: translateX(20px); }
+    to { opacity: 1; transform: translateX(0); }
+  }
+
+  .recap-meta {
+    display: flex;
+    gap: 1rem;
+    align-items: center;
+    margin-bottom: 1.5rem;
+    flex-wrap: wrap;
+  }
+  .meta-pill {
+    background: white;
+    padding: 0.5rem 1.25rem;
+    border-radius: 999px;
+    border: 2px solid var(--border);
+    font-weight: 600;
+    color: var(--text);
+  }
+  .meta-pill.recap-pill {
+    background: var(--recap);
+    color: white;
+    border-color: var(--recap);
+  }
+
+  .recap-header {
+    display: flex;
+    align-items: center;
+    gap: 1.5rem;
+    margin-bottom: 2rem;
+  }
+  .recap-icon {
+    font-size: 5rem;
+    line-height: 1;
+    flex-shrink: 0;
+  }
+  .recap-titel-block h2 {
+    font-size: 3rem;
+    color: var(--recap-dark);
+    font-weight: 800;
+    line-height: 1.1;
+    margin-bottom: 0.5rem;
+  }
+  .recap-titel-block .recap-untertitel {
+    font-size: 1.4rem;
+    color: var(--muted);
+  }
+
+  .recap-inhalt {
+    background: white;
+    border-radius: 20px;
+    padding: 2.5rem;
+    flex-grow: 1;
+    box-shadow: 0 15px 50px rgba(139, 92, 246, 0.1);
+    border: 2px solid white;
+  }
+  .recap-block {
+    padding: 1.25rem 0;
+    border-bottom: 2px solid var(--bg);
+  }
+  .recap-block:last-child { border-bottom: none; }
+  .recap-block-titel {
+    font-size: 1.6rem;
+    color: var(--recap-dark);
+    font-weight: 700;
+    margin-bottom: 0.5rem;
+    display: flex;
+    align-items: center;
+    gap: 0.5rem;
+  }
+  .recap-block-titel::before {
+    content: "▸";
+    color: var(--recap);
+    font-size: 1.4rem;
+  }
+  .recap-block-text {
+    font-size: 1.25rem;
+    color: var(--text);
+    line-height: 1.6;
+    padding-left: 1.6rem;
+  }
+
+  /* Farbvarianten für info-Folien */
+  body.farbe-blau header { border-bottom-color: #0077b6; }
+  body.farbe-blau header h1 { color: #023e8a; }
+  body.farbe-blau header .badge { background: #0077b6; }
+  body.farbe-blau .recap-titel-block h2 { color: #023e8a; }
+  body.farbe-blau .recap-block-titel { color: #023e8a; }
+  body.farbe-blau .recap-block-titel::before { color: #0077b6; }
+
+  body.farbe-gruen { background: linear-gradient(135deg, #f8fafc 0%, #d1fae5 100%); }
+  body.farbe-gruen header { border-bottom-color: #059669; }
+  body.farbe-gruen header h1 { color: #064e3b; }
+  body.farbe-gruen header .badge { background: #059669; }
+  body.farbe-gruen .recap-titel-block h2 { color: #064e3b; }
+  body.farbe-gruen .recap-block-titel { color: #064e3b; }
+  body.farbe-gruen .recap-block-titel::before { color: #059669; }
+  body.farbe-gruen .steuerleiste { border-top-color: #059669; }
+  body.farbe-gruen .leiste-info strong { color: #064e3b; }
+  body.farbe-gruen .leiste-btn-primary { background: #059669; border-color: #059669; }
+  body.farbe-gruen .leiste-btn-primary:hover:not(:disabled) { background: #047857; border-color: #047857; }
+
+  body.farbe-orange { background: linear-gradient(135deg, #f8fafc 0%, #fed7aa 100%); }
+  body.farbe-orange header { border-bottom-color: #ea580c; }
+  body.farbe-orange header h1 { color: #7c2d12; }
+  body.farbe-orange header .badge { background: #ea580c; }
+  body.farbe-orange .recap-titel-block h2 { color: #7c2d12; }
+  body.farbe-orange .recap-block-titel { color: #7c2d12; }
+  body.farbe-orange .recap-block-titel::before { color: #ea580c; }
+  body.farbe-orange .steuerleiste { border-top-color: #ea580c; }
+  body.farbe-orange .leiste-info strong { color: #7c2d12; }
+  body.farbe-orange .leiste-btn-primary { background: #ea580c; border-color: #ea580c; }
+  body.farbe-orange .leiste-btn-primary:hover:not(:disabled) { background: #c2410c; border-color: #c2410c; }
+
+  body.farbe-lila { background: linear-gradient(135deg, #f8fafc 0%, #ede9fe 100%); }
+  body.farbe-lila header { border-bottom-color: #8b5cf6; }
+  body.farbe-lila header h1 { color: #5b21b6; }
+  body.farbe-lila header .badge { background: #8b5cf6; }
+  body.farbe-lila .recap-titel-block h2 { color: #5b21b6; }
+  body.farbe-lila .recap-block-titel { color: #5b21b6; }
+  body.farbe-lila .recap-block-titel::before { color: #8b5cf6; }
+  body.farbe-lila .steuerleiste { border-top-color: #8b5cf6; }
+  body.farbe-lila .leiste-info strong { color: #5b21b6; }
+  body.farbe-lila .leiste-btn-primary { background: #8b5cf6; border-color: #8b5cf6; }
+  body.farbe-lila .leiste-btn-primary:hover:not(:disabled) { background: #7c3aed; border-color: #7c3aed; }
+
+  /* Disclaimer-Box auf info-Folien */
+  .disclaimer-box {
+    margin-top: 1.5rem;
+    padding: 1rem 1.25rem;
+    background: #fef3c7;
+    border-left: 4px solid #f59e0b;
+    border-radius: 8px;
+    font-size: 1rem;
+    color: #78350f;
+    line-height: 1.5;
+    display: flex;
+    align-items: flex-start;
+    gap: 0.5rem;
+  }
+  .disclaimer-box::before {
+    content: "⚖️";
+    font-size: 1.2rem;
+    flex-shrink: 0;
+  }
+
+  /* === LINK-FOLIE === */
+  .link-screen {
+    min-height: calc(100vh - 200px);
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    align-items: center;
+    text-align: center;
+    gap: 2rem;
+    animation: einblenden-folie 0.5s ease;
+  }
+  .link-icon {
+    font-size: 6rem;
+    line-height: 1;
+  }
+  .link-screen h2 {
+    font-size: 3.5rem;
+    color: var(--primary-dark);
+    font-weight: 800;
+    line-height: 1.1;
+  }
+  .link-untertitel {
+    font-size: 1.5rem;
+    color: var(--muted);
+    max-width: 800px;
+  }
+  .link-text {
+    font-size: 1.25rem;
+    color: var(--text);
+    max-width: 800px;
+    line-height: 1.6;
+  }
+  .link-karte {
+    background: white;
+    border-radius: 24px;
+    padding: 2.5rem 3rem;
+    box-shadow: 0 20px 60px rgba(0, 119, 182, 0.15);
+    max-width: 700px;
+    width: 100%;
+    border: 3px solid var(--primary);
+    transition: all 0.3s;
+  }
+  .link-karte:hover {
+    transform: translateY(-4px);
+    box-shadow: 0 25px 70px rgba(0, 119, 182, 0.25);
+  }
+  .link-url {
+    font-size: 2rem;
+    color: var(--primary);
+    font-weight: 700;
+    text-decoration: none;
+    display: block;
+    margin-bottom: 0.5rem;
+    word-break: break-all;
+  }
+  .link-url:hover { color: var(--primary-dark); text-decoration: underline; }
+  .link-beschreibung {
+    color: var(--muted);
+    font-size: 1.1rem;
+    margin-top: 0.5rem;
+  }
+  .link-qr-zeile {
+    display: flex;
+    align-items: center;
+    gap: 2rem;
+    margin-top: 1.5rem;
+    padding-top: 1.5rem;
+    border-top: 2px solid var(--bg);
+  }
+  .link-qr-zeile #link-qr-target { flex-shrink: 0; }
+  .link-qr-text {
+    text-align: left;
+    color: var(--muted);
+    font-size: 1rem;
+    line-height: 1.5;
+  }
+  .link-qr-text strong { color: var(--primary-dark); display: block; font-size: 1.15rem; margin-bottom: 0.3rem; }
+
+  .link-button {
+    display: inline-block;
+    margin-top: 1.5rem;
+    padding: 1rem 2.5rem;
+    background: var(--primary);
+    color: white;
+    border-radius: 12px;
+    text-decoration: none;
+    font-size: 1.25rem;
+    font-weight: 700;
+    transition: all 0.2s;
+    box-shadow: 0 6px 20px rgba(0, 119, 182, 0.3);
+  }
+  .link-button:hover {
+    background: var(--primary-dark);
+    transform: translateY(-2px);
+    box-shadow: 0 10px 30px rgba(0, 119, 182, 0.4);
+  }
+  .link-button.versteckt { display: none; }
+
+  /* === UEBERSICHT-FOLIE (Besuchergruppen) === */
+  .uebersicht-screen {
+    min-height: calc(100vh - 200px);
+    display: flex;
+    flex-direction: column;
+    animation: einblenden-folie 0.5s ease;
+  }
+  .uebersicht-header {
+    text-align: center;
+    margin-bottom: 2rem;
+  }
+  .uebersicht-header h2 {
+    font-size: 3rem;
+    color: var(--primary-dark);
+    font-weight: 800;
+    line-height: 1.1;
+    margin-bottom: 0.5rem;
+  }
+  .uebersicht-untertitel {
+    font-size: 1.4rem;
+    color: var(--muted);
+  }
+  .uebersicht-grid {
+    display: grid;
+    grid-template-columns: repeat(2, 1fr);
+    gap: 1.5rem;
+    flex-grow: 1;
+  }
+  .uebersicht-karte {
+    background: white;
+    border-radius: 20px;
+    padding: 2rem 1.75rem;
+    border: 3px solid var(--border);
+    display: flex;
+    flex-direction: column;
+    gap: 0.75rem;
+    transition: all 0.3s;
+    box-shadow: 0 8px 30px rgba(0, 0, 0, 0.05);
+  }
+  .uebersicht-karte:hover { transform: translateY(-3px); box-shadow: 0 15px 40px rgba(0, 0, 0, 0.1); }
+  .uebersicht-karte.farbe-blau { border-color: #0077b6; background: linear-gradient(135deg, white, #e0f2fe); }
+  .uebersicht-karte.farbe-gruen { border-color: #059669; background: linear-gradient(135deg, white, #d1fae5); }
+  .uebersicht-karte.farbe-orange { border-color: #ea580c; background: linear-gradient(135deg, white, #fed7aa); }
+  .uebersicht-karte.farbe-lila { border-color: #8b5cf6; background: linear-gradient(135deg, white, #ede9fe); }
+  .uebersicht-karte-icon {
+    font-size: 4rem;
+    line-height: 1;
+  }
+  .uebersicht-karte-name {
+    font-size: 1.7rem;
+    font-weight: 800;
+    line-height: 1.1;
+  }
+  .uebersicht-karte.farbe-blau .uebersicht-karte-name { color: #023e8a; }
+  .uebersicht-karte.farbe-gruen .uebersicht-karte-name { color: #064e3b; }
+  .uebersicht-karte.farbe-orange .uebersicht-karte-name { color: #7c2d12; }
+  .uebersicht-karte.farbe-lila .uebersicht-karte-name { color: #5b21b6; }
+  .uebersicht-karte-kurz {
+    color: var(--muted);
+    font-size: 1rem;
+    font-style: italic;
+  }
+  .uebersicht-karte-regelung {
+    font-weight: 600;
+    font-size: 1.05rem;
+    margin-top: auto;
+    padding-top: 0.75rem;
+    border-top: 1px solid rgba(0,0,0,0.08);
+    line-height: 1.4;
+  }
+  .uebersicht-karte.farbe-blau .uebersicht-karte-regelung { color: #023e8a; }
+  .uebersicht-karte.farbe-gruen .uebersicht-karte-regelung { color: #064e3b; }
+  .uebersicht-karte.farbe-orange .uebersicht-karte-regelung { color: #7c2d12; }
+  .uebersicht-karte.farbe-lila .uebersicht-karte-regelung { color: #5b21b6; }
+  .uebersicht-hinweis {
+    margin-top: 2rem;
+    padding: 1.25rem 1.5rem;
+    background: white;
+    border-left: 4px solid var(--primary);
+    border-radius: 8px;
+    font-size: 1.1rem;
+    color: var(--text);
+    line-height: 1.5;
+  }
+
+  /* === FRAGE-SCREEN === */
+  .frage-screen {
+    display: grid;
+    grid-template-columns: 1fr 320px;
+    gap: 2.5rem;
+    min-height: calc(100vh - 180px);
+  }
+  .frage-haupt { display: flex; flex-direction: column; }
+  .frage-titel {
+    font-size: 2.5rem;
+    color: var(--primary-dark);
+    font-weight: 700;
+    line-height: 1.2;
+    margin-bottom: 0.75rem;
+  }
+  .frage-untertitel {
+    font-size: 1.25rem;
+    color: var(--muted);
+    margin-bottom: 2rem;
+  }
+  .frage-meta {
+    display: flex;
+    gap: 1rem;
+    align-items: center;
+    margin-bottom: 1.5rem;
+    flex-wrap: wrap;
+  }
+  .meta-pill.live {
+    background: var(--primary);
+    color: white;
+    border-color: var(--primary);
+    display: flex;
+    align-items: center;
+    gap: 0.5rem;
+  }
+  .meta-pill.live::before {
+    content: "";
+    width: 10px; height: 10px;
+    border-radius: 50%;
+    background: white;
+    animation: pulse 1.5s infinite;
+  }
+  @keyframes pulse { 0%, 100% { opacity: 1; } 50% { opacity: 0.3; } }
+  .meta-pill.count {
+    background: var(--primary-dark);
+    color: white;
+    border-color: var(--primary-dark);
+  }
+
+  .frage-side { display: flex; flex-direction: column; gap: 1.5rem; }
+  .qr-side {
+    background: white;
+    padding: 1.5rem;
+    border-radius: 16px;
+    box-shadow: 0 10px 30px rgba(0, 0, 0, 0.08);
+    text-align: center;
+  }
+  .qr-side .label {
+    font-weight: 600;
+    color: var(--primary-dark);
+    margin-bottom: 1rem;
+    font-size: 1rem;
+  }
+  .qr-side .url {
+    font-family: ui-monospace, "SF Mono", Menlo, monospace;
+    font-size: 0.85rem;
+    color: var(--muted);
+    margin-top: 0.75rem;
+    word-break: break-all;
+  }
+  #qrcode-side img, #qrcode-side canvas { display: block; margin: 0 auto; }
+
+  .auswertung {
+    background: white;
+    border-radius: 16px;
+    padding: 2rem;
+    flex-grow: 1;
+    box-shadow: 0 10px 30px rgba(0, 0, 0, 0.05);
+    overflow-y: auto;
+  }
+
+  .text-antworten {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 0.75rem;
+    align-content: flex-start;
+  }
+  .text-antworten .antwort {
+    background: linear-gradient(135deg, var(--light), #e0f2fe);
+    color: var(--primary-dark);
+    padding: 0.75rem 1.25rem;
+    border-radius: 12px;
+    font-size: 1.15rem;
+    font-weight: 500;
+    border: 2px solid transparent;
+    animation: einblenden 0.4s ease;
+    line-height: 1.4;
+  }
+  .text-antworten .antwort.gross {
+    font-size: 1.5rem;
+    font-weight: 700;
+    background: linear-gradient(135deg, var(--primary), var(--accent));
+    color: white;
+  }
+  .text-antworten .antwort.mittel {
+    font-size: 1.3rem;
+    font-weight: 600;
+    background: linear-gradient(135deg, var(--accent), var(--light));
+    color: var(--primary-dark);
+  }
+  @keyframes einblenden {
+    from { opacity: 0; transform: scale(0.8); }
+    to { opacity: 1; transform: scale(1); }
+  }
+
+  .choice-antworten { display: flex; flex-direction: column; gap: 1rem; }
+  .balken-zeile {
+    display: grid;
+    grid-template-columns: 1fr auto;
+    gap: 1rem;
+    align-items: center;
+  }
+  .balken-label {
+    font-size: 1.15rem;
+    color: var(--text);
+    font-weight: 500;
+    margin-bottom: 0.4rem;
+  }
+  .balken-wrapper {
+    background: var(--bg);
+    border-radius: 8px;
+    height: 38px;
+    overflow: hidden;
+    border: 1px solid var(--border);
+  }
+  .balken {
+    height: 100%;
+    background: linear-gradient(90deg, var(--primary), var(--accent));
+    border-radius: 8px;
+    transition: width 0.6s cubic-bezier(0.34, 1.56, 0.64, 1);
+    display: flex;
+    align-items: center;
+    padding-left: 1rem;
+    color: white;
+    font-weight: 600;
+    min-width: 0;
+  }
+  .balken-zahl {
+    font-size: 1.5rem;
+    font-weight: 700;
+    color: var(--primary-dark);
+    min-width: 80px;
+    text-align: right;
+  }
+
+  .skala-summary {
+    display: grid;
+    grid-template-columns: 1fr 1fr 1fr;
+    gap: 1.5rem;
+    margin-bottom: 2rem;
+  }
+  .skala-stat {
+    background: var(--bg);
+    border-radius: 12px;
+    padding: 1.5rem;
+    text-align: center;
+  }
+  .skala-stat .wert {
+    font-size: 3.5rem;
+    font-weight: 800;
+    color: var(--primary);
+    line-height: 1;
+  }
+  .skala-stat .label {
+    font-size: 1rem;
+    color: var(--muted);
+    margin-top: 0.5rem;
+    font-weight: 500;
+  }
+  .skala-verteilung {
+    display: grid;
+    grid-template-columns: repeat(10, 1fr);
+    gap: 6px;
+    align-items: end;
+    height: 220px;
+    padding: 1rem 0;
+    border-bottom: 2px solid var(--border);
+  }
+  .skala-balken {
+    background: linear-gradient(to top, var(--primary), var(--accent));
+    border-radius: 6px 6px 0 0;
+    transition: height 0.6s cubic-bezier(0.34, 1.56, 0.64, 1);
+    min-height: 4px;
+    display: flex;
+    justify-content: center;
+    align-items: flex-start;
+    padding-top: 0.4rem;
+    color: white;
+    font-weight: 700;
+    font-size: 0.95rem;
+  }
+  .skala-labels {
+    display: grid;
+    grid-template-columns: repeat(10, 1fr);
+    gap: 6px;
+    margin-top: 0.5rem;
+    text-align: center;
+    font-weight: 600;
+    color: var(--muted);
+  }
+
+  .leer-hinweis {
+    text-align: center;
+    color: var(--muted);
+    font-size: 1.4rem;
+    padding: 4rem 2rem;
+    font-style: italic;
+  }
+  .leer-hinweis .icon {
+    font-size: 4rem;
+    display: block;
+    margin-bottom: 1rem;
+  }
+
+  @media (max-width: 1024px) {
+    .frage-screen { grid-template-columns: 1fr; }
+    body { padding: 1.5rem; }
+    .recap-titel-block h2 { font-size: 2rem; }
+    .recap-icon { font-size: 3.5rem; }
+  }
+
+  /* ==== Steuerleiste unten ==== */
+  body { padding-bottom: 6rem; } /* Platz für die Leiste */
+  body.mit-banner { padding-top: 3rem; padding-bottom: 6rem; }
+
+  .steuerleiste {
+    position: fixed;
+    bottom: 0;
+    left: 0;
+    right: 0;
+    background: rgba(255, 255, 255, 0.97);
+    backdrop-filter: blur(10px);
+    -webkit-backdrop-filter: blur(10px);
+    border-top: 2px solid var(--border);
+    padding: 0.85rem 2rem;
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    gap: 1rem;
+    z-index: 999;
+    box-shadow: 0 -4px 20px rgba(0, 0, 0, 0.06);
+  }
+  body.recap-modus .steuerleiste { border-top-color: var(--recap); }
+
+  .leiste-info {
+    flex-grow: 1;
+    color: var(--muted);
+    font-size: 0.95rem;
+  }
+  .leiste-info strong {
+    color: var(--primary-dark);
+    font-weight: 600;
+  }
+  body.recap-modus .leiste-info strong { color: var(--recap-dark); }
+  .leiste-info .position {
+    display: inline-block;
+    background: var(--bg);
+    color: var(--text);
+    padding: 0.2rem 0.6rem;
+    border-radius: 6px;
+    font-weight: 600;
+    margin-right: 0.5rem;
+    font-size: 0.85rem;
+  }
+
+  .leiste-buttons {
+    display: flex;
+    gap: 0.5rem;
+    align-items: center;
+  }
+  .leiste-btn {
+    padding: 0.7rem 1.3rem;
+    border: 2px solid var(--border);
+    border-radius: 10px;
+    background: white;
+    color: var(--text);
+    font-weight: 600;
+    cursor: pointer;
+    font-family: inherit;
+    font-size: 1rem;
+    transition: all 0.15s;
+  }
+  .leiste-btn:hover:not(:disabled) {
+    border-color: var(--primary);
+    background: var(--light);
+  }
+  body.recap-modus .leiste-btn:hover:not(:disabled) {
+    border-color: var(--recap);
+    background: var(--recap-light);
+  }
+  .leiste-btn:disabled { opacity: 0.4; cursor: not-allowed; }
+  .leiste-btn-primary {
+    background: var(--primary);
+    color: white;
+    border-color: var(--primary);
+  }
+  .leiste-btn-primary:hover:not(:disabled) {
+    background: var(--primary-dark);
+    border-color: var(--primary-dark);
+    color: white;
+  }
+  body.recap-modus .leiste-btn-primary {
+    background: var(--recap);
+    border-color: var(--recap);
+  }
+  body.recap-modus .leiste-btn-primary:hover:not(:disabled) {
+    background: var(--recap-dark);
+    border-color: var(--recap-dark);
+  }
+  .leiste-btn-icon {
+    padding: 0.7rem 0.9rem;
+  }
+  .tastatur-hinweis {
+    font-size: 0.75rem;
+    color: var(--muted);
+    margin-left: 0.5rem;
+    display: flex;
+    align-items: center;
+    gap: 0.3rem;
+  }
+  .tastatur-hinweis kbd {
+    background: var(--bg);
+    border: 1px solid var(--border);
+    border-radius: 4px;
+    padding: 0.1rem 0.4rem;
+    font-family: ui-monospace, monospace;
+    font-size: 0.7rem;
+    color: var(--text);
+  }
+
+  @media (max-width: 768px) {
+    .steuerleiste { padding: 0.6rem 1rem; flex-wrap: wrap; }
+    .tastatur-hinweis { display: none; }
+    .leiste-info { font-size: 0.85rem; }
+  }
+</style>
+</head>
+<body class="mit-banner">
+
+<div class="test-banner">🧪 OFFLINE-VORSCHAU – Daten werden nur lokal gespeichert</div>
+
+<header>
+  <div>
+    <h1 id="hdr-titel">2. Treffen Arbeitskreis</h1>
+    <div class="untertitel" id="hdr-untertitel">Nachwuchsgewinnung in den Bädern</div>
+  </div>
+  <div class="badge" id="hdr-badge">Live-Umfrage</div>
+</header>
+
+<!-- Wartebildschirm -->
+<div id="warte" class="warte-screen">
+  <h2>📱 Per Handy teilnehmen</h2>
+  <p>Scannt den QR-Code oder öffnet die URL,<br>um an der Umfrage teilzunehmen.</p>
+  <div class="qr-container">
+    <div id="qrcode-warte"></div>
+    <div class="url" id="warte-url"></div>
+  </div>
+  <p style="font-size: 1.1rem;">Die Inhalte werden hier nacheinander eingeblendet.</p>
+</div>
+
+<!-- Recap-Folie (auch für info-Typ) -->
+<div id="recap" class="recap-screen" style="display: none;">
+  <div class="recap-meta">
+    <div class="meta-pill recap-pill" id="recap-pill-label">📋 Rückblick 1. Treffen</div>
+    <div class="meta-pill" id="recap-position">Folie 1 / 3</div>
+  </div>
+  <div class="recap-header">
+    <div class="recap-icon" id="recap-icon">📋</div>
+    <div class="recap-titel-block">
+      <h2 id="recap-titel"></h2>
+      <div class="recap-untertitel" id="recap-untertitel"></div>
+    </div>
+  </div>
+  <div class="recap-inhalt" id="recap-inhalt"></div>
+</div>
+
+<!-- Link-Folie -->
+<div id="link-folie" class="link-screen" style="display: none;">
+  <div class="link-icon" id="link-icon">🚀</div>
+  <h2 id="link-titel"></h2>
+  <div class="link-untertitel" id="link-untertitel"></div>
+  <div class="link-text" id="link-text"></div>
+  <div class="link-karte">
+    <a class="link-url" id="link-url" target="_blank" rel="noopener"></a>
+    <div class="link-beschreibung" id="link-beschreibung"></div>
+    <div class="link-qr-zeile">
+      <div id="link-qr-target"></div>
+      <div class="link-qr-text">
+        <strong>QR-Code zum Mitnehmen</strong>
+        Scannt den Code, um die Seite direkt aufzurufen oder mit euren Kollegen zu teilen.
+      </div>
+    </div>
+  </div>
+  <a class="link-button versteckt" id="link-button" target="_blank" rel="noopener"></a>
+</div>
+
+<!-- Übersichts-Folie (Besuchergruppen) -->
+<div id="uebersicht-folie" class="uebersicht-screen" style="display: none;">
+  <div class="uebersicht-header">
+    <h2 id="uebersicht-titel"></h2>
+    <div class="uebersicht-untertitel" id="uebersicht-untertitel"></div>
+  </div>
+  <div class="uebersicht-grid" id="uebersicht-grid"></div>
+  <div class="uebersicht-hinweis" id="uebersicht-hinweis"></div>
+</div>
+
+<!-- Frage -->
+<div id="frage" class="frage-screen" style="display: none;">
+  <div class="frage-haupt">
+    <div class="frage-meta">
+      <div class="meta-pill live">LIVE</div>
+      <div class="meta-pill" id="frage-nummer">Frage 1 / 5</div>
+      <div class="meta-pill count" id="frage-count">0 Antworten</div>
+    </div>
+    <h2 class="frage-titel" id="frage-titel"></h2>
+    <p class="frage-untertitel" id="frage-untertitel"></p>
+    <div class="auswertung" id="auswertung"></div>
+  </div>
+  <div class="frage-side">
+    <div class="qr-side">
+      <div class="label">📱 Jetzt mitmachen</div>
+      <div id="qrcode-side"></div>
+      <div class="url" id="frage-url"></div>
+    </div>
+  </div>
+</div>
+
+<!-- Steuerleiste am unteren Rand -->
+<div class="steuerleiste" id="steuerleiste">
+  <div class="leiste-info" id="leiste-info">
+    <span class="position" id="leiste-position">–</span>
+    <span id="leiste-text">Bereit zum Start</span>
+  </div>
+  <div class="leiste-buttons">
+    <button class="leiste-btn leiste-btn-icon" id="leiste-zurueck" title="Zurück (Pfeil links)">⬅️</button>
+    <button class="leiste-btn leiste-btn-primary" id="leiste-vor" title="Weiter (Pfeil rechts oder Leertaste)">Weiter ➡️</button>
+    <span class="tastatur-hinweis">
+      <kbd>←</kbd><kbd>→</kbd>
+    </span>
+  </div>
+</div>
+
+<script>
+  const FRAGEN = window.FRAGEN || [];
+  const FOLIEN_VOR = window.FOLIEN_VOR || window.RECAP_FOLIEN || [];
+  const FOLIEN_NACH = window.FOLIEN_NACH || [];
+  const VERANSTALTUNG = window.VERANSTALTUNG || {};
+
+  document.getElementById("hdr-titel").textContent = VERANSTALTUNG.titel || "Live-Umfrage";
+  document.getElementById("hdr-untertitel").textContent = VERANSTALTUNG.untertitel || "";
+
+  const teilnehmerUrl = VERANSTALTUNG.teilnehmerUrl || new URL("umfrage.html", window.location.href).href;
+  const angezeigteUrl = teilnehmerUrl.replace(/^https?:\/\//, "").replace(/^file:\/\//, "");
+  document.getElementById("warte-url").textContent = angezeigteUrl;
+  document.getElementById("frage-url").textContent = angezeigteUrl;
+
+  new QRCode(document.getElementById("qrcode-warte"), {
+    text: teilnehmerUrl, width: 300, height: 300,
+    colorDark: "#023e8a", colorLight: "#ffffff",
+    correctLevel: QRCode.CorrectLevel.M,
+  });
+  new QRCode(document.getElementById("qrcode-side"), {
+    text: teilnehmerUrl, width: 220, height: 220,
+    colorDark: "#023e8a", colorLight: "#ffffff",
+    correctLevel: QRCode.CorrectLevel.M,
+  });
+
+  let aktuelleId = "";
+  let linkQrErstellt = "";
+
+  // Hilfsfunktionen
+  function findeFolie(id) {
+    return FOLIEN_VOR.find(f => f.id === id) || FOLIEN_NACH.find(f => f.id === id);
+  }
+  function findeFrage(id) {
+    return FRAGEN.find(f => f.id === id);
+  }
+
+  // ============================================================
+  // Update-Loop
+  // ============================================================
+  async function aktualisieren() {
+    try {
+      const state = await UmfrageAPI.getState();
+      const neueId = state.aktuelleFrage || "";
+
+      if (!neueId) {
+        zeigeWarte();
+        aktuelleId = "";
+        return;
+      }
+
+      // Folie?
+      const folie = findeFolie(neueId);
+      if (folie) {
+        if (neueId !== aktuelleId) {
+          aktuelleId = neueId;
+          zeigeFolie(folie);
+        }
+        return;
+      }
+
+      // Frage?
+      const frage = findeFrage(neueId);
+      if (frage) {
+        if (neueId !== aktuelleId) {
+          aktuelleId = neueId;
+          zeigeFrage(frage);
+        }
+        const resData = await UmfrageAPI.getResults(neueId);
+        rendereAuswertung(frage, resData.antworten);
+        document.getElementById("frage-count").textContent =
+          resData.anzahl + (resData.anzahl === 1 ? " Antwort" : " Antworten");
+        return;
+      }
+
+      zeigeWarte();
+    } catch (e) { console.error(e); }
+  }
+
+  function alleVerstecken() {
+    document.getElementById("warte").style.display = "none";
+    document.getElementById("recap").style.display = "none";
+    document.getElementById("link-folie").style.display = "none";
+    document.getElementById("uebersicht-folie").style.display = "none";
+    document.getElementById("frage").style.display = "none";
+    document.body.classList.remove("recap-modus");
+    document.body.classList.remove("farbe-blau", "farbe-gruen", "farbe-orange", "farbe-lila");
+  }
+
+  function zeigeWarte() {
+    alleVerstecken();
+    document.getElementById("warte").style.display = "flex";
+    document.getElementById("hdr-badge").textContent = "Live-Umfrage";
+  }
+
+  function zeigeFolie(folie) {
+    alleVerstecken();
+    const istVor = FOLIEN_VOR.includes(folie);
+
+    // Hintergrund-Farbe je nach Folie
+    if (istVor) {
+      document.body.classList.add("recap-modus");
+      document.getElementById("hdr-badge").textContent = "Rückblick";
+    } else {
+      document.getElementById("hdr-badge").textContent = "Im Anschluss";
+      if (folie.farbe) {
+        document.body.classList.add("farbe-" + folie.farbe);
+      }
+    }
+
+    if (folie.type === "info") {
+      zeigeInfo(folie, istVor);
+    } else if (folie.type === "link") {
+      zeigeLink(folie);
+    } else if (folie.type === "uebersicht") {
+      zeigeUebersicht(folie);
+    } else {
+      // Fallback: wie info
+      zeigeInfo(folie, istVor);
+    }
+  }
+
+  function zeigeInfo(folie, istVor) {
+    const root = document.getElementById("recap");
+    root.style.display = "flex";
+
+    // Pill-Label oben
+    const pill = document.getElementById("recap-pill-label");
+    if (istVor) {
+      pill.textContent = "📋 Rückblick 1. Treffen";
+    } else {
+      pill.textContent = (folie.icon || "📋") + " " + folie.titel;
+    }
+
+    // Position aus Gesamt-Ablauf
+    const ablauf = baueAblauf();
+    const idx = ablauf.findIndex(x => x.id === folie.id);
+    document.getElementById("recap-position").textContent =
+      `Folie ${idx + 1} / ${ablauf.length}`;
+
+    document.getElementById("recap-icon").textContent = folie.icon || "📋";
+    document.getElementById("recap-titel").textContent = folie.titel;
+    document.getElementById("recap-untertitel").textContent = folie.untertitel || "";
+
+    let inhaltHtml = (folie.inhalt || []).map(b => `
+      <div class="recap-block">
+        <div class="recap-block-titel">${escape(b.ueberschrift)}</div>
+        <div class="recap-block-text">${escape(b.text)}</div>
+      </div>`).join("");
+
+    if (folie.disclaimer) {
+      inhaltHtml += `<div class="disclaimer-box">${escape(folie.disclaimer)}</div>`;
+    }
+
+    document.getElementById("recap-inhalt").innerHTML = inhaltHtml;
+
+    // Re-trigger animation
+    root.style.animation = "none";
+    root.offsetHeight;
+    root.style.animation = "";
+  }
+
+  function zeigeLink(folie) {
+    const root = document.getElementById("link-folie");
+    root.style.display = "flex";
+
+    document.getElementById("link-icon").textContent = folie.icon || "🚀";
+    document.getElementById("link-titel").textContent = folie.titel;
+    document.getElementById("link-untertitel").textContent = folie.untertitel || "";
+    document.getElementById("link-text").textContent = folie.text || "";
+
+    const a = document.getElementById("link-url");
+    a.href = folie.linkUrl;
+    a.textContent = folie.linkLabel || folie.linkUrl;
+    document.getElementById("link-beschreibung").textContent = folie.linkBeschreibung || "";
+
+    // Optionaler Button
+    const btn = document.getElementById("link-button");
+    if (folie.buttonLabel) {
+      btn.href = folie.linkUrl;
+      btn.textContent = "🔗 " + folie.buttonLabel;
+      btn.classList.remove("versteckt");
+    } else {
+      btn.classList.add("versteckt");
+    }
+
+    // QR-Code (nur einmal pro Folie erstellen)
+    if (linkQrErstellt !== folie.id) {
+      const qrTarget = document.getElementById("link-qr-target");
+      qrTarget.innerHTML = "";
+      new QRCode(qrTarget, {
+        text: folie.linkUrl,
+        width: 140, height: 140,
+        colorDark: "#023e8a", colorLight: "#ffffff",
+        correctLevel: QRCode.CorrectLevel.M,
+      });
+      linkQrErstellt = folie.id;
+    }
+
+    root.style.animation = "none";
+    root.offsetHeight;
+    root.style.animation = "";
+  }
+
+  function zeigeUebersicht(folie) {
+    const root = document.getElementById("uebersicht-folie");
+    root.style.display = "flex";
+
+    document.getElementById("uebersicht-titel").textContent = folie.titel;
+    document.getElementById("uebersicht-untertitel").textContent = folie.untertitel || "";
+
+    const grid = document.getElementById("uebersicht-grid");
+    grid.innerHTML = (folie.gruppen || []).map(g => `
+      <div class="uebersicht-karte farbe-${escape(g.farbe || "blau")}">
+        <div class="uebersicht-karte-icon">${escape(g.icon || "")}</div>
+        <div class="uebersicht-karte-name">${escape(g.name)}</div>
+        <div class="uebersicht-karte-kurz">${escape(g.kurz || "")}</div>
+        <div class="uebersicht-karte-regelung">${escape(g.regelung || "")}</div>
+      </div>
+    `).join("");
+
+    document.getElementById("uebersicht-hinweis").textContent = folie.hinweis || "";
+
+    root.style.animation = "none";
+    root.offsetHeight;
+    root.style.animation = "";
+  }
+
+  function zeigeFrage(frage) {
+    alleVerstecken();
+    document.getElementById("frage").style.display = "grid";
+    document.getElementById("hdr-badge").textContent = "Live-Umfrage";
+
+    document.getElementById("frage-titel").textContent = frage.titel;
+    document.getElementById("frage-untertitel").textContent = frage.untertitel || "";
+    const idx = FRAGEN.findIndex((f) => f.id === frage.id);
+    document.getElementById("frage-nummer").textContent =
+      `Frage ${idx + 1} / ${FRAGEN.length}`;
+    document.getElementById("auswertung").innerHTML = "";
+  }
+
+  function rendereAuswertung(frage, antworten) {
+    const root = document.getElementById("auswertung");
+    if (!antworten.length) {
+      root.innerHTML = `<div class="leer-hinweis"><span class="icon">⏳</span>Warten auf Antworten...</div>`;
+      return;
+    }
+    if (frage.type === "text") rendereText(root, antworten);
+    else if (frage.type === "choice") rendereChoice(root, frage, antworten);
+    else if (frage.type === "scale") rendereScale(root, frage, antworten);
+  }
+
+  function rendereText(root, antworten) {
+    const haeufigkeit = new Map();
+    antworten.forEach((a) => {
+      const arr = Array.isArray(a.antwort) ? a.antwort : [a.antwort];
+      arr.forEach((text) => {
+        const t = String(text).trim();
+        if (!t) return;
+        const key = t.toLowerCase();
+        const e = haeufigkeit.get(key) || { text: t, count: 0 };
+        e.count++;
+        haeufigkeit.set(key, e);
+      });
+    });
+    const liste = [...haeufigkeit.values()].sort((a, b) => b.count - a.count);
+    if (!liste.length) {
+      root.innerHTML = `<div class="leer-hinweis"><span class="icon">⏳</span>Warten auf Antworten...</div>`;
+      return;
+    }
+    const maxCount = liste[0].count;
+    const html = liste.map((e) => {
+      let klasse = "";
+      if (e.count >= maxCount && maxCount >= 3) klasse = "gross";
+      else if (e.count >= Math.ceil(maxCount * 0.6) && maxCount >= 2) klasse = "mittel";
+      const label = e.count > 1 ? `${e.text} (${e.count})` : e.text;
+      return `<div class="antwort ${klasse}">${escape(label)}</div>`;
+    }).join("");
+    root.innerHTML = `<div class="text-antworten">${html}</div>`;
+  }
+
+  function rendereChoice(root, frage, antworten) {
+    const counts = {};
+    frage.optionen.forEach((opt) => (counts[opt] = 0));
+    antworten.forEach((a) => {
+      const arr = Array.isArray(a.antwort) ? a.antwort : [a.antwort];
+      arr.forEach((opt) => { if (counts[opt] !== undefined) counts[opt]++; });
+    });
+    const max = Math.max(1, ...Object.values(counts));
+    const total = antworten.length;
+    const html = frage.optionen.map((opt) => {
+      const c = counts[opt];
+      const prozent = total ? Math.round((c / total) * 100) : 0;
+      const breite = max ? (c / max) * 100 : 0;
+      return `
+        <div>
+          <div class="balken-label">${escape(opt)}</div>
+          <div class="balken-zeile">
+            <div class="balken-wrapper">
+              <div class="balken" style="width: ${breite}%">${breite > 15 ? prozent + "%" : ""}</div>
+            </div>
+            <div class="balken-zahl">${c}</div>
+          </div>
+        </div>`;
+    }).join("");
+    root.innerHTML = `<div class="choice-antworten">${html}</div>`;
+  }
+
+  function rendereScale(root, frage, antworten) {
+    const min = frage.min || 1, max = frage.max || 10;
+    const werte = antworten.map((a) => Number(a.antwort)).filter((n) => !isNaN(n));
+    if (!werte.length) {
+      root.innerHTML = `<div class="leer-hinweis"><span class="icon">⏳</span>Warten auf Antworten...</div>`;
+      return;
+    }
+    const summe = werte.reduce((s, n) => s + n, 0);
+    const durchschnitt = (summe / werte.length).toFixed(1);
+    const sortiert = [...werte].sort((a, b) => a - b);
+    const median = werte.length % 2 === 0
+      ? ((sortiert[werte.length / 2 - 1] + sortiert[werte.length / 2]) / 2).toFixed(1)
+      : sortiert[Math.floor(werte.length / 2)].toFixed(1);
+    const verteilung = {};
+    for (let i = min; i <= max; i++) verteilung[i] = 0;
+    werte.forEach((w) => { if (w >= min && w <= max) verteilung[w]++; });
+    const maxAnzahl = Math.max(1, ...Object.values(verteilung));
+    const balkenHtml = [], labelsHtml = [];
+    for (let i = min; i <= max; i++) {
+      const anzahl = verteilung[i];
+      const hoehe = (anzahl / maxAnzahl) * 100;
+      balkenHtml.push(`<div class="skala-balken" style="height: ${hoehe}%">${anzahl > 0 ? anzahl : ""}</div>`);
+      labelsHtml.push(`<div>${i}</div>`);
+    }
+    root.innerHTML = `
+      <div class="skala-summary">
+        <div class="skala-stat"><div class="wert">${durchschnitt}</div><div class="label">Durchschnitt</div></div>
+        <div class="skala-stat"><div class="wert">${median}</div><div class="label">Median</div></div>
+        <div class="skala-stat"><div class="wert">${werte.length}</div><div class="label">Antworten</div></div>
+      </div>
+      <div class="skala-verteilung">${balkenHtml.join("")}</div>
+      <div class="skala-labels">${labelsHtml.join("")}</div>`;
+  }
+
+  function escape(s) {
+    return String(s).replace(/[&<>"']/g, (c) => ({
+      "&": "&amp;", "<": "&lt;", ">": "&gt;", '"': "&quot;", "'": "&#39;"
+    }[c]));
+  }
+
+  // ============================================================
+  // Navigation (Steuerleiste)
+  // ============================================================
+  function baueAblauf() {
+    return [
+      ...FOLIEN_VOR.map((f) => ({ ...f, kind: "vor" })),
+      ...FRAGEN.map((f) => ({ ...f, kind: "frage" })),
+      ...FOLIEN_NACH.map((f) => ({ ...f, kind: "nach" })),
+    ];
+  }
+
+  function getAktuelleIndex() {
+    if (!aktuelleId) return -1;
+    return baueAblauf().findIndex((x) => x.id === aktuelleId);
+  }
+
+  async function gehe(richtung) {
+    const ablauf = baueAblauf();
+    const idx = getAktuelleIndex();
+    let neuerIdx;
+    if (idx === -1) {
+      // Nichts aktiv → "Weiter" startet bei erstem Element
+      if (richtung === 1) neuerIdx = 0;
+      else return;
+    } else {
+      neuerIdx = idx + richtung;
+    }
+    if (neuerIdx < 0 || neuerIdx >= ablauf.length) return;
+    await UmfrageAPI.setState(ablauf[neuerIdx].id);
+    aktuelleId = ablauf[neuerIdx].id;
+    aktualisieren();
+    aktualisiereSteuerleiste();
+  }
+
+  function aktualisiereSteuerleiste() {
+    const ablauf = baueAblauf();
+    const idx = getAktuelleIndex();
+    const btnZurueck = document.getElementById("leiste-zurueck");
+    const btnVor = document.getElementById("leiste-vor");
+    const position = document.getElementById("leiste-position");
+    const text = document.getElementById("leiste-text");
+
+    if (idx === -1) {
+      position.textContent = "Start";
+      text.innerHTML = "<strong>Bereit zum Start</strong> – Klicke auf <em>Weiter</em> oder drücke die Leertaste";
+      btnZurueck.disabled = true;
+      btnVor.disabled = false;
+      btnVor.innerHTML = "▶️ Starten";
+    } else {
+      const item = ablauf[idx];
+      const istLetztes = idx === ablauf.length - 1;
+      const kindLabel = item.kind === "frage" ? "Frage" : "Folie";
+      // Position relativ zum jeweiligen Bereich
+      let unterPosition = "";
+      if (item.kind === "vor") {
+        const i = FOLIEN_VOR.findIndex((f) => f.id === item.id);
+        unterPosition = `Rückblick ${i + 1}/${FOLIEN_VOR.length}`;
+      } else if (item.kind === "frage") {
+        const i = FRAGEN.findIndex((f) => f.id === item.id);
+        unterPosition = `${i + 1}/${FRAGEN.length}`;
+      } else if (item.kind === "nach") {
+        const i = FOLIEN_NACH.findIndex((f) => f.id === item.id);
+        unterPosition = `Im Anschluss ${i + 1}/${FOLIEN_NACH.length}`;
+      }
+      position.textContent = `${idx + 1}/${ablauf.length}`;
+      text.innerHTML = `${kindLabel} – ${unterPosition}: <strong>${escape(item.titel)}</strong>`;
+      btnZurueck.disabled = idx === 0;
+      btnVor.disabled = istLetztes;
+      btnVor.innerHTML = istLetztes ? "🏁 Ende" : "Weiter ➡️";
+    }
+  }
+
+  // Buttons
+  document.getElementById("leiste-zurueck").onclick = () => gehe(-1);
+  document.getElementById("leiste-vor").onclick = () => gehe(1);
+
+  // Tastatursteuerung: Pfeiltasten + Leertaste + Bild auf/ab (Presenter-Klicker)
+  document.addEventListener("keydown", (e) => {
+    // Nicht reagieren wenn in einem Input gerade getippt wird
+    if (e.target.tagName === "INPUT" || e.target.tagName === "TEXTAREA") return;
+
+    if (e.key === "ArrowRight" || e.key === " " || e.key === "PageDown") {
+      e.preventDefault();
+      gehe(1);
+    } else if (e.key === "ArrowLeft" || e.key === "PageUp") {
+      e.preventDefault();
+      gehe(-1);
+    }
+  });
+
+  async function aktualisierenMitLeiste() {
+    await aktualisieren();
+    aktualisiereSteuerleiste();
+  }
+
+  UmfrageAPI.onChange(aktualisierenMitLeiste);
+  aktualisierenMitLeiste();
+  setInterval(aktualisierenMitLeiste, 1500);
+</script>
+
+</body>
+</html>

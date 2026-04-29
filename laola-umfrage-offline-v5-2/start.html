@@ -1,0 +1,207 @@
+<!DOCTYPE html>
+<html lang="de">
+<head>
+<meta charset="UTF-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1.0" />
+<title>Live-Umfrage – Offline-Vorschau</title>
+<style>
+  :root {
+    --primary: #0077b6;
+    --primary-dark: #023e8a;
+    --accent: #00b4d8;
+    --light: #caf0f8;
+    --bg: #f8fafc;
+    --text: #1e293b;
+    --muted: #64748b;
+    --border: #e2e8f0;
+  }
+  * { box-sizing: border-box; margin: 0; padding: 0; }
+  body {
+    font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, sans-serif;
+    background: linear-gradient(135deg, #f8fafc 0%, #e0f2fe 100%);
+    color: var(--text);
+    min-height: 100vh;
+    padding: 2rem;
+    max-width: 900px;
+    margin: 0 auto;
+  }
+  header {
+    text-align: center;
+    padding: 2rem 0;
+    border-bottom: 3px solid var(--primary);
+    margin-bottom: 2.5rem;
+  }
+  h1 { color: var(--primary-dark); font-size: 2rem; margin-bottom: 0.5rem; }
+  .untertitel { color: var(--muted); }
+  .badge-offline {
+    display: inline-block;
+    background: #f59e0b;
+    color: white;
+    padding: 0.3rem 0.9rem;
+    border-radius: 999px;
+    font-size: 0.8rem;
+    font-weight: 700;
+    text-transform: uppercase;
+    letter-spacing: 0.05em;
+    margin-top: 0.75rem;
+  }
+
+  .hinweis {
+    background: #fef3c7;
+    border: 2px solid #f59e0b;
+    border-radius: 12px;
+    padding: 1.25rem;
+    margin-bottom: 2rem;
+    color: #78350f;
+    line-height: 1.6;
+  }
+  .hinweis strong { color: #78350f; }
+  .hinweis code {
+    background: white;
+    padding: 0.15rem 0.5rem;
+    border-radius: 4px;
+    font-size: 0.9em;
+  }
+
+  .karten {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(260px, 1fr));
+    gap: 1.5rem;
+    margin-bottom: 2.5rem;
+  }
+  .karte {
+    background: white;
+    border-radius: 16px;
+    padding: 1.75rem;
+    box-shadow: 0 10px 30px rgba(0, 119, 182, 0.08);
+    border: 2px solid var(--border);
+    transition: all 0.2s;
+    text-decoration: none;
+    color: var(--text);
+    display: block;
+  }
+  .karte:hover {
+    border-color: var(--primary);
+    transform: translateY(-3px);
+    box-shadow: 0 15px 40px rgba(0, 119, 182, 0.15);
+  }
+  .karte .icon { font-size: 3rem; margin-bottom: 0.75rem; display: block; }
+  .karte h2 { color: var(--primary-dark); font-size: 1.25rem; margin-bottom: 0.5rem; }
+  .karte p { color: var(--muted); font-size: 0.95rem; line-height: 1.5; }
+  .karte .nummer {
+    display: inline-block;
+    background: var(--primary);
+    color: white;
+    width: 28px;
+    height: 28px;
+    line-height: 28px;
+    text-align: center;
+    border-radius: 50%;
+    font-weight: 700;
+    font-size: 0.9rem;
+    margin-right: 0.5rem;
+  }
+
+  .ablauf {
+    background: white;
+    border-radius: 12px;
+    padding: 1.5rem;
+    border: 2px solid var(--border);
+  }
+  .ablauf h3 {
+    color: var(--primary-dark);
+    margin-bottom: 1rem;
+    font-size: 1.1rem;
+  }
+  .ablauf ol {
+    padding-left: 1.5rem;
+    color: var(--text);
+    line-height: 1.8;
+  }
+  .ablauf ol li::marker { color: var(--primary); font-weight: 700; }
+
+  .reset-bar {
+    margin-top: 2rem;
+    padding-top: 1.5rem;
+    border-top: 2px solid var(--border);
+    text-align: center;
+  }
+  .reset-bar button {
+    padding: 0.6rem 1.25rem;
+    background: white;
+    border: 2px solid var(--border);
+    border-radius: 8px;
+    color: #dc2626;
+    font-weight: 600;
+    cursor: pointer;
+    font-family: inherit;
+  }
+  .reset-bar button:hover { border-color: #dc2626; background: #fef2f2; }
+</style>
+</head>
+<body>
+
+<header>
+  <h1>📊 Live-Umfrage – Offline-Vorschau</h1>
+  <div class="untertitel">2. Treffen Arbeitskreis Nachwuchsgewinnung</div>
+  <div class="badge-offline">🧪 Test-Modus (lokal im Browser)</div>
+</header>
+
+<div class="hinweis">
+  <strong>So funktioniert die Offline-Vorschau:</strong><br>
+  Alle drei Ansichten teilen sich die Daten über <code>localStorage</code>
+  und synchronisieren sich automatisch zwischen Tabs desselben Browsers.
+  Öffne die Ansichten in <strong>separaten Tabs</strong> (Rechtsklick →
+  "In neuem Tab öffnen") – Änderungen werden in Echtzeit übernommen.
+</div>
+
+<div class="karten">
+  <a href="praesentation.html" target="_blank" class="karte">
+    <span class="icon">📺</span>
+    <h2><span class="nummer">1</span>Präsentation</h2>
+    <p>Beamer-Ansicht mit QR-Code und Live-Auswertung. So sieht es während der Veranstaltung auf dem großen Bildschirm aus.</p>
+  </a>
+
+  <a href="admin.html" target="_blank" class="karte">
+    <span class="icon">🎛️</span>
+    <h2><span class="nummer">2</span>Moderation</h2>
+    <p>Hier steuerst du die Umfrage. Fragen aktivieren, weiterschalten, Antworten zurücksetzen.</p>
+  </a>
+
+  <a href="umfrage.html" target="_blank" class="karte">
+    <span class="icon">📱</span>
+    <h2><span class="nummer">3</span>Teilnehmer</h2>
+    <p>Die Ansicht für die Handys der Teilnehmer. Öffne diesen Tab mehrfach (oder im Inkognito-Fenster) zum Simulieren mehrerer Personen.</p>
+  </a>
+</div>
+
+<div class="ablauf">
+  <h3>📋 Empfohlener Test-Ablauf</h3>
+  <ol>
+    <li>Öffne <strong>alle drei</strong> Ansichten in separaten Tabs</li>
+    <li>Im <strong>Moderations-Tab</strong>: <strong>"Umfrage starten"</strong> klicken – die erste Recap-Folie erscheint auf dem Beamer</li>
+    <li>Mit <strong>"Weiter ➡️"</strong> durch die 3 Recap-Folien klicken</li>
+    <li>Nach den Folien kommt automatisch <strong>Frage 1</strong> – im Teilnehmer-Tab antworten</li>
+    <li>Im <strong>Präsentations-Tab</strong>: Antwort erscheint live</li>
+    <li>Mit <strong>"Weiter ➡️"</strong> zur nächsten Frage – Antworten der vorherigen Frage bleiben gespeichert</li>
+    <li>Optional: Teilnehmer-Tab in Inkognito-Fenster nochmal öffnen, um mehrere Personen zu simulieren</li>
+  </ol>
+</div>
+
+<div class="reset-bar">
+  <button onclick="alleDatenLoeschen()">🗑️ Alle Test-Daten zurücksetzen</button>
+</div>
+
+<script>
+  function alleDatenLoeschen() {
+    if (!confirm("Alle Test-Daten wirklich löschen?")) return;
+    localStorage.removeItem("umfrage:state");
+    localStorage.removeItem("umfrage:antworten");
+    localStorage.removeItem("teilnehmerId");
+    localStorage.removeItem("abgegeben");
+    alert("Alle Test-Daten gelöscht. Bitte alle offenen Tabs neu laden.");
+  }
+</script>
+
+</body>
+</html>
